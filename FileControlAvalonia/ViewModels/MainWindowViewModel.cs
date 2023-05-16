@@ -12,6 +12,7 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void OpenFileExplorer()
         {
+
             var fileExplorer = new FileExplorerWindow();
             fileExplorer.Show();
         }
