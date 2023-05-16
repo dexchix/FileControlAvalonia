@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:FileControlAvalonia.ViewModels"
+		xmlns:m ="using:FileControlAvalonia.Models"
+		xmlns:i ="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+		xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+	    x:Name="SelectFilesForm"
+	    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="FileControlAvalonia.Views.FileExplorerWindow"
+	    MaxWidth="390"
+	    MaxHeight="440"
+		MinWidth="390"
+	    MinHeight="440">
+	<Window.DataContext>
+		<vm:FileExplorerWindowViewModel/>
+	</Window.DataContext>
+	<Window.KeyBindings>
+		<KeyBinding Gesture="Left" Command="{Binding GoBackFolderCommand}" />
+		<KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"
+					CommandParameter="{Binding ElementName=SelectFilesForm}"/>
+		<KeyBinding Gesture="Right" Command="{Binding GoToFolderCommand}"/>
+		<KeyBinding Gesture="Up" Command="{Binding UpCommand}"/>
+		<KeyBinding Gesture="Down" Command="{Binding DownCommand}"/>
+	</Window.KeyBindings>
+
+	<Grid RowDefinitions="40,*,30">
+		<StackPanel>
+			<Button Width="25" Height="25" Margin="5,5,0,0"
+					Command="{Binding GoBackFolderCommand}">
+				<Button.Template>
+					<ControlTemplate>
+						<Image Source="/Assets/ProvArrowLeft.png"/>
+					</ControlTemplate>
+				</Button.Template>
+			</Button>
+			<TextBox Margin="5" Height="10" VerticalAlignment="Top"
+					 Text="{Binding FileTree.Path}" IsReadOnly="True"/>
+		</StackPanel>
+		<ListBox x:Name="FilesListBox" Grid.Row="1" BorderThickness="1" Width="380" Height="330" Margin="0,22,0,0"
+				 Items="{Binding FileTree.Children}" HotKeyManager.HotKey="Right" SelectedIndex="{Binding ItemIndex}"
+				                                   >
+			<ListBox.KeyBindings>
+				<KeyBinding Gesture="Right" Command="{Binding GoToFolderCommand}"/>
+			</ListBox.KeyBindings>
+			<i:Interaction.Behaviors>
+				<ia:EventTriggerBehavior EventName="DoubleTapped">
+					<ia:InvokeCommandAction Command="{Binding GoToFolderCommand}"/>
+				</ia:EventTriggerBehavior>
+			</i:Interaction.Behaviors>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal" Height="25">
+						<CheckBox IsThreeState="False" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+						<Image Margin="0,0,0,0" VerticalAlignment="Bottom" Height="25">
+							<Image.Source>
+								<MultiBinding Converter="{x:Static vm:FileExplorerWindowViewModel.FileIconConverter}">
+									<Binding Path="IsDirectory"/>
+									<Binding Path="IsExpanded"/>
+								</MultiBinding>
+							</Image.Source>
+						</Image>
+						<Label Content="{Binding Name}" VerticalAlignment="Stretch"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+			<ListBox.Styles>
+				<Style Selector="ListBox">
+					<Setter Property="IsTabStop" Value="True"></Setter>
+				</Style>
+			</ListBox.Styles>
+		</ListBox>
+
+		<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10"
+					HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,10">
+			<TextBox x:Name="TextBoxExtensions" Width="220" Watermark="png/exe/jpeg/spa/spu"
+					 Text="{Binding Extensions}" IsReadOnly="True">
+
+			</TextBox>
+			<Button Width="70" Height="30" Content="ОК"
+                    HorizontalContentAlignment="Center"
+					Command="{Binding OkCommand}"
+					CommandParameter="{Binding ElementName=SelectFilesForm}"/>
+			<Button Width="70" Height="30" Content="Отмена"
+                    HorizontalContentAlignment="Center"
+					Command="{Binding CancelCommand}"
+					CommandParameter="{Binding ElementName=SelectFilesForm}"/>
+		</StackPanel>
+	</Grid>
+</Window>
