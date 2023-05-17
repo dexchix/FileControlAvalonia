@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using FileControlAvalonia.ViewModels;
 using System;
 
 namespace FileControlAvalonia.Views

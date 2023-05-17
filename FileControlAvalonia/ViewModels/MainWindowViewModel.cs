@@ -14,6 +14,7 @@ namespace FileControlAvalonia.ViewModels
         {
 
             var fileExplorer = new FileExplorerWindow();
+            var fghfgh = fileExplorer.DataContext;
             fileExplorer.Show();
         }
         #endregion

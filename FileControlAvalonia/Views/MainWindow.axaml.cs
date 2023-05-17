@@ -1,5 +1,7 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using System;
 
 namespace FileControlAvalonia.Views
 {
@@ -12,6 +14,12 @@ namespace FileControlAvalonia.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            Position = new PixelPoint(200, 200);
+            CanResize = false;
         }
     }
 }
