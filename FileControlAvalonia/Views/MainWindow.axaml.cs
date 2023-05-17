@@ -10,6 +10,8 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
+
+            //ExtendClientAreaToDecorationsHint = true;
         }
         private void InitializeComponent()
         {

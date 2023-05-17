@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Converters;
+using NLog.LayoutRenderers.Wrappers;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -86,7 +87,11 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
+            MainWindowViewModel.fileTree = FileTree.Children;
 
+            var fdgdfgghgdf = MainWindowViewModel.fileTree;
+
+            window.Close();
         }
         public void UpCommand()
         {

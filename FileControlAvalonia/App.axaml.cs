@@ -8,6 +8,8 @@ namespace FileControlAvalonia
 {
     public partial class App : Application
     {
+        public static IClassicDesktopStyleApplicationLifetime? CurrentApplication;
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -21,6 +23,7 @@ namespace FileControlAvalonia
                 {
                     DataContext = new MainWindowViewModel(),
                 };
+                CurrentApplication = desktop;
             }
 
             base.OnFrameworkInitializationCompleted();
