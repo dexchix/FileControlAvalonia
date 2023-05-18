@@ -9,81 +9,92 @@
         Title="Контроль целостности ПО ВУ"
 		Width="1200" Height="600"
 		ExtendClientAreaToDecorationsHint="True"
-		ExtendClientAreaChromeHints="NoChrome"
-		ExtendClientAreaTitleBarHeightHint="0">
-
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        SystemDecorations="BorderOnly"
+		>
 	<Design.DataContext>
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
+	<Border BorderBrush="Black" BorderThickness="2">
+		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
+			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0 -30 0 0"
+						HorizontalAlignment="Left" VerticalAlignment="Bottom">
+				<Label FontSize="13" Content="Контроль целостности ПО ВУ"></Label>
+				<Image Source="/Assets/CopyModelDifferences_32x32.ico"  Height="23" Margin="5 -10 0 0"
+					   ></Image>
+			</StackPanel>
+			<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
+				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left"
+						 >
+				<Button Width="120" Height="25" Content="Проверить" FontSize="11"
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+				</Button>
+				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11"
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+				</Button>
+			</StackPanel>
 
-	<Grid RowDefinitions="30 35 35 435 30 35" ColumnDefinitions="280 640 280">
-		<Label VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="0" FontSize="13" Margin="10 5 0 0" Content="Контроль целостности ПО ВУ"></Label>
-		<Image Source="/Assets/CopyModelDifferences_32x32.ico" Grid.Row="0" Grid.Column="1" Height="23" VerticalAlignment="Center" HorizontalAlignment="Left" Margin=" -65 7 0 0"></Image>
-		<Button Height="30" Width="30" Command="{Binding CloseProgram}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="3" Grid.RowSpan="2" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
-			<Button.Styles>
-				<Style Selector="Button">
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate>
-								<Image Source="/Assets/Close.png"></Image>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</Button.Styles>
-		</Button>
-		<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
-			Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left"
-					 Margin="10 10 0 0">
-			<Button Width="120" Height="25" Content="Проверить" FontSize="11"
-					HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-			</Button>
-			<Button Width="120" Height="25" Content="Создать эталон" FontSize="11"
-					HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-			</Button>
-		</StackPanel>
+			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
+						Orientation="Horizontal" HorizontalAlignment="Left">
+				<Button Width="120" Height="25" Content="Развернуть" FontSize="11"
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+			</StackPanel>
 
-		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
-					Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,-5">
-			<Button Width="120" Height="25" Content="Развернуть" FontSize="11"
-					HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-			<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
-					HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-		</StackPanel>
+			<StackPanel Spacing="150" Orientation="Horizontal" 
+						Grid.Row="1" Grid.Column="1">
+				<TextBlock>Дата создания эталона: </TextBlock>
+				<TextBlock>Дата последней проверки: </TextBlock>
+			</StackPanel>
 
-		<StackPanel Spacing="150" Orientation="Horizontal" Margin="10,15"
-					Grid.Row="1" Grid.Column="1">
-			<TextBlock>Дата создания эталона: </TextBlock>
-			<TextBlock>Дата последней проверки: </TextBlock>
-		</StackPanel>
 
-		<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>
-		<StackPanel Grid.Row="1" Grid.Column="3" Margin="5" Height="35"
-			HorizontalAlignment="Right" Spacing="10" Orientation="Horizontal">
-			<Button Command="{Binding OpenFileExplorer}">
-				<Image Source="/Assets/add.png"></Image>
-			</Button>
-			<Button Command="{Binding TEST}">
-				<Image Source="/Assets/setting.png"></Image>
-			</Button>
-			<Button>
-				<Image Source="/Assets/info.png"></Image>
-			</Button>
-		</StackPanel>
-		<ComboBox Grid.Row="2" Grid.Column="2" HorizontalContentAlignment="Right"
-				  Width="200" Height="25" Margin=" 75 0 0 0"/>
-		<TreeDataGrid Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
-					  HorizontalAlignment="Stretch" Margin="5, -5, 5 ,5"
-					  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
-		</TreeDataGrid>
-		<ProgressBar Grid.Row="4" Grid.ColumnSpan="3"
-                     Height="30" VerticalAlignment="Bottom"/>
-		<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
-					Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
-			<TextBlock>Уровень пользователя: </TextBlock>
-			<TextBlock>| </TextBlock>
-		</StackPanel>
-	</Grid>
+			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical"> 
+				<Button Height="35" Command="{Binding CloseProgram}" VerticalAlignment="Top"
+					HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="1" Margin="0 0 1 0">
+					<Button.Styles>
+						<Style Selector="Button">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<Image Source="/Assets/Close.png"></Image>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Button.Styles>
+				</Button>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 0 5 0">
+					<Button Height="35" Command="{Binding OpenFileExplorer}">
+						<Image Source="/Assets/add.png"></Image>
+					</Button>
+					<Button Height="35" Command="{Binding TEST}">
+						<Image Source="/Assets/setting.png"></Image>
+					</Button>
+					<Button Height="35">
+						<Image Source="/Assets/info.png"></Image>
+					</Button>
+				</StackPanel>
+				<ComboBox Margin="70 3 0 0" HorizontalContentAlignment="Right" Height="25" Width="200"/>
+			</StackPanel>
+			
+			
+			<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>
+			
+			<TreeDataGrid Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
+						  Width="1185" HorizontalAlignment="Center"
+						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
+			</TreeDataGrid>
+			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3"
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 10 0"/>
+			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
+						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
+				<TextBlock>Уровень пользователя: </TextBlock>
+				<TextBlock>| </TextBlock>
+			</StackPanel>
+		</Grid>
+	</Border>
 </Window>
 <!--<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
