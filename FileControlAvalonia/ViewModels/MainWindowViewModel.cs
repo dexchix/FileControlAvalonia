@@ -152,25 +152,11 @@ namespace FileControlAvalonia.ViewModels
         }
         public void TEST()
         {
-            Files = new ObservableCollection<FileTree>()
-            {
-                new FileTree("C:\\1\\2",true),
-            };
-            //Source = new HierarchicalTreeDataGridSource<FileTree>(FileTree)
-            //{
-            //    Columns =
-            //    {
-            //        new HierarchicalExpanderColumn<FileTree>
-            //            (
-            //                new TextColumn<FileTree,string>("Имя", x=> x.Name), x=>x.Children),
-            //        new TextColumn<FileTree,string>("Путь", x=> x.Path),
-            //        new TextColumn<FileTree, string>("Родитель", x => x.Parent.Name)
-            //    },
-            //};
+
         }
         public void TEST2()
         {
-            Files.Add(new FileTree("C:\\Users\\ORPO\\Desktop\\filecontrol", true));
+            Files.Add(new FileTree("/lib32", true));
         }
         #endregion
     }

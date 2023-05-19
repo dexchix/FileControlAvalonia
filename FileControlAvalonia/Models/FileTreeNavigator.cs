@@ -14,8 +14,8 @@ namespace FileControlAvalonia.Models
     public class FileTreeNavigator: ReactiveObject
     {
         #region FIELDS
-        public readonly string _pathRootFolder = "C:\\1\\2";
-        //private string _pathRootFolder = "/home/orpo/Desktop/1/2";
+        //public readonly string _pathRootFolder = "C:\\1\\2";
+        private string _pathRootFolder = "/home/orpo/Desktop/1/2";
         public static FileTree? _fileTree;
         public static Watcher? _watcher;
         new public event PropertyChangedEventHandler? PropertyChanged;
