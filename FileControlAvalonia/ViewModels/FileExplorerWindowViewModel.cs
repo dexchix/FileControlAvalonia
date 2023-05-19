@@ -87,11 +87,15 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            MainWindowViewModel.fileTree = FileTree.Children;
+            _fileTreeNavigator.FillingCollectionSelectedItems(_fileTreeNavigator.SearchTreeParent(_fileTreeNavigator
+                                                             ._pathRootFolder,FileTree).Children!);
 
-            var fdgdfgghgdf = MainWindowViewModel.fileTree;
+            //MainWindowViewModel.fileTree = FileTree.Children;
 
-            window.Close();
+            //var fdgdfgghgdf = MainWindowViewModel.fileTree;
+
+            //window.Close();
+            var sdfsdf = _fileTreeNavigator.selectedFiles;
         }
         public void UpCommand()
         {

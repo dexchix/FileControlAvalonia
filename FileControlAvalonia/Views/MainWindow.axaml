@@ -1,6 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:FileControlAvalonia.ViewModels"
+		xmlns:m="using:FileControlAvalonia.Models"
+		xmlns:c ="using:FileControlAvalonia.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -13,6 +15,9 @@
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly"
 		>
+	<Window.Resources>
+		<c:IndentConverter x:Key="IndentConverter"/>
+	</Window.Resources>
 	<Design.DataContext>
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
@@ -72,7 +77,7 @@
 					<Button Height="35" Command="{Binding TEST}">
 						<Image Source="/Assets/setting.png"></Image>
 					</Button>
-					<Button Height="35">
+					<Button Height="35" Command="{Binding TEST2}">
 						<Image Source="/Assets/info.png"></Image>
 					</Button>
 				</StackPanel>
@@ -82,82 +87,31 @@
 			
 			<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>
 			
-			<TreeDataGrid Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
+			<!--<TreeDataGrid Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
 						  Width="1185" HorizontalAlignment="Center"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
-			</TreeDataGrid>
-			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3"
-						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 10 0"/>
-			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
-						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
-				<TextBlock>Уровень пользователя: </TextBlock>
-				<TextBlock>| </TextBlock>
-			</StackPanel>
-		</Grid>
-	</Border>
-</Window>
-<!--<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:m="using:FileControlAvalonia.Models"
-        xmlns:vm="using:FileControlAvalonia.ViewModels"
-        xmlns:A="using: TreeDataGridDemo"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="TreeDataGridDemo.MainWindow"
-        Title="TreeDataGridDemo"
-        xmlns:conv="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls.Converters"
-    >
-	-->
-<!--xmlns:conv="clr-namespace:Avalonia.Controls.Converters"-->
-<!--
-	<Window.Resources>
-		<m:IndentConverter x:Key="IndentConverter"/>
-	</Window.Resources>
-	<Window.DataContext>
-		<vm:FilesPageViewModel/>
-	</Window.DataContext>
-
-	<Grid RowDefinitions="40,*">
-		<Grid Grid.Row="0">
-			<Button HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Click="ButtonClick">
-
-			</Button>
-		</Grid>
-		<Grid Margin="5" Grid.Row="1">
-			<DockPanel>
-				<DockPanel DockPanel.Dock="Top" Margin="0 4">
-					<ComboBox Items="{Binding Drives}"
-                              SelectedItem="{Binding SelectedDrive}"
-                              DockPanel.Dock="Left"/>
-					<TextBox Text="{Binding SelectedPath, Mode=OneWay}"
-                             Margin="4 0 0 0"
-                             VerticalContentAlignment="Center"
-                             KeyDown="SelectedPath_KeyDown"/>
-				</DockPanel>
-				<TextBlock Classes="realized-count" DockPanel.Dock="Bottom"/>
-				<TreeDataGrid Name="fileViewer" Source="{Binding Source}" >
-					<TreeDataGrid.Resources>
-						<DataTemplate x:Key="FileCell" DataType="m:FileTreeNodeModel">
-							<Grid Name="EtalonGrid">
-								<Line StartPoint="0,0" EndPoint="0,80" Stroke="Black" IsVisible="True"/>
-								<Grid.RowDefinitions>
-									<RowDefinition></RowDefinition>
-									<RowDefinition></RowDefinition>
-									<RowDefinition></RowDefinition>
-								</Grid.RowDefinitions>
-								<Label Grid.Row="0" Content="{Binding HashSum}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
-								<Label Grid.Row="1" Content="{Binding ModifiedToString}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-								<Label Grid.Row="2" Content="{Binding Version}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
-							</Grid>
-						</DataTemplate>
-						<DataTemplate x:Key="ButtonCell" DataType="m:FileTreeNodeModel">
-							-->
-<!--<Button>
+			</TreeDataGrid>-->
+			<TreeDataGrid Name="fileViewer" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
+						  Width="1185" HorizontalAlignment="Center"
+						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}" >
+				<TreeDataGrid.Resources>
+					<DataTemplate x:Key="FileCell" DataType="m:FileTree">
+						<Grid Name="EtalonGrid">
+							<Line StartPoint="0,0" EndPoint="0,80" Stroke="Black" IsVisible="True"/>
+							<Grid.RowDefinitions>
+								<RowDefinition></RowDefinition>
+								<RowDefinition></RowDefinition>
+								<RowDefinition></RowDefinition>
+							</Grid.RowDefinitions>
+							<Label Grid.Row="0" Content="{Binding Name}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+							<Label Grid.Row="1" Content="{Binding Path}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+							<Label Grid.Row="2" Content="{Binding Name}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+						</Grid>
+					</DataTemplate>
+					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
+						<Button>
                             <StackPanel Orientation="Horizontal" Spacing="5">
-                                <Image Source="/Assets/deliteFile.png" Height="20"></Image>
+                                <!--<Image Source="/Assets/deliteFile.png" Height="20"></Image>-->
                                 <Label Content="Удалить"></Label>
                             </StackPanel>
                             <Button.Styles>
@@ -178,95 +132,101 @@
                                     <Setter Property="BorderThickness" Value="2"></Setter>
                                 </Style>
                             </Button.Styles>
-                        </Button>-->
-<!--
-						</DataTemplate>
-					</TreeDataGrid.Resources>
-					<TreeDataGrid.Styles>
-						<Style Selector="TreeDataGridRow">
-							<Setter Property="BorderThickness" Value="1"></Setter>
-							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
-							<Setter Property="Height" Value="70"></Setter>
-							<Setter Property="Background" Value="{Binding Color}"></Setter>
-						</Style>
-						<Style Selector="TreeDataGridRowsPresenter:checked /template/ ContentPresenter">
-							<Setter Property="BorderThickness" Value="1"></Setter>
-							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
-							<Setter Property="Height" Value="70"></Setter>
-							<Setter Property="Background" Value="{Binding Color}"></Setter>
-						</Style>
+                        </Button>
+					</DataTemplate>
+				</TreeDataGrid.Resources>
+				<TreeDataGrid.Styles>
+					<Style Selector="TreeDataGridCellsPresenter">
+                        <Setter Property="Background" Value="{Binding Color}"></Setter>
+                    </Style>
+
+					<Style Selector="TreeDataGridRow">
+						<Setter Property="BorderThickness" Value="1"></Setter>
+						<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
+						<Setter Property="Height" Value="70"></Setter>
+					</Style>
+					<Style Selector="TreeDataGridRowsPresenter:checked /template/ ContentPresenter">
+						<Setter Property="BorderThickness" Value="1"></Setter>
+						<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
+						<Setter Property="Height" Value="70"></Setter>
+					</Style>
 
 
 
-						<Style Selector="TreeDataGridExpanderCell">
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate>
-										<ToggleButton
+					<Style Selector="TreeDataGridExpanderCell">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate>
+									<ToggleButton
                                         
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch"
-                                                      Focusable="True"
-                                                      IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
-                                                      Background="Transparent"
-                                                      IsVisible="True"
+												  HorizontalAlignment="Stretch"
+												  VerticalAlignment="Stretch"
+												  Focusable="True"
+												  IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
+												  Background="Transparent"
+												  IsVisible="True"
                                                   
                                                   >
-											<ContentControl>
-												<Border x:Name="CellBorder"
-                                                        Background="{TemplateBinding Background}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                                        CornerRadius="{TemplateBinding CornerRadius}"
-                                                        Padding="{TemplateBinding Indent, Converter={StaticResource IndentConverter}}}"
+										<ContentControl>
+											<Border x:Name="CellBorder"
+													Background="{TemplateBinding Background}"
+													BorderBrush="{TemplateBinding BorderBrush}"
+													BorderThickness="{TemplateBinding BorderThickness}"
+													CornerRadius="{TemplateBinding CornerRadius}"
+													Padding="{TemplateBinding Indent, Converter={StaticResource IndentConverter}}}"
                                                  >
-													<StackPanel Orientation="Horizontal" Margin=" 0 0 0 0">
-														<Image Margin="-0 0 4 0"
-                                                              VerticalAlignment="Center"
-                                                              Height="20">
-															<Image.Source>
-																<MultiBinding Converter="{x:Static vm:FilesPageViewModel.ArrowIconConverter}">
-																	<Binding Path="IsDirectory"/>
-																	<Binding Path="IsExpanded"/>
-																	<Binding Path="HasChildren"/>
-																</MultiBinding>
-															</Image.Source>
-														</Image>
-														<Image Margin="10 0 4 0"
-                                                               VerticalAlignment="Center"
-                                                               Height="30">
-															<Image.Source>
-																<MultiBinding Converter="{x:Static vm:FilesPageViewModel.FileIconConverter}">
-																	<Binding Path="IsDirectory"/>
-																	<Binding Path="IsExpanded"/>
-																</MultiBinding>
-															</Image.Source>
-														</Image>
-														<TextBlock Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
+												<StackPanel Orientation="Horizontal" Margin=" 0 0 0 0">
+													<Image Margin="-0 0 4 0"
+														  VerticalAlignment="Center"
+														  Height="20">
+														<Image.Source>
+															<MultiBinding Converter="{x:Static vm:MainWindowViewModel.ArrowIconConverter}">
+																<Binding Path="IsDirectory"/>
+																<Binding Path="IsExpanded"/>
+																<Binding Path="HasChildren"/>
+															</MultiBinding>
+														</Image.Source>
+													</Image>
+													<Image Margin="10 0 4 0"
+														   VerticalAlignment="Center"
+														   Height="30">
+														<Image.Source>
+															<MultiBinding Converter="{x:Static vm:MainWindowViewModel.FileIconConverter}">
+																<Binding Path="IsDirectory"/>
+																<Binding Path="IsExpanded"/>
+															</MultiBinding>
+														</Image.Source>
+													</Image>
+													<TextBlock Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
 
-													</StackPanel>
-												</Border>
-											</ContentControl>
-											<ToggleButton.Styles>
-												<Style Selector="ToggleButton:checked /template/ ContentPresenter">
-													<Setter Property="Background" Value="Transparent"/>
-													<Setter Property="Foreground" Value="Black"/>
-												</Style>
-												<Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
-													<Setter Property="Background" Value="Transparent"/>
-													<Setter Property="Foreground" Value="Black"/>
-												</Style>
-											</ToggleButton.Styles>
-										</ToggleButton>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
+												</StackPanel>
+											</Border>
+										</ContentControl>
+										<!--<ToggleButton.Styles>
+											<Style Selector="ToggleButton:checked /template/ ContentPresenter">
+												<Setter Property="Background" Value="Transparent"/>
+												<Setter Property="Foreground" Value="Black"/>
+											</Style>
+											<Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
+												<Setter Property="Background" Value="Transparent"/>
+												<Setter Property="Foreground" Value="Black"/>
+											</Style>
+										</ToggleButton.Styles>-->
+									</ToggleButton>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
 
-					</TreeDataGrid.Styles>
-				</TreeDataGrid>
-			</DockPanel>
+				</TreeDataGrid.Styles>
+			</TreeDataGrid>
+			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3"
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 10 0"/>
+			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
+						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
+				<TextBlock>Уровень пользователя: </TextBlock>
+				<TextBlock>| </TextBlock>
+			</StackPanel>
 		</Grid>
-	</Grid>
-
-</Window>-->
+	</Border>
+</Window>

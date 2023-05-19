@@ -2,6 +2,7 @@
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace FileControlAvalonia.Models
     public class FileTreeNavigator: ReactiveObject
     {
         #region FIELDS
-        //private string _pathRootFolder = "C:\\1\\2";
-        private string _pathRootFolder = "/home/orpo/Desktop/1/2";
+        public readonly string _pathRootFolder = "C:\\1\\2";
+        //private string _pathRootFolder = "/home/orpo/Desktop/1/2";
         public static FileTree? _fileTree;
         public static Watcher? _watcher;
         new public event PropertyChangedEventHandler? PropertyChanged;
@@ -163,6 +164,20 @@ namespace FileControlAvalonia.Models
                     }
                 }
             });
+        }
+        public ObservableCollection<FileTree>? selectedFiles = new ObservableCollection<FileTree>();
+        public void FillingCollectionSelectedItems(ObservableCollection<FileTree> fileTrees)
+        {
+            foreach(var fileTree in fileTrees)
+            {
+                //fileTree.IsChecked == true ?
+                if(fileTree.IsChecked == true)
+                {
+                    selectedFiles.Add(fileTree);
+                }
+                if (fileTree.IsDirectory && fileTree.IsChecked != true)
+                    FillingCollectionSelectedItems(fileTree.Children);
+            }
         }
         #endregion
     }

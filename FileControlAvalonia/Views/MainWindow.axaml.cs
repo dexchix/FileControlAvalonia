@@ -13,6 +13,7 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
+            this.Deactivated += TEST; 
         }
         private void InitializeComponent()
         {
@@ -23,6 +24,10 @@ namespace FileControlAvalonia.Views
             base.OnOpened(e);
             Position = new PixelPoint(300, 300);
             CanResize = false;
+        }
+        private void TEST (object sender, EventArgs e)
+        {
+            
         }
     }
 }
