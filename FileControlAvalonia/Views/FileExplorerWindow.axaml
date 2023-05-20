@@ -7,13 +7,13 @@
 	    x:Name="SelectFilesForm"
 	    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="FileControlAvalonia.Views.FileExplorerWindow"
 		Icon="/Assets/AddFile.ico"
-	    MaxWidth="390"
-	    MaxHeight="440"
-		MinWidth="390"
-	    MinHeight="440">
+	    Width="390" Height="440"
+		ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        SystemDecorations="BorderOnly">
 	<Window.DataContext>
 		<vm:FileExplorerWindowViewModel/>
 	</Window.DataContext>
@@ -25,7 +25,7 @@
 		<KeyBinding Gesture="Up" Command="{Binding UpCommand}"/>
 		<KeyBinding Gesture="Down" Command="{Binding DownCommand}"/>
 	</Window.KeyBindings>
-
+	<Border BorderBrush="Black" BorderThickness="2">
 	<Grid RowDefinitions="40,*,30">
 		<StackPanel>
 			<Button Width="25" Height="25" Margin="5,5,0,0"
@@ -89,4 +89,5 @@
 					CommandParameter="{Binding ElementName=SelectFilesForm}"/>
 		</StackPanel>
 	</Grid>
+	</Border>
 </Window>

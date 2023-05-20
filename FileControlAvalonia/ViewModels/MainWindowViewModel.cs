@@ -128,7 +128,7 @@ namespace FileControlAvalonia.ViewModels
                     var assetLoader = AvaloniaLocator.Current.GetRequiredService<IAssetLoader>();
 
                     using (var fileStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/file.png")))
-                    using (var folderStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/folder.png")))
+                    using (var folderStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/folder-open.png")))
                     using (var folderOpenStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/folder.png")))
                     {
                         s_iconConverter = new IconConverter(new Bitmap(fileStream), new Bitmap(folderStream), new Bitmap(folderOpenStream));
@@ -156,7 +156,8 @@ namespace FileControlAvalonia.ViewModels
         }
         public void TEST2()
         {
-            Files.Add(new FileTree("/lib32", true));
+            //Files.Add(new FileTree("/lib32", true));
+            Files.Add(new FileTree("C:\\Users\\ORPO\\Desktop\\filecontrol", true));
         }
         #endregion
     }

@@ -1,10 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Avalonia.VisualTree;
-using Avalonia.Platform;
 using System;
+using FileControlAvalonia.Helper;
 
 namespace FileControlAvalonia.Views
 {
@@ -13,7 +11,7 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
-            this.Deactivated += TEST; 
+
         }
         private void InitializeComponent()
         {
@@ -22,12 +20,8 @@ namespace FileControlAvalonia.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Position = new PixelPoint(300, 300);
+            Position = new PixelPoint(WindowAssistant.X_Coordinate, WindowAssistant.Y_Coordinate);
             CanResize = false;
-        }
-        private void TEST (object sender, EventArgs e)
-        {
-            
         }
     }
 }

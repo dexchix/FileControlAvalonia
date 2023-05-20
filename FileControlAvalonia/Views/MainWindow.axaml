@@ -164,9 +164,7 @@
 												  Focusable="True"
 												  IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
 												  Background="Transparent"
-												  IsVisible="True"
-                                                  
-                                                  >
+												  IsVisible="True">
 										<ContentControl>
 											<Border x:Name="CellBorder"
 													Background="{TemplateBinding Background}"
@@ -202,22 +200,19 @@
 												</StackPanel>
 											</Border>
 										</ContentControl>
-										<!--<ToggleButton.Styles>
-											<Style Selector="ToggleButton:checked /template/ ContentPresenter">
-												<Setter Property="Background" Value="Transparent"/>
-												<Setter Property="Foreground" Value="Black"/>
+										<ToggleButton.Styles>
+											<Style Selector="ToggleButton:checked  /template/ ContentPresenter">
+												<Setter Property="Background" Value="Transparent"></Setter>
 											</Style>
 											<Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
-												<Setter Property="Background" Value="Transparent"/>
-												<Setter Property="Foreground" Value="Black"/>
+												<Setter Property="Background" Value="Transparent"></Setter>
 											</Style>
-										</ToggleButton.Styles>-->
+										</ToggleButton.Styles>
 									</ToggleButton>
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
 					</Style>
-
 				</TreeDataGrid.Styles>
 			</TreeDataGrid>
 			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3"
