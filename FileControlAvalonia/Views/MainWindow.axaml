@@ -18,9 +18,23 @@
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
 	</Window.Resources>
+	
 	<Design.DataContext>
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
+	
+	<Window.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="Transparent"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
+		<Style Selector="Button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="Gray"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
+	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="2">
 		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
 			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0 -30 0 0"
@@ -43,9 +57,12 @@
 			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
 						Orientation="Horizontal" HorizontalAlignment="Left">
 				<Button Width="120" Height="25" Content="Развернуть" FontSize="11"
-						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+				</Button>
 				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
-						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+					
+				</Button>
 			</StackPanel>
 
 			<StackPanel Spacing="150" Orientation="Horizontal" 

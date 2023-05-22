@@ -173,10 +173,10 @@ namespace FileControlAvalonia.Models
                 //fileTree.IsChecked == true ?
                 if(fileTree.IsChecked == true)
                 {
-                    selectedFiles.Add(fileTree);
+                    selectedFiles!.Add(fileTree);
                 }
                 if (fileTree.IsDirectory && fileTree.IsChecked != true)
-                    FillingCollectionSelectedItems(fileTree.Children);
+                    FillingCollectionSelectedItems(fileTree.Children!);
             }
         }
         #endregion
