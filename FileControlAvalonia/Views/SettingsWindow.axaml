@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:FileControlAvalonia.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
+        x:Class="FileControlAvalonia.Views.SettingsWindow"
+        Title="Настройки" Icon="/Assets/setting.png"
+		Width="600" Height="585"
+		ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        SystemDecorations="BorderOnly">
+	<Window.DataContext>
+		<vm:SettingsWindowViewModel/>
+	</Window.DataContext>
+	<Border BorderBrush="Black" BorderThickness="2">
+		<Grid RowDefinitions="30 * 30" ColumnDefinitions="auto auto">
+			<StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
+				<Image Source="/Assets/setting.png" Height="20" VerticalAlignment="Center" Margin="10 0 0 0"></Image>
+
+				<Label Content="Настройки" Margin="5 3 0 0"></Label>
+			</StackPanel>
+			<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="11.5" Margin="5 0 0 0">
+				<Label Content = "Сервер"></Label>
+				<Label Content = "База данных"></Label>
+				<Label Content = "Пользователь"></Label>
+				<Label Content = "Пароль"></Label>
+				<Label Content = "Имя таблицы"></Label>
+				<Label Content = "Адрес ОРС сервера"></Label>
+				<Label Content = "Тег общего состояния"></Label>
+				<Label Content = "Тег общего количества файлов"></Label>
+				<Label Content = "Тег количества совпадений"></Label>
+				<Label Content = "Тег количества несовпадений"></Label>
+				<Label Content = "Тег частично совпавших"></Label>
+				<Label Content = "Тег количества без доступа"></Label>
+				<Label Content = "Тег не найденых"></Label>
+				<Label Content = "Доступные расширения файлов"></Label>
+				<Label Content = "Параметр доступа для кнопки «Проверить»"></Label>
+			</StackPanel>
+			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
+						HorizontalAlignment="Stretch" Width="270">
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox PasswordChar="*" HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch"></TextBox>
+			</StackPanel>
+			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 
+						VerticalAlignment="Bottom" Margin="5 -8 0 5" Spacing="10">
+				<Button Content="Подтвердить" Width="150" HorizontalContentAlignment="Center"></Button>
+				<Button Content="Отмена" Command="{Binding CloseWindow}" Width="150" HorizontalContentAlignment="Center"
+						CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}}"></Button>
+			</StackPanel>
+		</Grid>
+	</Border>
+</Window>

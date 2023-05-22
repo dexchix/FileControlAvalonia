@@ -71,10 +71,10 @@
 					</Button.Styles>
 				</Button>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 0 5 0">
-					<Button Height="35" Command="{Binding OpenFileExplorer}">
+					<Button Height="35" Command="{Binding OpenFileExplorerWindow}">
 						<Image Source="/Assets/add.png"></Image>
 					</Button>
-					<Button Height="35" Command="{Binding TEST}">
+					<Button Height="35" Command="{Binding OpenSettingsWindow}">
 						<Image Source="/Assets/setting.png"></Image>
 					</Button>
 					<Button Height="35" Command="{Binding TEST2}">

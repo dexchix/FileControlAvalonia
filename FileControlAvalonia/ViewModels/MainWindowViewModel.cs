@@ -143,21 +143,23 @@ namespace FileControlAvalonia.ViewModels
         {
             App.CurrentApplication!.Shutdown();
         }
-        public void OpenFileExplorer()
+        public void OpenFileExplorerWindow()
         {
 
             var fileExplorer = new FileExplorerWindow();
             var fghfgh = fileExplorer.DataContext;
             fileExplorer.Show();
         }
-        public void TEST()
+        public void OpenSettingsWindow()
         {
-
+            var settingsWindow = new SettingsWindow();
+            var fghfgh = settingsWindow.DataContext;
+            settingsWindow.Show();
         }
         public void TEST2()
         {
             //Files.Add(new FileTree("/lib32", true));
-            Files.Add(new FileTree("C:\\Users\\ORPO\\Desktop\\filecontrol", true));
+            Files.Add(new FileTree("C:\\Users", true));
         }
         #endregion
     }

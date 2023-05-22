@@ -23,15 +23,15 @@ namespace FileControlAvalonia.Views
         }
         private void TEST(object sender, EventArgs args)
         {
-            Close();
-            new FileExplorerWindow().Show();
-            //Activate();
-            //Focus();
+            //Close();
+            //new FileExplorerWindow().Show();
+            ////Activate();
+            ////Focus();
         }
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Position = new PixelPoint(WindowAssistant.X_Coordinate + 200, WindowAssistant.Y_Coordinate + 100);
+            Position = new PixelPoint(WindowAssistant.X_Coordinate + 400, WindowAssistant.Y_Coordinate + 70);
             CanResize = false;
         }
     }
