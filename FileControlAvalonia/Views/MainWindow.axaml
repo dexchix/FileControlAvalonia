@@ -217,14 +217,7 @@
 												</StackPanel>
 											</Border>
 										</ContentControl>
-										<ToggleButton.Styles>
-											<Style Selector="ToggleButton:checked  /template/ ContentPresenter">
-												<Setter Property="Background" Value="Transparent"></Setter>
-											</Style>
-											<Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
-												<Setter Property="Background" Value="Transparent"></Setter>
-											</Style>
-										</ToggleButton.Styles>
+						
 									</ToggleButton>
 								</ControlTemplate>
 							</Setter.Value>
