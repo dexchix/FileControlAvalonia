@@ -61,7 +61,7 @@
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
 				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
-						Command ="{Binding WrapFileTree}" 
+						Command ="{Binding WrapFileTree}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 
 				</Button>

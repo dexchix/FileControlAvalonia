@@ -149,12 +149,12 @@ namespace FileControlAvalonia.ViewModels
             settingsWindow.Show();
         }
 
-        public void WrapFileTree(object button)
+        public void WrapFileTree(TreeDataGrid fileVieawer)
         {
-           
+            //fileVieawer.Source.
         }
         
-        public void UnWrapFileTree(object treeDataGrid)
+        public void UnWrapFileTree(TreeDataGrid fileVieawer)
         {
 
         }
