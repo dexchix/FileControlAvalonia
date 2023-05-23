@@ -25,36 +25,23 @@ namespace FileControlAvalonia.ViewModels
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
         #endregion
+
         #region PROPERTIES
         public ObservableCollection<FileTree> Files
         {
             get => fileTree;
             set => this.RaiseAndSetIfChanged(ref fileTree, value);
         }
-        public HierarchicalTreeDataGridSource<FileTree> Source 
+        public HierarchicalTreeDataGridSource<FileTree> Source
         {
             get => _source;
-            set => this.RaiseAndSetIfChanged(ref  _source, value);
+            set => this.RaiseAndSetIfChanged(ref _source, value);
         }
         #endregion
 
         public MainWindowViewModel()
         {
-            //FileTree = new ObservableCollection<FileTree>()
-            //{
-            //    new FileTree("C:\\1\\2",true)
-            //};
             Files = new ObservableCollection<FileTree>();
-            //Source = new HierarchicalTreeDataGridSource<FileTree>(Files)
-            //{
-            //    Columns =
-            //    {
-            //        new HierarchicalExpanderColumn<FileTree>(
-            //        new TextColumn<FileTree,string>("Файл", x=> x.Name), x=>x.Children),
-            //        new TextColumn<FileTree,string>("Эталон", x=> x.Path),
-            //        new TextColumn<FileTree, string>("Фактическое значение", x => x.Parent.Name)
-            //    },
-            //};
 
             Source = new HierarchicalTreeDataGridSource<FileTree>(Files)
             {
@@ -95,6 +82,7 @@ namespace FileControlAvalonia.ViewModels
                 }
             };
         }
+        #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
         {
             get
@@ -138,11 +126,14 @@ namespace FileControlAvalonia.ViewModels
                 return s_iconConverter;
             }
         }
+        #endregion
+
         #region COMMANDS
         public void CloseProgram()
         {
             App.CurrentApplication!.Shutdown();
         }
+
         public void OpenFileExplorerWindow()
         {
 
@@ -150,11 +141,22 @@ namespace FileControlAvalonia.ViewModels
             var fghfgh = fileExplorer.DataContext;
             fileExplorer.Show();
         }
+
         public void OpenSettingsWindow()
         {
             var settingsWindow = new SettingsWindow();
             var fghfgh = settingsWindow.DataContext;
             settingsWindow.Show();
+        }
+
+        public void WrapFileTree(object button)
+        {
+           
+        }
+        
+        public void UnWrapFileTree(object treeDataGrid)
+        {
+
         }
         public void TEST2()
         {

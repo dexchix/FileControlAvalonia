@@ -18,11 +18,11 @@
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
 	</Window.Resources>
-	
+
 	<Design.DataContext>
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
-	
+
 	<Window.Styles>
 		<Style Selector="Button">
 			<Setter Property="Background" Value="Transparent"></Setter>
@@ -57,22 +57,25 @@
 			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
 						Orientation="Horizontal" HorizontalAlignment="Left">
 				<Button Width="120" Height="25" Content="Развернуть" FontSize="11"
+						Command ="{Binding UnWrapFileTree}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
 				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
+						Command ="{Binding WrapFileTree}" 
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-					
+
 				</Button>
 			</StackPanel>
+			<!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"-->
 
-			<StackPanel Spacing="150" Orientation="Horizontal" 
+			<StackPanel Spacing="150" Orientation="Horizontal"
 						Grid.Row="1" Grid.Column="1">
 				<TextBlock>Дата создания эталона: </TextBlock>
 				<TextBlock>Дата последней проверки: </TextBlock>
 			</StackPanel>
 
 
-			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical"> 
+			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical">
 				<Button Height="35" Command="{Binding CloseProgram}" VerticalAlignment="Top"
 					HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="1" Margin="0 0 1 0">
 					<Button.Styles>
@@ -100,14 +103,9 @@
 				</StackPanel>
 				<ComboBox Margin="70 3 0 0" HorizontalContentAlignment="Right" Height="25" Width="200"/>
 			</StackPanel>
-			
-			
+
 			<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>
-			
-			<!--<TreeDataGrid Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
-						  Width="1185" HorizontalAlignment="Center"
-						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
-			</TreeDataGrid>-->
+
 			<TreeDataGrid Name="fileViewer" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
 						  Width="1185" HorizontalAlignment="Center"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}" >
@@ -127,35 +125,35 @@
 					</DataTemplate>
 					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
 						<Button>
-                            <StackPanel Orientation="Horizontal" Spacing="5">
-                                <!--<Image Source="/Assets/deliteFile.png" Height="20"></Image>-->
-                                <Label Content="Удалить"></Label>
-                            </StackPanel>
-                            <Button.Styles>
-                                <Style Selector="Button">
-                                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-                                    <Setter Property="Background" Value="White"></Setter>
-                                    <Setter Property="Height" Value="60"></Setter>
-                                    <Setter Property="Width" Value="140"></Setter>
-                                    <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-                                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                                    <Setter Property="Content" Value="Удалить"></Setter>
-                                    <Setter Property="BorderBrush" Value="Black"></Setter>
-                                    <Setter Property="BorderThickness" Value="2"></Setter>
-                                </Style>
-                                <Style Selector="Button:pointerover /template/ ContentPresenter">
-                                    <Setter Property="Background" Value="Gray"></Setter>
-                                    <Setter Property="BorderBrush" Value="Black"></Setter>
-                                    <Setter Property="BorderThickness" Value="2"></Setter>
-                                </Style>
-                            </Button.Styles>
-                        </Button>
+							<StackPanel Orientation="Horizontal" Spacing="5">
+								<!--<Image Source="/Assets/deliteFile.png" Height="20"></Image>-->
+								<Label Content="Удалить"></Label>
+							</StackPanel>
+							<Button.Styles>
+								<Style Selector="Button">
+									<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+									<Setter Property="Background" Value="White"></Setter>
+									<Setter Property="Height" Value="60"></Setter>
+									<Setter Property="Width" Value="140"></Setter>
+									<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+									<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+									<Setter Property="Content" Value="Удалить"></Setter>
+									<Setter Property="BorderBrush" Value="Black"></Setter>
+									<Setter Property="BorderThickness" Value="2"></Setter>
+								</Style>
+								<Style Selector="Button:pointerover /template/ ContentPresenter">
+									<Setter Property="Background" Value="Gray"></Setter>
+									<Setter Property="BorderBrush" Value="Black"></Setter>
+									<Setter Property="BorderThickness" Value="2"></Setter>
+								</Style>
+							</Button.Styles>
+						</Button>
 					</DataTemplate>
 				</TreeDataGrid.Resources>
 				<TreeDataGrid.Styles>
 					<Style Selector="TreeDataGridCellsPresenter">
-                        <Setter Property="Background" Value="{Binding Color}"></Setter>
-                    </Style>
+						<Setter Property="Background" Value="{Binding Color}"></Setter>
+					</Style>
 
 					<Style Selector="TreeDataGridRow">
 						<Setter Property="BorderThickness" Value="1"></Setter>
