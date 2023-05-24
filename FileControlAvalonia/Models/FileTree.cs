@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Models
 {
-    public class FileTree: ReactiveObject
+    public class FileTree : ReactiveObject
     {
         #region FIELDS
         private string _path;
@@ -21,6 +21,7 @@ namespace FileControlAvalonia.Models
         #endregion
 
         #region PROPERTIES
+        public string Color { get; set; }
         public bool IsChecked
         {
             get => _isChecked;
@@ -71,6 +72,7 @@ namespace FileControlAvalonia.Models
 
         public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false)
         {
+            Color = new Random().Next(0, 10) > 4 ? "#f00" : "#090";
             _path = path;
             _name = isRoot ? path : System.IO.Path.GetFileName(Path);
             _isExpanded = isRoot;

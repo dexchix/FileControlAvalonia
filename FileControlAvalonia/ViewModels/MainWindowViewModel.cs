@@ -4,6 +4,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Views;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -151,17 +153,68 @@ namespace FileControlAvalonia.ViewModels
 
         public void WrapFileTree(TreeDataGrid fileVieawer)
         {
-            //fileVieawer.Source.
+            //Task.Run(() => 
+            //{
+            //    foreach (var file in Files)
+            //    {
+            //       file.IsExpanded = false;
+            //    }
+            //});
+            try
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    foreach (var file in Files)
+                    {
+                        file.IsExpanded = false;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
-        
+
         public void UnWrapFileTree(TreeDataGrid fileVieawer)
         {
+            try
+            {
+                //Dispatcher.UIThread.Post(() =>
+                //{
+                //    foreach (var file in Files)
+                //    {
+                //        UnWrapFile(file);
+                //    }
+                //});
 
+                foreach(var file in Files)
+                {
+                    file.IsExpanded = true;
+                }
+            }
+            catch
+            {
+
+            }
         }
         public void TEST2()
         {
             //Files.Add(new FileTree("/lib32", true));
             Files.Add(new FileTree("C:\\Users", true));
+        }
+        private async void UnWrapFile(FileTree file)
+        {
+            if (file.IsDirectory == true)
+            {
+                file.IsExpanded = true;
+                foreach (var children in file.Children)
+                {
+                    if (children.IsDirectory == true)
+                        await Task.Run(() => UnWrapFile(children));
+                }
+            }
         }
         #endregion
     }
