@@ -1,17 +1,14 @@
-﻿using DynamicData.Experimental;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Models
 {
-    public class FileTreeNavigator: ReactiveObject
+    public class FileTreeNavigator : ReactiveObject
     {
         #region FIELDS
         public readonly string _pathRootFolder = "C:\\1\\2";
@@ -165,20 +162,85 @@ namespace FileControlAvalonia.Models
                 }
             });
         }
-        public ObservableCollection<FileTree>? selectedFiles = new ObservableCollection<FileTree>();
-        public void FillingCollectionSelectedItems(ObservableCollection<FileTree> fileTrees)
+        //public ObservableCollection<FileTree>? selectedFiles = new ObservableCollection<FileTree>();
+        //public void FillingCollectionSelectedItems(ObservableCollection<FileTree> fileTrees)
+        //{
+        //    foreach (var fileTree in fileTrees)
+        //    {
+        //        //fileTree.IsChecked == true ?
+        //        if (fileTree.IsChecked == true)
+        //        {
+        //            selectedFiles!.Add(fileTree);
+        //        }
+        //        if (fileTree.IsDirectory && fileTree.IsChecked != true)
+        //            FillingCollectionSelectedItems(fileTree.Children!);
+        //    }
+        //}
+
+        public ObservableCollection<FileTree> GetSelectedFiles()
         {
-            foreach(var fileTree in fileTrees)
+            bool presenceEmptyFolders = true;
+            var selectedFilesTree = SearchTreeParent(_pathRootFolder, FileTree).Clone() as FileTree;
+            RemoveUnSelectedFiles(selectedFilesTree.Children!);
+
+            //while (presenceEmptyFolders == true)
+            //{
+            //    RemoveEmptyFolders(selectedFilesTree.Children!);
+            //    presenceEmptyFolders = CheckEmptyFolders(selectedFilesTree.Children!);
+            //}
+            //RemoveEmptyFolders(selectedFilesTree.Children!);
+            return selectedFilesTree.Children!;
+        }
+        public void RemoveUnSelectedFiles(ObservableCollection<FileTree> folder)
+        {
+            foreach (var file in folder.ToList())
             {
-                //fileTree.IsChecked == true ?
-                if(fileTree.IsChecked == true)
+                if (file.IsChecked == false && !file.IsDirectory)
                 {
-                    selectedFiles!.Add(fileTree);
+                    folder.Remove(file);
                 }
-                if (fileTree.IsDirectory && fileTree.IsChecked != true)
-                    FillingCollectionSelectedItems(fileTree.Children!);
+                if (file.IsDirectory)
+                {
+                    RemoveUnSelectedFiles(file.Children!);
+                }
             }
         }
+        private void RemoveEmptyFolders(ObservableCollection<FileTree> selectedFiles)
+        {
+            foreach (var file in selectedFiles.ToList())
+            {
+                if (file.IsDirectory && file.Children.Count == 0)
+                {
+                    selectedFiles.Remove(file);
+                }
+                else if (file.IsDirectory && file.Children.Count != 0)
+                {
+                    RemoveEmptyFolders(file.Children);
+                }
+            }
+        }
+
+        private bool CheckEmptyFolders(ObservableCollection<FileTree> files)
+        {
+            foreach(var file in files.ToList())
+            {
+                if(file.IsDirectory && file.Children?.Count != 0)
+                {
+                    return true;
+                }
+                else if (file.IsDirectory)
+                {
+                    CheckEmptyFolders(file.Children);
+                }
+            }
+            return false;
+        }
+
+        //private bool CheckEmptyFolders()
+        //{
+        //    //1 prohod
+        //    //Если вернет false тогда вернуть коллекцию файлов
+        //}
         #endregion
     }
 }

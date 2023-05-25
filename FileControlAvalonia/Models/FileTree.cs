@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Models
 {
-    public class FileTree : ReactiveObject
+    public class FileTree : ReactiveObject, ICloneable
     {
         #region FIELDS
         private string _path;
@@ -109,6 +109,11 @@ namespace FileControlAvalonia.Models
                 HasChildren = false;
 
             return result;
+        }
+
+        public object Clone()
+        {
+            return this;
         }
     }
 }
