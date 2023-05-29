@@ -10,11 +10,13 @@ namespace FileControlAvalonia.Helper
 {
     public class TransmitterSelectedFiles
     {
+        #region FIELDS
         private string _pathRootFolder;
         private FileTree _fileTree;
         private FileTree _copyFileTree;
         private List<FileTree> _removedChildrens;
         private List<FileTree> _parentOfRemoveChild;
+        #endregion 
 
         public TransmitterSelectedFiles(string pathRootFolder, FileTree rootFolder)
         {
@@ -25,6 +27,7 @@ namespace FileControlAvalonia.Helper
             _parentOfRemoveChild = new List<FileTree>();
         }
 
+        #region METHODS
         public ObservableCollection<FileTree> GetSelectedFiles()
         {
             SortingFileTree(_copyFileTree.Children!);
@@ -99,4 +102,5 @@ namespace FileControlAvalonia.Helper
             return copy;
         }
     }
+    #endregion
 }

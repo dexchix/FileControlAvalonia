@@ -85,6 +85,13 @@ namespace FileControlAvalonia.ViewModels
                         new ColumnOptions<FileTree>{MaxWidth = new GridLength(170)})
                 }
             };
+            ReactiveUI.MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(x =>
+            {
+                foreach(var item in x)
+                {
+                    Files.Add(item);
+                }
+            });
         }
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
@@ -199,7 +206,9 @@ namespace FileControlAvalonia.ViewModels
         public void TEST2()
         {
             //Files.Add(new FileTree("/lib32", true));
-            Files.Add(new FileTree("C:\\Users", true));
+            //Files.Add(new FileTree("C:\\Users", true));
+            //Helper.MessageBus.Bus += AddFilesInTreeDataGrid;
+            
         }
         private async void UnWrapFile(FileTree file)
         {
@@ -212,6 +221,18 @@ namespace FileControlAvalonia.ViewModels
                         await Task.Run(() => UnWrapFile(children));
                 }
             }
+        }
+
+
+        //===================
+        private void AddFilesInTreeDataGrid(object selectedFiles)
+        {
+            var files = selectedFiles as ObservableCollection<FileTree>;
+            foreach(var item in files)
+            {
+                Files.Add(item);
+            }
+
         }
         #endregion
     }

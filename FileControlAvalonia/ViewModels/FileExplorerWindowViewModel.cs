@@ -14,6 +14,7 @@ using FileControlAvalonia.Models;
 using FileControlAvalonia.Converters;
 using NLog.LayoutRenderers.Wrappers;
 using FileControlAvalonia.Helper;
+using System.Collections.ObjectModel;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -88,7 +89,9 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            var dasdasd = new TransmitterSelectedFiles(_fileTreeNavigator._pathRootFolder, _fileTreeNavigator.SearchTreeParent(_fileTreeNavigator._pathRootFolder, FileTree)).GetSelectedFiles();
+            var transmitterSelectedFiles = new TransmitterSelectedFiles(_fileTreeNavigator._pathRootFolder, _fileTreeNavigator.SearchTreeParent(_fileTreeNavigator._pathRootFolder, FileTree));
+            var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
+            ReactiveUI.MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
             window.Close();
         }
         public void UpCommand()

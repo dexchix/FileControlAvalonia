@@ -11,7 +11,6 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
-
         }
         private void InitializeComponent()
         {
