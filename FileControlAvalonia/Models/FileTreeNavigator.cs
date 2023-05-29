@@ -5,6 +5,14 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EmitMapper.Conversion;
+using EmitMapper.EmitInvoker;
+using EmitMapper.Mappers;
+using EmitMapper.MappingConfiguration;
+using EmitMapper.Utils;
+using System.Runtime.Serialization.Formatters.Binary;
+using FileControlAvalonia.Helper;
+using System.Collections.Generic;
 
 namespace FileControlAvalonia.Models
 {
@@ -162,85 +170,6 @@ namespace FileControlAvalonia.Models
                 }
             });
         }
-        //public ObservableCollection<FileTree>? selectedFiles = new ObservableCollection<FileTree>();
-        //public void FillingCollectionSelectedItems(ObservableCollection<FileTree> fileTrees)
-        //{
-        //    foreach (var fileTree in fileTrees)
-        //    {
-        //        //fileTree.IsChecked == true ?
-        //        if (fileTree.IsChecked == true)
-        //        {
-        //            selectedFiles!.Add(fileTree);
-        //        }
-        //        if (fileTree.IsDirectory && fileTree.IsChecked != true)
-        //            FillingCollectionSelectedItems(fileTree.Children!);
-        //    }
-        //}
-
-        public ObservableCollection<FileTree> GetSelectedFiles()
-        {
-            bool presenceEmptyFolders = true;
-            var selectedFilesTree = SearchTreeParent(_pathRootFolder, FileTree).Clone() as FileTree;
-            RemoveUnSelectedFiles(selectedFilesTree.Children!);
-
-            //while (presenceEmptyFolders == true)
-            //{
-            //    RemoveEmptyFolders(selectedFilesTree.Children!);
-            //    presenceEmptyFolders = CheckEmptyFolders(selectedFilesTree.Children!);
-            //}
-            //RemoveEmptyFolders(selectedFilesTree.Children!);
-            return selectedFilesTree.Children!;
-        }
-        public void RemoveUnSelectedFiles(ObservableCollection<FileTree> folder)
-        {
-            foreach (var file in folder.ToList())
-            {
-                if (file.IsChecked == false && !file.IsDirectory)
-                {
-                    folder.Remove(file);
-                }
-                if (file.IsDirectory)
-                {
-                    RemoveUnSelectedFiles(file.Children!);
-                }
-            }
-        }
-        private void RemoveEmptyFolders(ObservableCollection<FileTree> selectedFiles)
-        {
-            foreach (var file in selectedFiles.ToList())
-            {
-                if (file.IsDirectory && file.Children.Count == 0)
-                {
-                    selectedFiles.Remove(file);
-                }
-                else if (file.IsDirectory && file.Children.Count != 0)
-                {
-                    RemoveEmptyFolders(file.Children);
-                }
-            }
-        }
-
-        private bool CheckEmptyFolders(ObservableCollection<FileTree> files)
-        {
-            foreach(var file in files.ToList())
-            {
-                if(file.IsDirectory && file.Children?.Count != 0)
-                {
-                    return true;
-                }
-                else if (file.IsDirectory)
-                {
-                    CheckEmptyFolders(file.Children);
-                }
-            }
-            return false;
-        }
-
-        //private bool CheckEmptyFolders()
-        //{
-        //    //1 prohod
-        //    //Если вернет false тогда вернуть коллекцию файлов
-        //}
         #endregion
     }
 }

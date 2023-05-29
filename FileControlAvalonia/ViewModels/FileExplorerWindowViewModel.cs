@@ -13,10 +13,11 @@ using Avalonia.Media.Imaging;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Converters;
 using NLog.LayoutRenderers.Wrappers;
+using FileControlAvalonia.Helper;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class FileExplorerWindowViewModel: ReactiveObject
+    public class FileExplorerWindowViewModel : ReactiveObject
     {
         #region FIELDS
         private int _itemIndex = 0;
@@ -87,7 +88,8 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            var sdf = _fileTreeNavigator.GetSelectedFiles();
+            var dasdasd = new TransmitterSelectedFiles(_fileTreeNavigator._pathRootFolder, _fileTreeNavigator.SearchTreeParent(_fileTreeNavigator._pathRootFolder, FileTree)).GetSelectedFiles();
+            window.Close();
         }
         public void UpCommand()
         {

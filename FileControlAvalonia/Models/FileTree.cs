@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Models
 {
+    [Serializable]
     public class FileTree : ReactiveObject, ICloneable
     {
         #region FIELDS
@@ -113,7 +114,7 @@ namespace FileControlAvalonia.Models
 
         public object Clone()
         {
-            return this;
+            return MemberwiseClone();
         }
     }
 }

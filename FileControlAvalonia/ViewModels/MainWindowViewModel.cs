@@ -6,6 +6,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using FileControlAvalonia.Converters;
+using FileControlAvalonia.Helper;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Views;
 using HarfBuzzSharp;
@@ -26,6 +27,7 @@ namespace FileControlAvalonia.ViewModels
         public HierarchicalTreeDataGridSource<FileTree> _source;
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
+        private WindowServise _windowServise = new WindowServise();
         #endregion
 
         #region PROPERTIES
@@ -138,17 +140,12 @@ namespace FileControlAvalonia.ViewModels
 
         public void OpenFileExplorerWindow()
         {
-
-            var fileExplorer = new FileExplorerWindow();
-            var fghfgh = fileExplorer.DataContext;
-            fileExplorer.Show();
+            _windowServise.ShowWindow<FileExplorerWindow>();
         }
 
         public void OpenSettingsWindow()
         {
-            var settingsWindow = new SettingsWindow();
-            var fghfgh = settingsWindow.DataContext;
-            settingsWindow.Show();
+            _windowServise.ShowWindow<SettingsWindow>();
         }
 
         public void WrapFileTree(TreeDataGrid fileVieawer)
