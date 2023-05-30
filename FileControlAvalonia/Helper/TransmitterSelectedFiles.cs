@@ -68,7 +68,7 @@ namespace FileControlAvalonia.Helper
         {
             foreach (var file in files.ToList())
             {
-                if (file.IsDirectory && file.Children?.Count == 0)
+                if (file.IsDirectory && file.Children?.Count == 0 && file.IsChecked == false)
                 {
                     _removedChildrens.Add(file);
                     _parentOfRemoveChild.Add(file.Parent!);

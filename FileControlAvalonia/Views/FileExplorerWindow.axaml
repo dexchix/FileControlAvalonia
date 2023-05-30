@@ -25,7 +25,19 @@
 		<KeyBinding Gesture="Up" Command="{Binding UpCommand}"/>
 		<KeyBinding Gesture="Down" Command="{Binding DownCommand}"/>
 	</Window.KeyBindings>
-	<Border BorderBrush="Black" BorderThickness="2">
+	<Window.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="Transparent"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
+		<Style Selector="Button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="Gray"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
+	</Window.Styles>
+	<Border BorderBrush="Black" BorderThickness="1">
 	<Grid RowDefinitions="40,*,30">
 		<StackPanel>
 			<Button Width="25" Height="25" Margin="5,5,0,0"
@@ -36,7 +48,7 @@
 					</ControlTemplate>
 				</Button.Template>
 			</Button>
-			<TextBox Margin="5" Height="10" VerticalAlignment="Top"
+			<TextBox Margin="4 5 4 5" Height="10" VerticalAlignment="Top"
 					 Text="{Binding FileTree.Path}" IsReadOnly="True"/>
 		</StackPanel>
 		<ListBox x:Name="FilesListBox" Grid.Row="1" BorderThickness="1" Width="380" Height="330" Margin="0,22,0,0"
@@ -76,7 +88,7 @@
 		<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10"
 					HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,10">
 			<TextBox x:Name="TextBoxExtensions" Width="220" Watermark="png/exe/jpeg/spa/spu"
-					 Text="{Binding Extensions}" IsReadOnly="True">
+					 Text="{Binding Extensions}" IsReadOnly="True" Margin="3 0 0 0">
 
 			</TextBox>
 			<Button Width="70" Height="30" Content="ОК"

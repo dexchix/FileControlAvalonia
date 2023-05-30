@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.ViewModels
@@ -87,11 +89,12 @@ namespace FileControlAvalonia.ViewModels
             };
             ReactiveUI.MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(x =>
             {
-                foreach(var item in x)
+                foreach (var item in x)
                 {
                     Files.Add(item);
                 }
             });
+
         }
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
@@ -126,7 +129,7 @@ namespace FileControlAvalonia.ViewModels
                 {
                     var assetLoader = AvaloniaLocator.Current.GetRequiredService<IAssetLoader>();
 
-                    using (var fileStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/file.png")))
+                    using (var fileStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/file2.png")))
                     using (var folderStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/folder-open.png")))
                     using (var folderOpenStream = assetLoader.Open(new Uri("avares://FileControlAvalonia/Assets/folder.png")))
                     {
@@ -155,47 +158,58 @@ namespace FileControlAvalonia.ViewModels
             _windowServise.ShowWindow<SettingsWindow>();
         }
 
-        public void WrapFileTree(TreeDataGrid fileVieawer)
+        public void ExpandAllNodes(TreeDataGrid fileVieawer)
         {
-            //Task.Run(() => 
-            //{
-            //    foreach (var file in Files)
-            //    {
-            //       file.IsExpanded = false;
-            //    }
-            //});
             try
             {
-                Dispatcher.UIThread.Post(() =>
+                for (int i = 0; i < Files.Count; i++)
                 {
-                    foreach (var file in Files)
-                    {
-                        file.IsExpanded = false;
-                    }
-                });
+                    Source.Expand(i);
+                }
             }
-            catch (Exception ex)
+            catch
             {
 
             }
+            try
+            {
+                foreach (var file in Files)
+                {
+                    if (file.IsDirectory)
+                    {
+                        file.IsExpanded = true;
+                        ChangeIsExpandedProp(file, true);
+                    }
+                }
+            }
+            catch
+            {
 
+            }
         }
 
-        public void UnWrapFileTree(TreeDataGrid fileVieawer)
+        public void CollapseAllNodes(TreeDataGrid fileVieawer)
         {
             try
             {
-                //Dispatcher.UIThread.Post(() =>
-                //{
-                //    foreach (var file in Files)
-                //    {
-                //        UnWrapFile(file);
-                //    }
-                //});
-
-                foreach(var file in Files)
+                for (int i = 0; i < Files.Count; i++)
                 {
-                    file.IsExpanded = true;
+                    Source.Collapse(i);
+                }
+            }
+            catch
+            {
+
+            }
+            try
+            {
+                foreach (var file in Files)
+                {
+                    if (file.IsDirectory)
+                    {
+                        file.IsExpanded = false;
+                        ChangeIsExpandedProp(file, false);
+                    }
                 }
             }
             catch
@@ -206,29 +220,29 @@ namespace FileControlAvalonia.ViewModels
         public void TEST2()
         {
             //Files.Add(new FileTree("/lib32", true));
-            //Files.Add(new FileTree("C:\\Users", true));
+            Files.Add(new FileTree("C:\\Users", true));
             //Helper.MessageBus.Bus += AddFilesInTreeDataGrid;
-            
+
         }
-        private async void UnWrapFile(FileTree file)
+
+        private void ChangeIsExpandedProp(FileTree folder, bool flag)
         {
-            if (file.IsDirectory == true)
+            folder.IsExpanded = flag;
+            foreach (var file in folder.Children)
             {
-                file.IsExpanded = true;
-                foreach (var children in file.Children)
+                if (file.IsDirectory)
                 {
-                    if (children.IsDirectory == true)
-                        await Task.Run(() => UnWrapFile(children));
+                    file.IsExpanded = flag;
+                    ChangeIsExpandedProp(file, flag);
                 }
             }
         }
-
 
         //===================
         private void AddFilesInTreeDataGrid(object selectedFiles)
         {
             var files = selectedFiles as ObservableCollection<FileTree>;
-            foreach(var item in files)
+            foreach (var item in files)
             {
                 Files.Add(item);
             }

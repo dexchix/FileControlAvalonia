@@ -14,7 +14,19 @@
 	<Window.DataContext>
 		<vm:SettingsWindowViewModel/>
 	</Window.DataContext>
-	<Border BorderBrush="Black" BorderThickness="2">
+	<Window.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="Transparent"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
+		<Style Selector="Button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="Gray"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
+	</Window.Styles>
+	<Border BorderBrush="Black" BorderThickness="1">
 		<Grid RowDefinitions="30 * 30" ColumnDefinitions="auto auto">
 			<StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
 				<Image Source="/Assets/setting.png" Height="20" VerticalAlignment="Center" Margin="10 0 0 0"></Image>

@@ -24,9 +24,16 @@ namespace FileControlAvalonia.Converters
 
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
         {
-            return values.Count == 2 && values[0] is bool isDirectory && values[1] is bool isExpanded
-                    ? !isDirectory ? _file : isExpanded ? _folderExpanded : _folderCollapsed
-                    : null;
+            if (values.Count == 2 &&
+                values[0] is bool isDirectory &&
+                values[1] is bool isExpanded)
+            {
+                if (!isDirectory)
+                    return _file;
+                else
+                    return isExpanded ? _folderExpanded : _folderCollapsed;
+            }
+            return null;
         }
     }
 }

@@ -35,7 +35,7 @@
 			<Setter Property="BorderThickness" Value="1"></Setter>
 		</Style>
 	</Window.Styles>
-	<Border BorderBrush="Black" BorderThickness="2">
+	<Border BorderBrush="Black" BorderThickness="1">
 		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
 			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0 -30 0 0"
 						HorizontalAlignment="Left" VerticalAlignment="Bottom">
@@ -57,11 +57,11 @@
 			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
 						Orientation="Horizontal" HorizontalAlignment="Left">
 				<Button Width="120" Height="25" Content="Развернуть" FontSize="11"
-						Command ="{Binding UnWrapFileTree}" CommandParameter="{Binding ElementName=fileViewer}"
+						Command ="{Binding ExpandAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
 				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
-						Command ="{Binding WrapFileTree}" CommandParameter="{Binding ElementName=fileViewer}"
+						Command ="{Binding CollapseAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 
 				</Button>
@@ -107,7 +107,7 @@
 			<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>
 
 			<TreeDataGrid Name="fileViewer" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
-						  Width="1185" HorizontalAlignment="Center"
+						  Width="1185" HorizontalAlignment="Center" Margin= "0 0 5 0"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}" >
 				<TreeDataGrid.Resources>
 					<DataTemplate x:Key="FileCell" DataType="m:FileTree">
@@ -125,8 +125,8 @@
 					</DataTemplate>
 					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
 						<Button>
-							<StackPanel Orientation="Horizontal" Spacing="5">
-								<!--<Image Source="/Assets/deliteFile.png" Height="20"></Image>-->
+							<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+								<Image Source="/Assets/deliteFile.png" Height="20"></Image>
 								<Label Content="Удалить"></Label>
 							</StackPanel>
 							<Button.Styles>
@@ -230,8 +230,8 @@
 					</Style>
 				</TreeDataGrid.Styles>
 			</TreeDataGrid>
-			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3"
-						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 10 0"/>
+			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 0 0"/>
 			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
 				<TextBlock>Уровень пользователя: </TextBlock>
