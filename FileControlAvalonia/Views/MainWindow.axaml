@@ -231,7 +231,7 @@
 				</TreeDataGrid.Styles>
 			</TreeDataGrid>
 			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
-						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 0 0"/>
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0"/>
 			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
 				<TextBlock>Уровень пользователя: </TextBlock>
