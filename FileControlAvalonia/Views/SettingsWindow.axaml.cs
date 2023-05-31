@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 using FileControlAvalonia.Helper;
 using System;
 
@@ -10,6 +11,10 @@ namespace FileControlAvalonia.Views
         public SettingsWindow()
         {
             InitializeComponent();
+        }
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
         }
         protected override void OnOpened(EventArgs e)
         {

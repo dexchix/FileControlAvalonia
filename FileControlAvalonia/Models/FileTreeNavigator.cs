@@ -19,28 +19,28 @@ namespace FileControlAvalonia.Models
     public class FileTreeNavigator : ReactiveObject
     {
         #region FIELDS
-        public readonly string _pathRootFolder = "C:\\1\\2";
-        //public readonly string _pathRootFolder = "/home/orpo/Desktop/1/2";
-        public static FileTree? _fileTree;
-        public static Watcher? _watcher;
+        public readonly string pathRootFolder = "C:\\1\\2";
+        //public readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
+        public static FileTree? fileTree;
+        public static Watcher? watcher;
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion 
 
         public FileTree FileTree
         {
-            get => _fileTree!;
+            get => fileTree!;
             set
             {
-                _fileTree = value;
+                fileTree = value;
                 OnPropertyChanged(nameof(FileTree));
             }
         }
         public FileTreeNavigator()
         {
-            if (Directory.Exists(_pathRootFolder))
+            if (Directory.Exists(pathRootFolder))
             {
-                _fileTree = new FileTree(_pathRootFolder, true);
-                _watcher = new Watcher(_pathRootFolder, this);
+                fileTree = new FileTree(pathRootFolder, true);
+                watcher = new Watcher(pathRootFolder, this);
                 CheckChangeRootPath();
             }
         }
@@ -67,7 +67,7 @@ namespace FileControlAvalonia.Models
         /// </summary>
         public void GoBackFolder()
         {
-            if (_fileTree != null && _fileTree.Parent != null)
+            if (fileTree != null && fileTree.Parent != null)
             {
                 FileTree = FileTree.Parent!;
             }
@@ -162,7 +162,7 @@ namespace FileControlAvalonia.Models
             {
                 while (true)
                 {
-                    if (!Directory.Exists(_pathRootFolder))
+                    if (!Directory.Exists(pathRootFolder))
                     {
                         CheckExistRootPath();
                         return;

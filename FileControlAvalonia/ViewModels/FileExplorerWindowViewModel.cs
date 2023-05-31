@@ -89,7 +89,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            var transmitterSelectedFiles = new TransmitterSelectedFiles(_fileTreeNavigator._pathRootFolder, _fileTreeNavigator.SearchTreeParent(_fileTreeNavigator._pathRootFolder, FileTree));
+            var transmitterSelectedFiles = new TransmitterSelectedFiles(_fileTreeNavigator.pathRootFolder, _fileTreeNavigator.SearchTreeParent(_fileTreeNavigator.pathRootFolder, FileTree));
             var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
             window.Close();
