@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileControlAvalonia.Helper
+namespace FileControlAvalonia.Services
 {
     interface IWindowService
     {
         void ShowWindow<T>() where T : Window, new()
         {
-        
+
         }
     }
 }

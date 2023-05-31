@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileControlAvalonia.Helper
+namespace FileControlAvalonia.Services
 {
     public class WindowAssistant
     {

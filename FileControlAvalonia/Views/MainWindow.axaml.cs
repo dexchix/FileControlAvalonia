@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System;
-using FileControlAvalonia.Helper;
+using FileControlAvalonia.Services;
 
 namespace FileControlAvalonia.Views
 {

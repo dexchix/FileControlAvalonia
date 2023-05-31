@@ -2,9 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using FileControlAvalonia.ViewModels;
-using FileControlAvalonia.Helper;
 using System;
 using System.Timers;
+using FileControlAvalonia.Services;
 
 namespace FileControlAvalonia.Views
 {

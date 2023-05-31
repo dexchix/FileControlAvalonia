@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileControlAvalonia.Helper
+namespace FileControlAvalonia.Services
 {
     public class WindowServise : IWindowService
     {
-        public void ShowWindow<T>() where T: Window, new()
+        public void ShowWindow<T>() where T : Window, new()
         {
             var childWindow = new T();
             childWindow.Show();
