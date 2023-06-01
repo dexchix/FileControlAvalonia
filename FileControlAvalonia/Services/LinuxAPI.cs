@@ -10,6 +10,9 @@ namespace FileControlAvalonia.Services
     public class LinuxAPI
     {
         [DllImport("libc")]
-        static extern int read(int handle, byte[] buf, int n);
+        public static extern int read(int handle, byte[] buf, int n);
+
+        
+
     }
 }

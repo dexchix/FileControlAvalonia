@@ -220,8 +220,12 @@ namespace FileControlAvalonia.ViewModels
         public void TEST2()
         {
             //Files.Add(new FileTree("/lib32", true));
-            Files.Add(new FileTree("C:\\Users", true));
+            //Files.Add(new FileTree("C:\\Users", true));
             //Helper.MessageBus.Bus += AddFilesInTreeDataGrid;
+
+            byte[] fsdfgg = { 3, 4, 5, 6, 4 };
+            var sdfsdf = LinuxAPI.read(34, fsdfgg, 44);
+         
 
         }
 
