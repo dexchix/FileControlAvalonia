@@ -29,6 +29,8 @@ namespace FileControlAvalonia.ViewModels
         public HierarchicalTreeDataGridSource<FileTree> _source;
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
+        private FileExplorerWindow _fileExplorerWindow;
+        private SettingsWindow _settingsWindow;
         private WindowServise _windowServise = new WindowServise();
         #endregion
 
@@ -150,12 +152,30 @@ namespace FileControlAvalonia.ViewModels
 
         public void OpenFileExplorerWindow()
         {
-            _windowServise.ShowWindow<FileExplorerWindow>();
+            if (_fileExplorerWindow == null || !_fileExplorerWindow.IsVisible)
+            {
+                _fileExplorerWindow = new FileExplorerWindow();
+                _fileExplorerWindow.Show();
+            }
+            else
+            {
+                _fileExplorerWindow.Activate();
+            }
+            //_windowServise.ShowWindow<FileExplorerWindow>();
         }
 
         public void OpenSettingsWindow()
         {
-            _windowServise.ShowWindow<SettingsWindow>();
+            if (_settingsWindow == null || !_settingsWindow.IsVisible)
+            {
+                _settingsWindow = new SettingsWindow();
+                _settingsWindow.Show();
+            }
+            else
+            {
+                _settingsWindow.Activate();
+            }
+            //_windowServise.ShowWindow<SettingsWindow>();
         }
 
         public void ExpandAllNodes(TreeDataGrid fileVieawer)
@@ -222,11 +242,6 @@ namespace FileControlAvalonia.ViewModels
             //Files.Add(new FileTree("/lib32", true));
             //Files.Add(new FileTree("C:\\Users", true));
             //Helper.MessageBus.Bus += AddFilesInTreeDataGrid;
-
-            byte[] fsdfgg = { 3, 4, 5, 6, 4 };
-            var sdfsdf = LinuxAPI.read(34, fsdfgg, 44);
-         
-
         }
 
         private void ChangeIsExpandedProp(FileTree folder, bool flag)
