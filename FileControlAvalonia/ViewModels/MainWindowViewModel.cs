@@ -32,9 +32,15 @@ namespace FileControlAvalonia.ViewModels
         private FileExplorerWindow _fileExplorerWindow;
         private SettingsWindow _settingsWindow;
         private WindowServise _windowServise = new WindowServise();
+        private bool _mainWindowState;
         #endregion
 
         #region PROPERTIES
+        public bool MainWindowState
+        {
+            get => _mainWindowState;
+            set => this.RaiseAndSetIfChanged(ref _mainWindowState, value);
+        }
         public ObservableCollection<FileTree> Files
         {
             get => fileTree;
@@ -49,6 +55,7 @@ namespace FileControlAvalonia.ViewModels
 
         public MainWindowViewModel()
         {
+            MainWindowState = true;
             Files = new ObservableCollection<FileTree>();
 
             Source = new HierarchicalTreeDataGridSource<FileTree>(Files)
@@ -76,7 +83,7 @@ namespace FileControlAvalonia.ViewModels
                         "FileCell",
                         new GridLength(1,GridUnitType.Star),
                         new ColumnOptions<FileTree>(){}
-                        ){ },
+                        ){},
                     new TemplateColumn<FileTree>(
                         "Фактическое значение",
                         "FileCell",
@@ -152,6 +159,7 @@ namespace FileControlAvalonia.ViewModels
 
         public void OpenFileExplorerWindow()
         {
+            MainWindowState = false;
             if (_fileExplorerWindow == null || !_fileExplorerWindow.IsVisible)
             {
                 _fileExplorerWindow = new FileExplorerWindow();
@@ -237,11 +245,9 @@ namespace FileControlAvalonia.ViewModels
 
             }
         }
-        public void TEST2()
+        public void OpenInfoWindow()
         {
-            //Files.Add(new FileTree("/lib32", true));
-            //Files.Add(new FileTree("C:\\Users", true));
-            //Helper.MessageBus.Bus += AddFilesInTreeDataGrid;
+            new InfoWindow().Show();
         }
 
         private void ChangeIsExpandedProp(FileTree folder, bool flag)

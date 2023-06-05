@@ -14,6 +14,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly"
+		
 		>
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
@@ -24,13 +25,12 @@
 	</Design.DataContext>
 
 	<Window.Styles>
-		<Style Selector="Button">
+		<Style Selector="Button.h1">
 			<Setter Property="Background" Value="Transparent"></Setter>
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="1"></Setter>
 		</Style>
-		<Style Selector="Button:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="Gray"></Setter>
+		<Style Selector="Button:pointerover.h1 /template/ ContentPresenter">
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="1"></Setter>
 		</Style>
@@ -39,28 +39,28 @@
 		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
 			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0 -30 0 0"
 						HorizontalAlignment="Left" VerticalAlignment="Bottom">
-				<Label FontSize="13" Content="Контроль целостности ПО ВУ"></Label>
 				<Image Source="/Assets/CopyModelDifferences_32x32.ico"  Height="23" Margin="5 -10 0 0"
 					   ></Image>
+				<Label FontSize="13" Content="Контроль целостности ПО ВУ"></Label>
 			</StackPanel>
 			<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
 				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left"
 						 >
-				<Button Width="120" Height="25" Content="Проверить" FontSize="11"
+				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
-				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11"
+				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
 			</StackPanel>
 
 			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
 						Orientation="Horizontal" HorizontalAlignment="Left">
-				<Button Width="120" Height="25" Content="Развернуть" FontSize="11"
+				<Button Width="120" Height="25" Content="Развернуть" FontSize="11" Classes="h1"
 						Command ="{Binding ExpandAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
-				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11"
+				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11" Classes="h1"
 						Command ="{Binding CollapseAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 
@@ -76,32 +76,46 @@
 
 
 			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical">
-				<Button Height="35" Command="{Binding CloseProgram}" VerticalAlignment="Top"
-					HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="1" Margin="0 0 1 0">
-					<Button.Styles>
-						<Style Selector="Button">
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate>
-										<Image Source="/Assets/Close.png"></Image>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</Button.Styles>
+				<Button Command="{Binding CloseProgram}" VerticalAlignment="Top"
+					HorizontalAlignment="Right" Margin="0 0 1 0">
+						<Image Source="/Assets/close1.png" Width="10" Height="10"/>
+						<Button.Styles>
+							<Style Selector="Button">
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+							<Style Selector="Button:pointerover /template/ ContentPresenter">
+							</Style>
+						</Button.Styles>
 				</Button>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 0 5 0">
-					<Button Height="35" Command="{Binding OpenFileExplorerWindow}">
-						<Image Source="/Assets/add.png"></Image>
+					<Button  Height="25" Width="25" Command="{Binding OpenFileExplorerWindow}" Classes="h1">
+						<Canvas Margin="-7 -5 0 0">
+							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
+								   Source="/Assets/add.png" ></Image>
+						</Canvas>
 					</Button>
-					<Button Height="35" Command="{Binding OpenSettingsWindow}">
-						<Image Source="/Assets/setting.png"></Image>
+					<Button Height="25" Width="25" Command="{Binding OpenSettingsWindow}" Classes="h1">
+						<Canvas Margin="-7 -5 0 0">
+							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
+								   Source="/Assets/setting.png"></Image>
+						</Canvas>
 					</Button>
-					<Button Height="35" Command="{Binding TEST2}">
-						<Image Source="/Assets/info.png"></Image>
+					<Button  Height="25" Width="25" Command="{Binding OpenInfoWindow}" Classes="h1">
+						<Canvas Margin="-9 -7 0 0">
+							<Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" 
+								   Source="/Assets/info.png"></Image>
+						</Canvas>
 					</Button>
 				</StackPanel>
-				<ComboBox Margin="70 3 0 0" HorizontalContentAlignment="Right" Height="25" Width="200"/>
+				<ComboBox Margin="70 3 0 0" HorizontalContentAlignment="Right" Height="25" 
+						  Width="200" FontSize="12">
+					<ComboBoxItem Content="Все файлы"></ComboBoxItem>
+					<ComboBoxItem Content="Прошедшие проверку"></ComboBoxItem>
+					<ComboBoxItem Content="Частично прошедшие проверку"></ComboBoxItem>
+					<ComboBoxItem Content="Не прошедшие проверку"></ComboBoxItem>
+					<ComboBoxItem Content="Без доступа"></ComboBoxItem>
+					<ComboBoxItem Content="Отсутствующие"></ComboBoxItem>
+				</ComboBox>
 			</StackPanel>
 
 			<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>

@@ -1,21 +1,17 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using FileControlAvalonia.ViewModels;
-using System;
-using System.Timers;
 using FileControlAvalonia.Services;
+using System;
 
 namespace FileControlAvalonia.Views
 {
-    public partial class FileExplorerWindow : Window
+    public partial class InfoWindow : Window
     {
-        private Timer timer;
-        public FileExplorerWindow()
+        public InfoWindow()
         {
             InitializeComponent();
         }
-
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
@@ -23,7 +19,7 @@ namespace FileControlAvalonia.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Position = new PixelPoint(WindowAssistant.X_Coordinate + 400, WindowAssistant.Y_Coordinate + 70);
+            Position = new PixelPoint(WindowAssistant.X_Coordinate +100, WindowAssistant.Y_Coordinate + 120);
             CanResize = false;
         }
     }

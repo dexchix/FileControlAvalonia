@@ -11,6 +11,8 @@
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
     <None Remove="Assets\AddFile.ico" />
+    <None Remove="Assets\close1.png" />
+    <None Remove="Assets\Обычный лого.png" />
   </ItemGroup>
 
   <ItemGroup>

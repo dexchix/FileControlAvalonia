@@ -15,13 +15,12 @@
 		<vm:SettingsWindowViewModel/>
 	</Window.DataContext>
 	<Window.Styles>
-		<Style Selector="Button">
+		<Style Selector="Button.h1">
 			<Setter Property="Background" Value="Transparent"></Setter>
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="1"></Setter>
 		</Style>
-		<Style Selector="Button:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="Gray"></Setter>
+		<Style Selector="Button:pointerover.h1 /template/ ContentPresenter">
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="1"></Setter>
 		</Style>
@@ -30,9 +29,21 @@
 		<Grid RowDefinitions="30 * 30" ColumnDefinitions="auto auto">
 			<StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
 				<Image Source="/Assets/setting.png" Height="20" VerticalAlignment="Center" Margin="10 0 0 0"></Image>
-
 				<Label Content="Настройки" Margin="5 3 0 0"></Label>
 			</StackPanel>
+			<Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+					Margin="10" Command="{Binding CloseWindow}"
+					CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+				<Image Source="/Assets/close1.png" Width="10" Height="10"/>
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="Transparent"/>
+					</Style>
+					<Style Selector="Button:pointerover /template/ ContentPresenter">
+					</Style>
+				</Button.Styles>
+			</Button>
+			
 			<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="11.5" Margin="5 0 0 0">
 				<Label Content = "Сервер"></Label>
 				<Label Content = "База данных"></Label>
@@ -52,26 +63,26 @@
 			</StackPanel>
 			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
 						HorizontalAlignment="Stretch" Width="270">
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox PasswordChar="*" HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
-				<TextBox HorizontalAlignment="Stretch"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding ServerVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding DataBaseVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}"></TextBox>
+				<TextBox PasswordChar="*" HorizontalAlignment="Stretch" Text ="{Binding PasswordVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding PathOPCServerVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalStatusVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalNumberofFilesVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfMatchesVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberMissmatchesVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagPartiallyMatchedVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfUnaccessedVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNotFoundVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}"></TextBox>
 			</StackPanel>
 			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 
 						VerticalAlignment="Bottom" Margin="5 -8 0 5" Spacing="10">
-				<Button Content="Подтвердить" Width="150" HorizontalContentAlignment="Center"></Button>
-				<Button Content="Отмена" Command="{Binding CloseWindow}" Width="150" HorizontalContentAlignment="Center"
+				<Button Content="Подтвердить" Width="150" HorizontalContentAlignment="Center" Command="{Binding Confirm}" Classes="h1"></Button>
+				<Button Content="Отмена" Command="{Binding CloseWindow}" Width="150" HorizontalContentAlignment="Center" Classes="h1"
 						CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}}"></Button>
 			</StackPanel>
 		</Grid>

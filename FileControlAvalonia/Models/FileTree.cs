@@ -69,11 +69,12 @@ namespace FileControlAvalonia.Models
             get => _children ??= LoadChildren();
             set => this.RaiseAndSetIfChanged(ref _children, value);
         }
+        List<string> Colors = new List<string>() { "#f00", "#090", "#FFFF00" };
         #endregion
 
         public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false)
         {
-            Color = new Random().Next(0, 10) > 4 ? "#f00" : "#090";
+            Color = Colors[new Random().Next(0, 3)];
             _path = path;
             _name = isRoot ? path : System.IO.Path.GetFileName(Path);
             _isExpanded = isRoot;
