@@ -63,21 +63,21 @@
 			</StackPanel>
 			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
 						HorizontalAlignment="Stretch" Width="270">
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding ServerVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding DataBaseVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}"></TextBox>
-				<TextBox PasswordChar="*" HorizontalAlignment="Stretch" Text ="{Binding PasswordVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding PathOPCServerVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalStatusVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalNumberofFilesVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfMatchesVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberMissmatchesVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagPartiallyMatchedVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfUnaccessedVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNotFoundVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding ServerVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding DataBaseVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>
+				<TextBox PasswordChar="*" HorizontalAlignment="Stretch" Text ="{Binding PasswordVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding PathOPCServerVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalStatusVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalNumberofFilesVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfMatchesVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberMissmatchesVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagPartiallyMatchedVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfUnaccessedVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNotFoundVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}, Mode=TwoWay"></TextBox>
 			</StackPanel>
 			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 
 						VerticalAlignment="Bottom" Margin="5 -8 0 5" Spacing="10">

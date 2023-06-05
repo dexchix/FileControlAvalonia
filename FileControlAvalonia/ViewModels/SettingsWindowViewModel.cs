@@ -2,6 +2,7 @@
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,7 +53,12 @@ namespace FileControlAvalonia.ViewModels
         }
         public void Confirm()
         {
-
+            XmlSerializer serializer = new XmlSerializer(typeof(SettingsWindowViewModel));
+            using (StreamWriter streamWriter = new StreamWriter("data.xml"))
+            {
+                // Выполните сериализацию объекта в XML и запишите в поток
+                serializer.Serialize(streamWriter, this);
+            }
         }
         #endregion
     }
