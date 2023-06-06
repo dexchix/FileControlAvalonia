@@ -77,16 +77,16 @@ namespace FileControlAvalonia.Models
         /// </summary>
         /// <param name="searchedFilePath"></param>
         /// <returns>Экземпляр типа FileTree (Файл)</returns>
-        public FileTree SearchFile(string searchedFilePath)
+        public static FileTree SearchFile(string searchedFilePath, FileTree fileTree)
         {
-            if (FileTree.Path == searchedFilePath)
-                return FileTree;
-            else if (searchedFilePath.StartsWith(FileTree.Path))
-                return SearchChildren(searchedFilePath, FileTree)!;
-            else if (FileTree.Path.StartsWith(searchedFilePath))
-                return SearchTreeParent(searchedFilePath, FileTree);
+            if (fileTree.Path == searchedFilePath)
+                return fileTree;
+            else if (searchedFilePath.StartsWith(fileTree.Path))
+                return SearchChildren(searchedFilePath, fileTree)!;
+            else if (fileTree.Path.StartsWith(searchedFilePath))
+                return SearchTreeParent(searchedFilePath, fileTree);
             else
-                return SearchChildren(searchedFilePath, SearchTreeParent(searchedFilePath, FileTree))!;
+                return SearchChildren(searchedFilePath, SearchTreeParent(searchedFilePath, fileTree))!;
         }
         /// <summary>
         /// Поиск родительского элемента в дереве
@@ -94,7 +94,7 @@ namespace FileControlAvalonia.Models
         /// <param name="searchedFilePath"></param>
         /// <param name="openedFolder"></param>
         /// <returns>Элемент типа FileTree (Файл)</returns>
-        public FileTree SearchTreeParent(string searchedFilePath, FileTree openedFolder)
+        public static FileTree SearchTreeParent(string searchedFilePath, FileTree openedFolder)
         {
             return searchedFilePath.StartsWith(openedFolder.Path)
                 ? openedFolder
@@ -106,7 +106,7 @@ namespace FileControlAvalonia.Models
         /// <param name="searchedFilePath"></param>
         /// <param name="rootFolder"></param>
         /// <returns>Элемент типа FileTree (Файл)</returns>
-        public FileTree? SearchChildren(string searchedFilePath, FileTree rootFolder)
+        public static FileTree? SearchChildren(string searchedFilePath, FileTree rootFolder)
         {
             var maxMatchFile = rootFolder.Children!.Where(x => searchedFilePath.StartsWith(x.Path))
                                                   .FirstOrDefault()!;

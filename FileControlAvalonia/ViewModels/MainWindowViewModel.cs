@@ -247,9 +247,21 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public void DeliteFile(FileTree file)
+        public void DeliteFile(FileTree element)
         {
-            Files.Remove(file);
+            foreach(var file in Files)
+            {
+                if(file.Path == element.Path)
+                {
+                    Files.Remove(file);
+                    return;
+                }
+            }
+            foreach (var file in Files)
+            {
+                var delitedFile = FileTreeNavigator.SearchFile(element.Path, file);
+                delitedFile.Parent.Children.Remove(delitedFile);
+            }
         }
 
         public void OpenInfoWindow()
