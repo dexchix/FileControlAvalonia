@@ -253,6 +253,13 @@
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
 				<TextBlock>Уровень пользователя: </TextBlock>
 				<TextBlock>| </TextBlock>
+				<TextBlock Text = "Всего файлов: "></TextBlock>
+				<TextBlock Text = "Соответствует: "></TextBlock>
+				<TextBlock Text = "Частично соответствует: "></TextBlock>
+				<TextBlock Text = "Не соответствует: "></TextBlock>
+				<TextBlock Text = "Нет доступа: "></TextBlock>
+				<TextBlock Text = "Не найдено: "></TextBlock>
+				<TextBlock Text = "Не проверено: "></TextBlock>
 			</StackPanel>
 		</Grid>
 	</Border>

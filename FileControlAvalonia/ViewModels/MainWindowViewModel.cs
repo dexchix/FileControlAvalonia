@@ -249,18 +249,25 @@ namespace FileControlAvalonia.ViewModels
 
         public void DeliteFile(FileTree element)
         {
-            foreach(var file in Files)
+            try
             {
-                if(file.Path == element.Path)
+                foreach (var file in Files)
                 {
-                    Files.Remove(file);
-                    return;
+                    if (file.Path == element.Path)
+                    {
+                        Files.Remove(file);
+                        return;
+                    }
+                }
+                foreach (var file in Files)
+                {
+                    var delitedFile = FileTreeNavigator.SearchFile(element.Path, file);
+                    delitedFile.Parent.Children.Remove(delitedFile);
                 }
             }
-            foreach (var file in Files)
+            catch(Exception ex)
             {
-                var delitedFile = FileTreeNavigator.SearchFile(element.Path, file);
-                delitedFile.Parent.Children.Remove(delitedFile);
+                Program.logger.Error($"{ex.ToString()}, Не удалось удалить файл");
             }
         }
 
@@ -281,9 +288,6 @@ namespace FileControlAvalonia.ViewModels
                 }
             }
         }
-        
-        
-
         #endregion
     }
 }
