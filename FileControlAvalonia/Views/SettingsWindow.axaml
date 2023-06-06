@@ -81,7 +81,8 @@
 			</StackPanel>
 			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 
 						VerticalAlignment="Bottom" Margin="5 -8 0 5" Spacing="10">
-				<Button Content="Подтвердить" Width="150" HorizontalContentAlignment="Center" Command="{Binding Confirm}" Classes="h1"></Button>
+				<Button Content="Подтвердить" Width="150" HorizontalContentAlignment="Center" Command="{Binding Confirm}" Classes="h1"
+						CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}}"></Button>
 				<Button Content="Отмена" Command="{Binding CloseWindow}" Width="150" HorizontalContentAlignment="Center" Classes="h1"
 						CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}}"></Button>
 			</StackPanel>

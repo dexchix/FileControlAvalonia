@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -245,6 +246,12 @@ namespace FileControlAvalonia.ViewModels
 
             }
         }
+
+        public void DeliteFile(FileTree file)
+        {
+            Files.Remove(file);
+        }
+
         public void OpenInfoWindow()
         {
             new InfoWindow().Show();
@@ -262,17 +269,9 @@ namespace FileControlAvalonia.ViewModels
                 }
             }
         }
+        
+        
 
-        //===================
-        private void AddFilesInTreeDataGrid(object selectedFiles)
-        {
-            var files = selectedFiles as ObservableCollection<FileTree>;
-            foreach (var item in files)
-            {
-                Files.Add(item);
-            }
-
-        }
         #endregion
     }
 }

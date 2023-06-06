@@ -14,6 +14,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly"
+		xmlns:avalonia="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.TreeDataGrid"
 		
 		>
 	<Window.Resources>
@@ -138,7 +139,9 @@
 						</Grid>
 					</DataTemplate>
 					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
-						<Button>
+						<Button Command="{Binding DataContext.DeliteFile, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
+								CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}"
+		                >
 							<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
 								<Image Source="/Assets/deliteFile.png" Height="20"></Image>
 								<Label Content="Удалить"></Label>
