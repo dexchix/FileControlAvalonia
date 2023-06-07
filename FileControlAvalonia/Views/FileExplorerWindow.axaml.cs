@@ -14,6 +14,13 @@ namespace FileControlAvalonia.Views
         public FileExplorerWindow()
         {
             InitializeComponent();
+            Deactivated += DeactivatedWindow;
+        }
+
+        private void DeactivatedWindow(object? sender, EventArgs e)
+        {
+            string activeWindow = WindowsAPI.GetActiveProcessName();
+            if (activeWindow != WindowsAPI.programProcessName) App.CurrentApplication!.Shutdown();
         }
 
         private void InitializeComponent()
