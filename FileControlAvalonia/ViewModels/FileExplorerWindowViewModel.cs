@@ -15,10 +15,11 @@ using FileControlAvalonia.Converters;
 using NLog.LayoutRenderers.Wrappers;
 using FileControlAvalonia.Helper;
 using System.Collections.ObjectModel;
+using FileControlAvalonia.ViewModels.Interfaces;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class FileExplorerWindowViewModel : ReactiveObject
+    public class FileExplorerWindowViewModel : ReactiveObject, IFileExplorerWindowViewModel
     {
         #region FIELDS
         private int _itemIndex = 0;

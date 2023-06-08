@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
+using FileControlAvalonia.ViewModels.Interfaces;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Xml.Serialization;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class SettingsWindowViewModel : ReactiveObject
+    public class SettingsWindowViewModel : ReactiveObject, ISettingsWindowViewModel
     {
         private Settings _settings = SettingsManager.GetSettings();
         private string _serverVM;

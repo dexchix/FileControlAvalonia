@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
+using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
 using HarfBuzzSharp;
 using ReactiveUI;
@@ -23,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
         #region FIELDS
         public static ObservableCollection<FileTree> fileTree;
@@ -163,7 +164,10 @@ namespace FileControlAvalonia.ViewModels
             MainWindowState = false;
             if (_fileExplorerWindow == null || !_fileExplorerWindow.IsVisible)
             {
-                _fileExplorerWindow = new FileExplorerWindow();
+                _fileExplorerWindow = new FileExplorerWindow()
+                {
+                    DataContext = new FileExplorerWindowViewModel(),
+                };
                 _fileExplorerWindow.Show();
             }
             else

@@ -14,9 +14,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly">
-	<Window.DataContext>
-		<vm:FileExplorerWindowViewModel/>
-	</Window.DataContext>
+	
 	<Window.KeyBindings>
 		<KeyBinding Gesture="Left" Command="{Binding GoBackFolderCommand}" />
 		<KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"
