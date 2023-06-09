@@ -35,6 +35,9 @@
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="1"></Setter>
 		</Style>
+		<Style Selector="TextBlock.f1">
+			<Setter Property="FontSize" Value="12"></Setter>
+		</Style>
 	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="1">
 		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
@@ -51,7 +54,7 @@
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
 				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1"
-						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
 				</Button>
 			</StackPanel>
 
@@ -70,7 +73,7 @@
 			<!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"-->
 
 			<StackPanel Spacing="150" Orientation="Horizontal"
-						Grid.Row="1" Grid.Column="1">
+						Grid.Row="1" Grid.Column="1" Margin="0 7 0 0">
 				<TextBlock>Дата создания эталона: </TextBlock>
 				<TextBlock>Дата последней проверки: </TextBlock>
 			</StackPanel>
@@ -108,8 +111,8 @@
 						</Canvas>
 					</Button>
 				</StackPanel>
-				<ComboBox Margin="70 3 0 0" HorizontalContentAlignment="Right" Height="25" 
-						  Width="200" FontSize="12">
+				<ComboBox Margin=" 0 15 30 0" HorizontalContentAlignment="Right" Height="30" 
+						  Width="250" FontSize="12">
 					<ComboBoxItem Content="Все файлы"></ComboBoxItem>
 					<ComboBoxItem Content="Прошедшие проверку"></ComboBoxItem>
 					<ComboBoxItem Content="Частично прошедшие проверку"></ComboBoxItem>
@@ -119,7 +122,7 @@
 				</ComboBox>
 			</StackPanel>
 
-			<TextBlock Grid.Row="2" Grid.Column="1" Margin="10,-5" Text="Создатель эталона:"/>
+			<TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 0" Text="Создатель эталона:"/>
 
 			<TreeDataGrid Name="fileViewer" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
 						  Width="1185" HorizontalAlignment="Center" Margin= "0 0 5 0"
@@ -251,15 +254,15 @@
 						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0"/>
 			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
-				<TextBlock>Уровень пользователя: </TextBlock>
-				<TextBlock>| </TextBlock>
-				<TextBlock Text = "Всего файлов: "></TextBlock>
-				<TextBlock Text = "Соответствует: "></TextBlock>
-				<TextBlock Text = "Частично соответствует: "></TextBlock>
-				<TextBlock Text = "Не соответствует: "></TextBlock>
-				<TextBlock Text = "Нет доступа: "></TextBlock>
-				<TextBlock Text = "Не найдено: "></TextBlock>
-				<TextBlock Text = "Не проверено: "></TextBlock>
+				<TextBlock Classes="f1">Уровень пользователя: </TextBlock>
+				<TextBlock Classes="f1">| </TextBlock>
+				<TextBlock Classes="f1" Text = "Всего файлов: "></TextBlock>
+				<TextBlock Classes="f1" Text = "Соответствует: "></TextBlock>
+				<TextBlock Classes="f1" Text = "Частично соответствует: "></TextBlock>
+				<TextBlock Classes="f1" Text = "Не соответствует: "></TextBlock>
+				<TextBlock Classes="f1" Text = "Нет доступа: "></TextBlock>
+				<TextBlock Classes="f1" Text = "Не найдено: "></TextBlock>
+				<TextBlock Classes="f1" Text = "Не проверено: "></TextBlock>
 			</StackPanel>
 		</Grid>
 	</Border>

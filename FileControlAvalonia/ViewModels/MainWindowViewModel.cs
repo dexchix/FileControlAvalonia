@@ -19,8 +19,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -53,10 +55,14 @@ namespace FileControlAvalonia.ViewModels
             get => _source;
             set => this.RaiseAndSetIfChanged(ref _source, value);
         }
+        public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
+        public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
+        public Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?> ShowDialogFileExplorerWindow { get; }
         #endregion
 
         public MainWindowViewModel()
         {
+
             MainWindowState = true;
             Files = new ObservableCollection<FileTree>();
 
@@ -98,7 +104,8 @@ namespace FileControlAvalonia.ViewModels
                         new ColumnOptions<FileTree>{MaxWidth = new GridLength(170)})
                 }
             };
-            ReactiveUI.MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(x =>
+
+            MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(x =>
             {
                 foreach (var item in x)
                 {
@@ -106,6 +113,9 @@ namespace FileControlAvalonia.ViewModels
                 }
             });
 
+            ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
+            ShowDialogSettingsWindow = new Interaction<SettingsWindowViewModel, SettingsWindowViewModel?>();
+            ShowDialogFileExplorerWindow = new Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?>();
         }
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
@@ -159,36 +169,29 @@ namespace FileControlAvalonia.ViewModels
             App.CurrentApplication!.Shutdown();
         }
 
-        public void OpenFileExplorerWindow()
+        public ICommand OpenInfoWindow
         {
-            MainWindowState = false;
-            if (_fileExplorerWindow == null || !_fileExplorerWindow.IsVisible)
+            get => ReactiveCommand.CreateFromTask(async () =>
             {
-                _fileExplorerWindow = new FileExplorerWindow()
-                {
-                    DataContext = new FileExplorerWindowViewModel(),
-                };
-                _fileExplorerWindow.Show();
-            }
-            else
-            {
-                _fileExplorerWindow.Activate();
-            }
-            //_windowServise.ShowWindow<FileExplorerWindow>();
+                var infoWindowVM = new InfoWindowViewModel();
+                var result = await ShowDialogInfoWindow.Handle(infoWindowVM);
+            });
         }
-
-        public void OpenSettingsWindow()
+        public ICommand OpenSettingsWindow
         {
-            if (_settingsWindow == null || !_settingsWindow.IsVisible)
+            get => ReactiveCommand.CreateFromTask(async () =>
             {
-                _settingsWindow = new SettingsWindow();
-                _settingsWindow.Show();
-            }
-            else
+                var settingsWindowVM = new SettingsWindowViewModel();
+                var result = await ShowDialogSettingsWindow.Handle(settingsWindowVM);
+            });
+        }
+        public ICommand OpenFileExplorerWindow
+        {
+            get => ReactiveCommand.CreateFromTask(async () =>
             {
-                _settingsWindow.Activate();
-            }
-            //_windowServise.ShowWindow<SettingsWindow>();
+                var fileExplorerVM = new FileExplorerWindowViewModel();
+                var result  = await ShowDialogFileExplorerWindow.Handle(fileExplorerVM);
+            });
         }
 
         public void ExpandAllNodes(TreeDataGrid fileVieawer)
@@ -269,15 +272,10 @@ namespace FileControlAvalonia.ViewModels
                     delitedFile.Parent.Children.Remove(delitedFile);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Program.logger.Error($"{ex.ToString()}, Не удалось удалить файл");
             }
-        }
-
-        public void OpenInfoWindow()
-        {
-            new InfoWindow().Show();
         }
 
         private void ChangeIsExpandedProp(FileTree folder, bool flag)

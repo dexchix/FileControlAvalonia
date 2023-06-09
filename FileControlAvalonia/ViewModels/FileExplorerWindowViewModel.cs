@@ -24,7 +24,7 @@ namespace FileControlAvalonia.ViewModels
         #region FIELDS
         private int _itemIndex = 0;
         private static IconConverter? s_iconConverter;
-        private static FileTreeNavigator _fileTreeNavigator = new FileTreeNavigator();
+        private static FileTreeNavigator _fileTreeNavigator; 
         private static FileTree? _fileTree;
         #endregion
 
@@ -65,6 +65,7 @@ namespace FileControlAvalonia.ViewModels
 
         public FileExplorerWindowViewModel()
         {
+            _fileTreeNavigator = new FileTreeNavigator();
             _fileTree = _fileTreeNavigator.FileTree;
             _fileTreeNavigator.PropertyChanged += OnMyPropertyChanged!;
         }

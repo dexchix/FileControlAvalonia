@@ -76,7 +76,7 @@
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagPartiallyMatchedVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNumberOfUnaccessedVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNotFoundVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay" Watermark="exe/stu/xlsx/png/zef/xef"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}, Mode=TwoWay"></TextBox>
 			</StackPanel>
 			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 

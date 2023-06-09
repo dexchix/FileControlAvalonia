@@ -13,12 +13,21 @@ namespace FileControlAvalonia.Services
 {
     public class SettingsManager
     {
+        private static List<string> extensions = new List<string>();
+        public static List<string> modifyExtensions = new List<string>();
         public static void SaveSettings(Settings settings)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));
             using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
             {
                 serializer.Serialize(streamWriter, settings);
+            }
+
+            extensions.Clear();
+            extensions = settings.AvalibleFileExtensions.Split('/').ToList();
+            foreach (string extension in extensions)
+            {
+                modifyExtensions.Add("."+ extension);
             }
         }
         public static Settings? GetSettings()
@@ -31,7 +40,7 @@ namespace FileControlAvalonia.Services
                     return serializer.Deserialize(streamReader) as Settings;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Program.logger.Error(ex);
                 return null;
