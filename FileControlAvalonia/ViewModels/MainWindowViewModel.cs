@@ -1,27 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
-using HarfBuzzSharp;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels

@@ -15,6 +15,7 @@ namespace FileControlAvalonia.Services
     {
         private static List<string> extensions = new List<string>();
         public static List<string> modifyExtensions = new List<string>();
+        public static string? settingsString;
         public static void SaveSettings(Settings settings)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));
@@ -22,12 +23,16 @@ namespace FileControlAvalonia.Services
             {
                 serializer.Serialize(streamWriter, settings);
             }
-
+            settingsString = settings.AvalibleFileExtensions;
             extensions.Clear();
+            modifyExtensions.Clear();
             extensions = settings.AvalibleFileExtensions.Split('/').ToList();
-            foreach (string extension in extensions)
+            if(extensions.Count > 0 && extensions[0] != "")
             {
-                modifyExtensions.Add("."+ extension);
+                foreach (string extension in extensions)
+                {
+                    modifyExtensions.Add("." + extension);
+                }
             }
         }
         public static Settings? GetSettings()

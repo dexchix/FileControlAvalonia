@@ -16,6 +16,7 @@ using NLog.LayoutRenderers.Wrappers;
 using FileControlAvalonia.Helper;
 using System.Collections.ObjectModel;
 using FileControlAvalonia.ViewModels.Interfaces;
+using FileControlAvalonia.Services;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -34,7 +35,7 @@ namespace FileControlAvalonia.ViewModels
             get => _itemIndex;
             set => this.RaiseAndSetIfChanged(ref _itemIndex, value);
         }
-        public string Extensions { get => "exe/ jpeg/ png"; }
+        public string Extensions { get => SettingsManager.settingsString!; }
 
         public static IMultiValueConverter FileIconConverter
         {

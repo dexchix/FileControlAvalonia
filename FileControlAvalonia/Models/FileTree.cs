@@ -1,10 +1,12 @@
-﻿using ReactiveUI;
+﻿using FileControlAvalonia.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Models
@@ -86,6 +88,8 @@ namespace FileControlAvalonia.Models
 
         private ObservableCollection<FileTree>? LoadChildren()
         {
+            var extensions = SettingsManager.modifyExtensions;
+
             if (!IsDirectory)
             {
                 return null;
@@ -97,14 +101,17 @@ namespace FileControlAvalonia.Models
             };
             var result = new ObservableCollection<FileTree>();
 
-            foreach (var d in Directory.EnumerateDirectories(Path, "*", options))
+            foreach (var directory in Directory.EnumerateDirectories(Path, "*", options))
             {
-                result.Add(new FileTree(d, true, this));
+                result.Add(new FileTree(directory, true, this));
             }
 
-            foreach (var f in Directory.EnumerateFiles(Path, "*", options))
+            foreach (var file in Directory.EnumerateFiles(Path, "*", options))
             {
-                result.Add(new FileTree(f, false, this));
+                if (extensions == null || extensions.Count == 0 || extensions[0] == "")
+                    result.Add(new FileTree(file, false, this));
+                else if (extensions.Contains(System.IO.Path.GetExtension(file)))
+                    result.Add(new FileTree(file, false, this));
             }
 
             if (result.Count == 0)
