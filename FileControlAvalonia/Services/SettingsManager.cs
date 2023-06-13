@@ -2,6 +2,7 @@
 using FileControlAvalonia.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
@@ -11,11 +12,18 @@ using System.Xml.Serialization;
 
 namespace FileControlAvalonia.Services
 {
-    public class SettingsManager
+    public static class SettingsManager
     {
         private static List<string> extensions = new List<string>();
         public static List<string> modifyExtensions = new List<string>();
         public static string? settingsString;
+
+        public static void SetStartupSettings()
+        {
+            var settings = GetSettings();
+            SaveSettings(settings);
+        }
+
         public static void SaveSettings(Settings settings)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));

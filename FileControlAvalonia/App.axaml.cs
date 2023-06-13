@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
@@ -44,6 +45,7 @@ namespace FileControlAvalonia
                     DataContext = mainWindowViewModel,
                 };
                 CurrentApplication = desktop;
+                SettingsManager.SetStartupSettings();
             }
             base.OnFrameworkInitializationCompleted();
         }
