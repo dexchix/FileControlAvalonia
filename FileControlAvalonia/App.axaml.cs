@@ -36,9 +36,22 @@ namespace FileControlAvalonia
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 Locator.CurrentMutable.Register(() => new FileExplorerWindowViewModel(), typeof(FileExplorerWindowViewModel));
-                Locator.CurrentMutable.Register(() => new InfoWindowViewModel(), typeof(InfoWindowViewModel));
-                Locator.CurrentMutable.Register(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
-                Locator.CurrentMutable.Register(() => new SettingsWindowViewModel(), typeof(SettingsWindowViewModel));
+                //Locator.CurrentMutable.Register(() => new InfoWindowViewModel(), typeof(InfoWindowViewModel));
+                //Locator.CurrentMutable.Register(() => new SettingsWindowViewModel(), typeof(SettingsWindowViewModel));
+                //Locator.CurrentMutable.Register(() => new InfoWindow(), typeof(InfoWindow));
+                //Locator.CurrentMutable.Register(() => new MainWindow(), typeof(MainWindow));
+                //Locator.CurrentMutable.Register(() => new SettingsWindow(), typeof(SettingsWindow));
+
+                Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
+                Locator.CurrentMutable.RegisterLazySingleton(() => new InfoWindowViewModel(), typeof(InfoWindowViewModel));
+                Locator.CurrentMutable.RegisterLazySingleton(() => new SettingsWindowViewModel(), typeof(SettingsWindowViewModel));
+
+                //Locator.CurrentMutable.RegisterLazySingleton(() => new InfoWindow(), typeof(InfoWindow));
+                //Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindow(), typeof(MainWindow));
+                //Locator.CurrentMutable.RegisterLazySingleton(() => new SettingsWindow(), typeof(SettingsWindow));
+
+
+
                 var mainWindowViewModel = Locator.Current.GetService<MainWindowViewModel>();
                 desktop.MainWindow = new MainWindow
                 {

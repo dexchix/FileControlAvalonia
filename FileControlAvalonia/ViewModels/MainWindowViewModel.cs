@@ -10,6 +10,7 @@ using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
@@ -164,24 +165,21 @@ namespace FileControlAvalonia.ViewModels
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
-                var infoWindowVM = new InfoWindowViewModel();
-                var result = await ShowDialogInfoWindow.Handle(infoWindowVM);
+                var result = await ShowDialogInfoWindow.Handle(Locator.Current.GetService<InfoWindowViewModel>()!);
             });
         }
         public ICommand OpenSettingsWindow
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
-                var settingsWindowVM = new SettingsWindowViewModel();
-                var result = await ShowDialogSettingsWindow.Handle(settingsWindowVM);
+                var result = await ShowDialogSettingsWindow.Handle(Locator.Current.GetService<SettingsWindowViewModel>()!);
             });
         }
         public ICommand OpenFileExplorerWindow
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
-                var fileExplorerVM = new FileExplorerWindowViewModel();
-                var result  = await ShowDialogFileExplorerWindow.Handle(fileExplorerVM);
+                var result  = await ShowDialogFileExplorerWindow.Handle(Locator.Current.GetService<FileExplorerWindowViewModel>()!);
             });
         }
 

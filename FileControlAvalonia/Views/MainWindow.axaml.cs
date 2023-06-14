@@ -7,6 +7,7 @@ using FileControlAvalonia.ViewModels;
 using ReactiveUI;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
+using Splat;
 
 namespace FileControlAvalonia.Views
 {
@@ -28,6 +29,7 @@ namespace FileControlAvalonia.Views
         #region ShowDialogs
         private async Task InfoWindowShowDialog(InteractionContext<InfoWindowViewModel, InfoWindowViewModel?> interaction)
         {
+            //var dialog = Locator.Current.GetService<InfoWindow>();
             var dialog = new InfoWindow();
             dialog.DataContext = interaction.Input;
 
@@ -37,6 +39,7 @@ namespace FileControlAvalonia.Views
 
         private async Task SettingsWindowShowDialog(InteractionContext<SettingsWindowViewModel, SettingsWindowViewModel?> interaction)
         {
+            //var dialog = Locator.Current.GetService<SettingsWindow>();
             var dialog = new SettingsWindow();
             dialog.DataContext = interaction.Input;
 

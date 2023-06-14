@@ -11,9 +11,6 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly">
-	<Window.DataContext>
-		<vm:SettingsWindowViewModel/>
-	</Window.DataContext>
 	<Window.Styles>
 		<Style Selector="Button.h1">
 			<Setter Property="Background" Value="Transparent"></Setter>
