@@ -62,7 +62,7 @@
 
 			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
 						Orientation="Horizontal" HorizontalAlignment="Left">
-				<Button Width="120" Height="25" Content="Развернуть" FontSize="11" Classes="h1"
+				<Button Width="120" Height="25" Content="Развернуть все" FontSize="11" Classes="h1"
 						Command ="{Binding ExpandAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
@@ -84,37 +84,37 @@
 			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical">
 				<Button Command="{Binding CloseProgram}" VerticalAlignment="Top"
 					HorizontalAlignment="Right" Margin="0 0 1 0">
-						<Image Source="/Assets/close1.png" Width="10" Height="10"/>
-						<Button.Styles>
-							<Style Selector="Button">
-								<Setter Property="Background" Value="Transparent"/>
-							</Style>
-							<Style Selector="Button:pointerover /template/ ContentPresenter">
-							</Style>
-						</Button.Styles>
+					<Image Source="/Assets/close1.png" Width="10" Height="10"/>
+					<Button.Styles>
+						<Style Selector="Button">
+							<Setter Property="Background" Value="Transparent"/>
+						</Style>
+						<Style Selector="Button:pointerover /template/ ContentPresenter">
+						</Style>
+					</Button.Styles>
 				</Button>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 10 5 0">
 					<Button  Height="27" Width="27" Command="{Binding OpenFileExplorerWindow}" Classes="h1">
 						<Canvas Margin="-5 -2 0 0">
-							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
+							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/add.png" ></Image>
 						</Canvas>
 					</Button>
 					<Button Height="27" Width="27" Command="{Binding OpenSettingsWindow}" Classes="h1">
 						<Canvas Margin="-6 -3 0 0">
-							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
+							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/setting.png"></Image>
 						</Canvas>
 					</Button>
 					<Button  Height="27" Width="27" Command="{Binding OpenInfoWindow}" Classes="h1">
 						<Canvas Margin="-8 -5 0 0">
-							<Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" 
+							<Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/info.png"></Image>
 						</Canvas>
 					</Button>
 				</StackPanel>
-				<ComboBox Margin=" 20 5 0 0" HorizontalContentAlignment="Right" Height="30" 
-						  Width="250" FontSize="12">
+				<ComboBox Margin=" 20 5 0 0" HorizontalContentAlignment="Left" Height="30"
+						  Width="250" FontSize="12" SelectedIndex="0">
 					<ComboBox.Styles>
 						<Style Selector="ComboBoxItem">
 							<Setter Property="HorizontalAlignment" Value="Left"></Setter>
@@ -147,15 +147,14 @@
 								<RowDefinition></RowDefinition>
 								<RowDefinition></RowDefinition>
 							</Grid.RowDefinitions>
-							<Label Grid.Row="0" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
-							<Label Grid.Row="1" Content="{Binding Path}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-							<Label Grid.Row="2" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+							<Label Grid.Row="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+							<Label Grid.Row="1" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+							<Label Grid.Row="2" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
 						</Grid>
 					</DataTemplate>
 					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
 						<Button Command="{Binding DataContext.DeliteFile, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
-								CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}"
-		                >
+								CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
 							<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
 								<Image Source="/Assets/deliteFile.png" Height="20"></Image>
 								<Label Content="Удалить"></Label>
@@ -184,7 +183,7 @@
 				<TreeDataGrid.Styles>
 					<Style Selector="TreeDataGridCellsPresenter">
 						<Setter Property="Background" Value="{Binding Color}"></Setter>
-						
+
 					</Style>
 
 					<Style Selector="TreeDataGridRow">
@@ -242,7 +241,7 @@
 															</MultiBinding>
 														</Image.Source>
 													</Image>
-													<TextBlock Text="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
+													<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
 
 												</StackPanel>
 											</Border>
@@ -264,17 +263,65 @@
 			</TreeDataGrid>
 			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
 						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0"/>
-			<StackPanel Grid.Row="5" Margin="10 -30 10 10" VerticalAlignment="Bottom"
+			<StackPanel Grid.Row="5" Margin="10 0 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
-				<TextBlock Classes="f1">Уровень пользователя: </TextBlock>
-				<TextBlock Classes="f1">| </TextBlock>
-				<TextBlock Classes="f1" Text = "Всего файлов: "></TextBlock>
-				<TextBlock Classes="f1" Text = "Соответствует: "></TextBlock>
-				<TextBlock Classes="f1" Text = "Частично соответствует: "></TextBlock>
-				<TextBlock Classes="f1" Text = "Не соответствует: "></TextBlock>
-				<TextBlock Classes="f1" Text = "Нет доступа: "></TextBlock>
-				<TextBlock Classes="f1" Text = "Не найдено: "></TextBlock>
-				<TextBlock Classes="f1" Text = "Не проверено: "></TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Уровень пользователя: {0} |">
+							<Binding Path="UserLevel"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Всего файлов: {0}">
+							<Binding Path="TotalFiles"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Соответствует: {0}">
+							<Binding Path="Corresponds"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Частично соответствует: {0}">
+							<Binding Path="PartialCorresponds"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Не соответствует: {0}">
+							<Binding Path="DontCoresponds"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Нет доступа: {0}">
+							<Binding Path="NoAccess"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Не найдено: {0}">
+							<Binding Path="NotFound"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<TextBlock Classes="f1">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Не проверено: {0}">
+							<Binding Path="NotChecked"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
 			</StackPanel>
 		</Grid>
 	</Border>

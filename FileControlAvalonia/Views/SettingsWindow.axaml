@@ -25,11 +25,13 @@
 	<Border BorderBrush="Black" BorderThickness="1">
 		<Grid RowDefinitions="30 * 30" ColumnDefinitions="auto auto">
 			<StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
-				<Image Source="/Assets/setting.png" Height="20" VerticalAlignment="Center" Margin="10 0 0 0"></Image>
-				<Label Content="Настройки" Margin="5 3 0 0"></Label>
+				<Canvas Margin=" -3 5 0 0">
+					<Image Source="/Assets/setting.png" Height="17" VerticalAlignment="Center" Margin="10 0 0 0"></Image>
+				</Canvas>
+				<Label Content="Настройки" Margin="25 1 0 0"></Label>
 			</StackPanel>
 			<Button Grid.Row="0" Grid.Column="1" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-					Margin="10" Command="{Binding CloseWindow}"
+					Margin="0 0 0 5" Command="{Binding CloseWindow}"
 					CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
 				<Image Source="/Assets/close1.png" Width="10" Height="10"/>
 				<Button.Styles>
@@ -59,7 +61,7 @@
 				<Label Content = "Параметр доступа для кнопки «Проверить»"></Label>
 			</StackPanel>
 			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
-						HorizontalAlignment="Stretch" Width="270" Margin= "5 -5 0 0">
+						HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding ServerVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding DataBaseVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>

@@ -29,6 +29,15 @@ namespace FileControlAvalonia.ViewModels
         private SettingsWindow _settingsWindow;
         private WindowServise _windowServise = new WindowServise();
         private bool _mainWindowState;
+        private string _userLevel;
+        private int _totalFiles;
+        private int _corresponds;
+        private int _partialCorresponds;
+        private int _dontCoresponds;
+        private int _noAccess;
+        private int _notFound;
+        private int _notChecked;
+
         #endregion
 
         #region PROPERTIES
@@ -47,9 +56,50 @@ namespace FileControlAvalonia.ViewModels
             get => _source;
             set => this.RaiseAndSetIfChanged(ref _source, value);
         }
+        public string UserLevel
+        {
+            get => _userLevel;
+            set => this.RaiseAndSetIfChanged(ref _userLevel, value);
+        }
+        public int TotalFiles
+        {
+            get => _totalFiles;
+            set => this.RaiseAndSetIfChanged(ref _totalFiles, value);
+        }
+        public int Corresponds
+        {
+            get => _corresponds;
+            set => this.RaiseAndSetIfChanged(ref _corresponds, value);
+        }
+        public int PartialCorresponds
+        {
+            get => _partialCorresponds;
+            set => this.RaiseAndSetIfChanged(ref _partialCorresponds, value);
+        }
+        public int DontCoresponds
+        {
+            get => _dontCoresponds;
+            set => this.RaiseAndSetIfChanged(ref _dontCoresponds, value);
+        }
+        public int NoAccess
+        {
+            get => _noAccess;
+            set => this.RaiseAndSetIfChanged(ref _noAccess, value);
+        }
+        public int NotFound
+        {
+            get => _notFound;
+            set => this.RaiseAndSetIfChanged(ref _notFound, value);
+        }
+        public int NotChecked
+        {
+            get => _notChecked;
+            set => this.RaiseAndSetIfChanged(ref _notChecked, value);
+        }
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
         public Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?> ShowDialogFileExplorerWindow { get; }
+
         #endregion
 
         public MainWindowViewModel()
@@ -108,7 +158,17 @@ namespace FileControlAvalonia.ViewModels
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
             ShowDialogSettingsWindow = new Interaction<SettingsWindowViewModel, SettingsWindowViewModel?>();
             ShowDialogFileExplorerWindow = new Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?>();
+
+            _userLevel = "admin";
+            _totalFiles = 0;
+            _corresponds = 0;
+            _partialCorresponds = 0;
+            _dontCoresponds = 0;
+            _noAccess = 0;
+            _notFound = 0;
+            _notChecked = 0; 
         }
+        int qqq = 14;
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
         {
@@ -179,7 +239,7 @@ namespace FileControlAvalonia.ViewModels
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
-                var result  = await ShowDialogFileExplorerWindow.Handle(Locator.Current.GetService<FileExplorerWindowViewModel>()!);
+                var result = await ShowDialogFileExplorerWindow.Handle(Locator.Current.GetService<FileExplorerWindowViewModel>()!);
             });
         }
 
