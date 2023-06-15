@@ -1,11 +1,12 @@
-﻿using ReactiveUI;
+﻿using FileControlAvalonia.Models;
+using ReactiveUI;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileControlAvalonia.Models
+namespace FileControlAvalonia.FileTreeLogic
 {
     public class FileTreeNavigator : ReactiveObject
     {

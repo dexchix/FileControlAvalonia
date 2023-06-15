@@ -17,6 +17,7 @@ using FileControlAvalonia.Helper;
 using System.Collections.ObjectModel;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Services;
+using FileControlAvalonia.FileTreeLogic;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -92,7 +93,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            var transmitterSelectedFiles = new TransmitterSelectedFiles(_fileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchTreeParent(_fileTreeNavigator.pathRootFolder, FileTree));
+            var transmitterSelectedFiles = new TransformerFileTrees(_fileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchTreeParent(_fileTreeNavigator.pathRootFolder, FileTree));
             var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
             window.Close();

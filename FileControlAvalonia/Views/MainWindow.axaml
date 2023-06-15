@@ -40,6 +40,11 @@
 		<Style Selector="TextBlock.f1">
 			<Setter Property="FontSize" Value="12"></Setter>
 		</Style>
+		<Style Selector="ToolTip">
+			<Setter Property="MaxWidth" Value="1000"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+		</Style>
 	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="1">
 		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
@@ -54,6 +59,12 @@
 						 >
 				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+					<ToolTip.Tip>
+						<StackPanel>
+							<TextBlock>ToolTip</TextBlock>
+							<TextBlock>A control which pops up a hint when a control is hovered</TextBlock>
+						</StackPanel>
+					</ToolTip.Tip>
 				</Button>
 				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
@@ -149,7 +160,13 @@
 							</Grid.RowDefinitions>
 							<Label Grid.Row="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
 							<Label Grid.Row="1" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-							<Label Grid.Row="2" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+						    <Label Grid.Row="2" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+							<ToolTip.Tip>
+								<StackPanel>
+									<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
+									<TextBlock Text="{Binding Path=DataContext.Path, RelativeSource={RelativeSource Self}}"></TextBlock>
+								</StackPanel>
+							</ToolTip.Tip>
 						</Grid>
 					</DataTemplate>
 					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">

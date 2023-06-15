@@ -5,6 +5,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using FileControlAvalonia.Converters;
+using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels.Interfaces;

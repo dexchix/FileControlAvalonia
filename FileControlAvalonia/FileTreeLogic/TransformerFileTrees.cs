@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Helper
 {
-    public class TransmitterSelectedFiles
+    public class TransformerFileTrees
     {
         #region FIELDS
         private string _pathRootFolder;
@@ -18,7 +18,7 @@ namespace FileControlAvalonia.Helper
         private List<FileTree> _parentOfRemoveChild;
         #endregion 
 
-        public TransmitterSelectedFiles(string pathRootFolder, FileTree rootFolder)
+        public TransformerFileTrees(string pathRootFolder, FileTree rootFolder)
         {
             _pathRootFolder = pathRootFolder;
             _fileTree = rootFolder;
@@ -28,12 +28,20 @@ namespace FileControlAvalonia.Helper
         }
 
         #region METHODS
+        /// <summary>
+        /// Возвращяет колекцию (деревья) выбранных элементов
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<FileTree> GetSelectedFiles()
         {
             SortingFileTree(_copyFileTree.Children!);
-            RemoveEmptyFolders();
+            RemoveEmptyFoldersAndUnselectedFiles();
             return _copyFileTree.Children!;
         }
+        /// <summary>
+        /// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 
+        /// </summary>
+        /// <param name="folder"></param>
         private void SortingFileTree(ObservableCollection<FileTree> folder)
         {
             foreach (var file in folder.ToList())
@@ -48,8 +56,10 @@ namespace FileControlAvalonia.Helper
                 }
             }
         }
-
-        private void RemoveEmptyFolders()
+        /// <summary>
+        /// Удаляет пустые папки и не выбранные элементы
+        /// </summary>
+        private void RemoveEmptyFoldersAndUnselectedFiles()
         {
             do
             {
@@ -63,7 +73,10 @@ namespace FileControlAvalonia.Helper
             }
             while (_parentOfRemoveChild.Count > 0);
         }
-
+        /// <summary>
+        /// Проверяет папку и добавляет её элементы и родителя в коллеции элементов которые должны быть удалены
+        /// </summary>
+        /// <param name="files"></param>
         private void CheckEmptyFolders(ObservableCollection<FileTree> files)
         {
             foreach (var file in files.ToList())
@@ -79,22 +92,29 @@ namespace FileControlAvalonia.Helper
                 }
             }
         }
-
-        private void CopyIsChecked(ObservableCollection<FileTree> folder, ObservableCollection<FileTree> copy)
+        /// <summary>
+        /// Выставляет в копии колекции деревьев свойство IsChecked в соответствии с оригинальной колекцией
+        /// </summary>
+        /// <param name="original"></param>
+        /// <param name="copy"></param>
+        private void CopyIsChecked(ObservableCollection<FileTree> original, ObservableCollection<FileTree> copy)
         {
-            for (int i = 0; i < folder.Count; i++)
+            for (int i = 0; i < original.Count; i++)
             {
-                if (folder[i].IsChecked)
+                if (original[i].IsChecked)
                 {
                     copy[i].IsChecked = true;
                 }
-                if (folder[i].IsDirectory)
+                if (original[i].IsDirectory)
                 {
-                    CopyIsChecked(folder[i].Children, copy[i].Children);
+                    CopyIsChecked(original[i].Children, copy[i].Children);
                 }
             }
         }
-
+        /// <summary>
+        /// Создает и возвращяет копию файлового дерева
+        /// </summary>
+        /// <returns></returns>
         private FileTree GetCopyFileTree()
         {
             var copy = new FileTree(_pathRootFolder, true);
