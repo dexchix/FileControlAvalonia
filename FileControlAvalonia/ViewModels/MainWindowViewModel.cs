@@ -148,12 +148,13 @@ namespace FileControlAvalonia.ViewModels
                 }
             };
 
-            MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(x =>
+            MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(transportFiles =>
             {
-                foreach (var item in x)
-                {
-                    Files.Add(item);
-                }
+                IdenticalElementChecker.CheckAndAddMisingElements(Files, transportFiles);
+                //foreach (var item in x)
+                //{
+                //    Files.Add(item);
+                //}
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -167,7 +168,7 @@ namespace FileControlAvalonia.ViewModels
             _dontCoresponds = 0;
             _noAccess = 0;
             _notFound = 0;
-            _notChecked = 0; 
+            _notChecked = 0;
         }
         int qqq = 14;
         #region CONVERTERS
@@ -316,22 +317,47 @@ namespace FileControlAvalonia.ViewModels
                         return;
                     }
                 }
-                foreach (var file in Files)
+                //foreach (var file in Files)
+                //{
+                //    var delitedFile = FileTreeNavigator.SearchFile(element.Path, file);
+
+                //    if (delitedFile != null) delitedFile.Parent!.Children!.Remove(delitedFile);
+                //}
+                for (int i = 0; i < Files.Count; i++)
                 {
-                    var delitedFile = FileTreeNavigator.SearchFile(element.Path, file);
-                    delitedFile.Parent.Children.Remove(delitedFile);
+                    var delitedFile = FileTreeNavigator.SearchFile(element.Path, Files[i]);
+
+                    var www = FileTreeNavigator.SearchFile(element.Path, Files[0]).GetHashCode();
+                    var qqq = delitedFile.GetHashCode();
+
+                    var www111 = FileTreeNavigator.SearchFile(element.Path, Files[0]).Parent.GetHashCode();
+                    var qqq111 = delitedFile.Parent.GetHashCode(); 
+
+
+
+                    if (delitedFile != null)
+                    {
+                        var uuuu = delitedFile.Parent.Children;
+
+                        delitedFile.Parent!.Children!.Remove(delitedFile);
+
+                        var uuuu1 = delitedFile.Parent.Children;
+
+                        var delitedFile1 = FileTreeNavigator.SearchFile(element.Path, Files[i]);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"{ex.ToString()}, Не удалось удалить файл");
+                Program.logger.Error($"{ex}, Не удалось удалить файл");
             }
         }
 
         private void ChangeIsExpandedProp(FileTree folder, bool flag)
         {
             folder.IsExpanded = flag;
-            foreach (var file in folder.Children)
+            foreach (var file in folder.Children!)
             {
                 if (file.IsDirectory)
                 {

@@ -259,7 +259,9 @@
 														</Image.Source>
 													</Image>
 													<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
-
+													<ToolTip.Tip>
+															<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
+													</ToolTip.Tip>
 												</StackPanel>
 											</Border>
 										</ContentControl>
