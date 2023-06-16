@@ -339,7 +339,8 @@ namespace FileControlAvalonia.ViewModels
                     {
                         var uuuu = delitedFile.Parent.Children;
 
-                        delitedFile.Parent!.Children!.Remove(delitedFile);
+                        //delitedFile.Parent!.Children!.Remove(delitedFile);
+                        FileTreeNavigator.SearchFile(delitedFile.Parent.Path, Files[i]).Children.Remove(FileTreeNavigator.SearchFile(delitedFile.Path, Files[i]));
 
                         var uuuu1 = delitedFile.Parent.Children;
 
