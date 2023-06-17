@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Core
 {
-    public enum StatusCheckedFile
+    public enum StatusFile
     {
         Checked,
         PartiallyChecked,
         FailedChecked,
+        UnChecked,
         NoAccess,
         Missing
     }

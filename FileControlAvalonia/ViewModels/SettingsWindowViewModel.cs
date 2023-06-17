@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using FileControlAvalonia.Models;
+using FileControlAvalonia.Core;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels.Interfaces;
 using ReactiveUI;

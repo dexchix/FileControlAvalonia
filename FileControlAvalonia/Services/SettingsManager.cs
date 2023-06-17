@@ -1,4 +1,4 @@
-﻿using FileControlAvalonia.Models;
+﻿using FileControlAvalonia.Core;
 using FileControlAvalonia.ViewModels;
 using System;
 using System.Collections.Generic;

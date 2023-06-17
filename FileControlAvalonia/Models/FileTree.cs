@@ -1,4 +1,5 @@
-﻿using FileControlAvalonia.Services;
+﻿using FileControlAvalonia.Core;
+using FileControlAvalonia.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace FileControlAvalonia.Models
         private bool _hasChildren = true;
         private bool _isExpanded;
         private bool _isChecked;
+        private StatusFile _status;
         #endregion
 
         #region PROPERTIES
@@ -42,6 +44,11 @@ namespace FileControlAvalonia.Models
                     });
                 }
             }
+        }
+        public StatusFile Status
+        {
+            get => _status;
+            set => this.RaiseAndSetIfChanged(ref _status, value);
         }
         public string Path
         {
@@ -72,6 +79,7 @@ namespace FileControlAvalonia.Models
             set => this.RaiseAndSetIfChanged(ref _children, value);
         }
         List<string> Colors = new List<string>() { "#f00", "#090", "#FFFF00" };
+        //
         #endregion
 
         public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false)
