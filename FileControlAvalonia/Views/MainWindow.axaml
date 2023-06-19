@@ -125,7 +125,7 @@
 					</Button>
 				</StackPanel>
 				<ComboBox Margin=" 20 5 0 0" HorizontalContentAlignment="Left" Height="30"
-						  Width="250" FontSize="12" SelectedIndex="0">
+						  Width="250" FontSize="12" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
 					<ComboBox.Styles>
 						<Style Selector="ComboBoxItem">
 							<Setter Property="HorizontalAlignment" Value="Left"></Setter>

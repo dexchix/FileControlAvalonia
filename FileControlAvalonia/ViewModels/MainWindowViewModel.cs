@@ -14,7 +14,9 @@ using FileControlAvalonia.Views;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Windows.Input;
 
@@ -23,13 +25,13 @@ namespace FileControlAvalonia.ViewModels
     public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
         #region FIELDS
-        public static ObservableCollection<FileTree> fileTree;
+        public static ObservableCollection<FileTree>? fileTree;
+        private IEnumerable<FileTree> _filteredFiles;
         public HierarchicalTreeDataGridSource<FileTree> _source;
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
-        private FileExplorerWindow _fileExplorerWindow;
-        private SettingsWindow _settingsWindow;
         private WindowServise _windowServise = new WindowServise();
+        private int _filterIndex = 0;
         private bool _mainWindowState;
         private string _userLevel;
         private int _totalFiles;
@@ -39,7 +41,7 @@ namespace FileControlAvalonia.ViewModels
         private int _noAccess;
         private int _notFound;
         private int _notChecked;
-
+        new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
         #region PROPERTIES
@@ -52,6 +54,16 @@ namespace FileControlAvalonia.ViewModels
         {
             get => fileTree;
             set => this.RaiseAndSetIfChanged(ref fileTree, value);
+        }
+        private IEnumerable<FileTree> FilteredFiles
+        {
+            get => _filteredFiles;
+            set => this.RaiseAndSetIfChanged(ref _filteredFiles, value); 
+        }
+        public int FilterIndex
+        {
+            get=> _filterIndex;
+            set => this.RaiseAndSetIfChanged(ref _filterIndex, value);
         }
         public HierarchicalTreeDataGridSource<FileTree> Source
         {
@@ -153,6 +165,7 @@ namespace FileControlAvalonia.ViewModels
             {
                 IdenticalElementChecker.CheckAndAddMisingElements(Files, transportFiles);
                 TestChekingFiles.TEST(Files);
+                FilteredFiles = Files;
                 //foreach (var item in x)
                 //{
                 //    Files.Add(item);
@@ -368,6 +381,16 @@ namespace FileControlAvalonia.ViewModels
                     ChangeIsExpandedProp(file, flag);
                 }
             }
+        }
+        #endregion
+        #region METHODS
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void FilterElements()
+        {
+
         }
         #endregion
     }
