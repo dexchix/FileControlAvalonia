@@ -20,7 +20,7 @@
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
 		<c:ForegroundConverter x:Key="ForegroundConverter"/>
-		<c:ColorToForegroundConverter x:Key="ColorToForegroundConverter"/>
+		<c:BackGroundConverter x:Key="BackGroundConverter"/>
 	</Window.Resources>
 
 	<Design.DataContext>
@@ -158,9 +158,9 @@
 								<RowDefinition></RowDefinition>
 								<RowDefinition></RowDefinition>
 							</Grid.RowDefinitions>
-							<Label Grid.Row="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
-							<Label Grid.Row="1" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-						    <Label Grid.Row="2" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+							<Label Grid.Row="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+							<Label Grid.Row="1" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+						    <Label Grid.Row="2" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
 							<ToolTip.Tip>
 								<StackPanel>
 									<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
@@ -199,7 +199,7 @@
 				</TreeDataGrid.Resources>
 				<TreeDataGrid.Styles>
 					<Style Selector="TreeDataGridCellsPresenter">
-						<Setter Property="Background" Value="{Binding Color}"></Setter>
+						<Setter Property="Background" Value="{Binding Path=Status, Converter={StaticResource BackGroundConverter}}"></Setter>
 
 					</Style>
 
@@ -258,7 +258,7 @@
 															</MultiBinding>
 														</Image.Source>
 													</Image>
-													<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Color, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
+													<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
 													<ToolTip.Tip>
 															<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
 													</ToolTip.Tip>

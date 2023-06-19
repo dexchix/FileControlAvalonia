@@ -5,6 +5,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using FileControlAvalonia.Converters;
+using FileControlAvalonia.Core;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
@@ -151,6 +152,7 @@ namespace FileControlAvalonia.ViewModels
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(transportFiles =>
             {
                 IdenticalElementChecker.CheckAndAddMisingElements(Files, transportFiles);
+                TestChekingFiles.TEST(Files);
                 //foreach (var item in x)
                 //{
                 //    Files.Add(item);

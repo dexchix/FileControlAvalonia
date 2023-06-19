@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Converters
 {
-    public class ForegroundConverter : IValueConverter
+    public class BackGroundConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
@@ -19,20 +19,21 @@ namespace FileControlAvalonia.Converters
                 switch (value)
                 {
                     case StatusFile.Checked:
-                        return Brushes.Black;
+                        return new SolidColorBrush(Color.Parse("#090"));
                     case StatusFile.PartiallyChecked:
-                        return Brushes.Black;
+                        return new SolidColorBrush(Color.Parse("#FFFF00"));
                     case StatusFile.NoAccess:
-                        return Brushes.White;
+                        return new SolidColorBrush(Color.Parse("#f00"));
                     case StatusFile.FailedChecked:
-                        return Brushes.White;
+                        return new SolidColorBrush(Color.Parse("#f00"));
                     case StatusFile.Missing:
-                        return Brushes.White;
+                        return new SolidColorBrush(Color.Parse("#f00"));
                     case StatusFile.UnChecked:
-                        return Brushes.White;
+                        return new SolidColorBrush(Color.Parse("#f00"));
                 }
             }
             return null;
+
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
