@@ -16,6 +16,11 @@ namespace FileControlAvalonia.Models
     public class FileTree : ReactiveObject, ICloneable
     {
         #region FIELDS
+        private int _id;
+        private string _eHash;
+        private string _fHash;
+        private string _eInfo;
+        private string _fInfo;
         private string _path;
         private string _name;
         private ObservableCollection<FileTree>? _children;
@@ -43,6 +48,31 @@ namespace FileControlAvalonia.Models
                     });
                 }
             }
+        }
+        public int ID
+        {
+            get => _id;
+            set => this.RaiseAndSetIfChanged(ref _id, value);
+        }
+        public string EHash
+        {
+            get => _eHash;
+            set => this.RaiseAndSetIfChanged(ref _eHash, value);
+        }
+        public string FHash
+        {
+            get => _fHash;
+            set => this.RaiseAndSetIfChanged(ref _fHash, value);
+        }
+        public string EInfo
+        {
+            get => _eInfo;
+            set => this.RaiseAndSetIfChanged(ref _eInfo, value);
+        }
+        public string FInfo
+        {
+            get => _fInfo;
+            set => this.RaiseAndSetIfChanged(ref _fInfo, value);
         }
         public StatusFile Status
         {
@@ -127,6 +157,10 @@ namespace FileControlAvalonia.Models
         public object Clone()
         {
             return MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            return Path;
         }
     }
 }

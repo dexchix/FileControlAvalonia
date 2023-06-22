@@ -29,7 +29,6 @@ namespace FileControlAvalonia.Core
             {
                 case 0:
                     return StatusFile.Checked;
-
                 case 1:
                     return StatusFile.PartiallyChecked;
                 case 2:

@@ -6,6 +6,7 @@ using FileControlAvalonia.ViewModels;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
 using Splat;
+using System.Threading.Tasks;
 
 namespace FileControlAvalonia
 {
@@ -18,19 +19,6 @@ namespace FileControlAvalonia
             AvaloniaXamlLoader.Load(this);
         }
 
-
-        //public override void OnFrameworkInitializationCompleted()
-        //{
-        //    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        //    {
-        //        desktop.MainWindow = new MainWindow
-        //        {
-        //            DataContext = new MainWindowViewModel(),
-        //        };
-        //        CurrentApplication = desktop;
-        //    }
-        //    base.OnFrameworkInitializationCompleted();
-        //}
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -51,7 +39,6 @@ namespace FileControlAvalonia
                 //Locator.CurrentMutable.RegisterLazySingleton(() => new SettingsWindow(), typeof(SettingsWindow));
 
 
-
                 var mainWindowViewModel = Locator.Current.GetService<MainWindowViewModel>();
                 desktop.MainWindow = new MainWindow
                 {
@@ -61,6 +48,7 @@ namespace FileControlAvalonia
                 SettingsManager.SetStartupSettings();
             }
             base.OnFrameworkInitializationCompleted();
+            
         }
     }
 }
