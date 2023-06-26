@@ -138,38 +138,26 @@ namespace FileControlAvalonia.ViewModels
             {
                 Columns =
                 {
-                        new HierarchicalExpanderColumn<FileTree>(
+                    new HierarchicalExpanderColumn<FileTree>(
                         new TemplateColumn<FileTree>(
                             "Имя файла",
                             "FileNameCell",
                             new GridLength(1, GridUnitType.Star),
                             new ColumnOptions<FileTree>
                             {
-                            })
-                        {
-                            IsTextSearchEnabled = true,
-                            TextSearchValueSelector = x => x.Name
-                        },
+                                MaxWidth = GridLength.Parse("350")
+                            }),
                         x => x.Children,
                         x => x.HasChildren,
-                        x => x.IsExpanded),
+                        x => x.IsExpanded
+                        ),
 
                     new TemplateColumn<FileTree>(
-                        "Эталон",
+                        "Эталон|Фактическое значение",
                         "FileCell",
                         new GridLength(1,GridUnitType.Star),
                         new ColumnOptions<FileTree>(){}
                         ){},
-                    new TemplateColumn<FileTree>(
-                        "Фактическое значение",
-                        "FileCell",
-                        new GridLength(1,GridUnitType.Star),
-                        new ColumnOptions<FileTree>()
-                        ){},
-                    new TemplateColumn<FileTree>(
-                        " ", "ButtonCell",
-                        new GridLength(1,GridUnitType.Star),
-                        new ColumnOptions<FileTree>{MaxWidth = new GridLength(170)})
                 }
             };
 

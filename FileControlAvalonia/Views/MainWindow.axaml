@@ -151,16 +151,42 @@
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}" >
 				<TreeDataGrid.Resources>
 					<DataTemplate x:Key="FileCell" DataType="m:FileTree">
-						<Grid Name="EtalonGrid">
-							<Line StartPoint="0,0" EndPoint="0,80" Stroke="Black" IsVisible="True"/>
-							<Grid.RowDefinitions>
-								<RowDefinition></RowDefinition>
-								<RowDefinition></RowDefinition>
-								<RowDefinition></RowDefinition>
-							</Grid.RowDefinitions>
-							<Label Grid.Row="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
-							<Label Grid.Row="1" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-						    <Label Grid.Row="2" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+						<Grid Name="EtalonGrid" RowDefinitions="* * *" ColumnDefinitions="335 335 *">
+	
+							<Label Grid.Row="0" Grid.Column="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+							<Label Grid.Row="1" Grid.Column="0" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+							<Label Grid.Row="2" Grid.Column="0" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+
+							<Label Grid.Row="0" Grid.Column="1" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+							<Label Grid.Row="1" Grid.Column="1" FontSize="12" Content="{Binding Path}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+							<Label Grid.Row="2" Grid.Column="1" FontSize="12" Content="{Binding Name}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+
+							<Button Grid.RowSpan="3" Grid.Column="2" Command="{Binding DataContext.DeliteFile, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
+								CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
+								<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+									<Image Source="/Assets/deliteFile.png" Height="20"></Image>
+									<Label Content="Удалить"></Label>
+								</StackPanel>
+								<Button.Styles>
+									<Style Selector="Button">
+										<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+										<Setter Property="Background" Value="White"></Setter>
+										<Setter Property="Height" Value="60"></Setter>
+										<Setter Property="Width" Value="140"></Setter>
+										<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+										<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+										<Setter Property="Content" Value="Удалить"></Setter>
+										<Setter Property="BorderBrush" Value="Black"></Setter>
+										<Setter Property="BorderThickness" Value="2"></Setter>
+									</Style>
+									<Style Selector="Button:pointerover /template/ ContentPresenter">
+										<Setter Property="Background" Value="Gray"></Setter>
+										<Setter Property="BorderBrush" Value="Black"></Setter>
+										<Setter Property="BorderThickness" Value="2"></Setter>
+									</Style>
+								</Button.Styles>
+							</Button>
+							
 							<ToolTip.Tip>
 								<StackPanel>
 									<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
@@ -170,31 +196,7 @@
 						</Grid>
 					</DataTemplate>
 					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
-						<Button Command="{Binding DataContext.DeliteFile, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
-								CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
-							<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-								<Image Source="/Assets/deliteFile.png" Height="20"></Image>
-								<Label Content="Удалить"></Label>
-							</StackPanel>
-							<Button.Styles>
-								<Style Selector="Button">
-									<Setter Property="HorizontalAlignment" Value="Center"></Setter>
-									<Setter Property="Background" Value="White"></Setter>
-									<Setter Property="Height" Value="60"></Setter>
-									<Setter Property="Width" Value="140"></Setter>
-									<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-									<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-									<Setter Property="Content" Value="Удалить"></Setter>
-									<Setter Property="BorderBrush" Value="Black"></Setter>
-									<Setter Property="BorderThickness" Value="2"></Setter>
-								</Style>
-								<Style Selector="Button:pointerover /template/ ContentPresenter">
-									<Setter Property="Background" Value="Gray"></Setter>
-									<Setter Property="BorderBrush" Value="Black"></Setter>
-									<Setter Property="BorderThickness" Value="2"></Setter>
-								</Style>
-							</Button.Styles>
-						</Button>
+						
 					</DataTemplate>
 				</TreeDataGrid.Resources>
 				<TreeDataGrid.Styles>
