@@ -47,7 +47,7 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="1">
-		<Grid RowDefinitions="30 35 35 425 30 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
+		<Grid RowDefinitions="30 35 35 * auto 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
 			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0 -30 0 0"
 						HorizontalAlignment="Left" VerticalAlignment="Bottom">
 				<Image Source="/Assets/CopyModelDifferences_32x32.ico"  Height="23" Margin="5 -10 0 0"
@@ -124,23 +124,8 @@
 						</Canvas>
 					</Button>
 				</StackPanel>
-				<ComboBox Margin=" 20 5 0 0" HorizontalContentAlignment="Left" Height="30"
-						  Width="250" FontSize="12" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
-					<ComboBox.Styles>
-						<Style Selector="ComboBoxItem">
-							<Setter Property="HorizontalAlignment" Value="Left"></Setter>
-							<Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
-						</Style>
-						<Style Selector="ComboBox">
-							<Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
-						</Style>
-					</ComboBox.Styles>
-					<ComboBoxItem Content="Все файлы"></ComboBoxItem>
-					<ComboBoxItem Content="Прошедшие проверку"></ComboBoxItem>
-					<ComboBoxItem Content="Частично прошедшие проверку"></ComboBoxItem>
-					<ComboBoxItem Content="Не прошедшие проверку"></ComboBoxItem>
-					<ComboBoxItem Content="Без доступа"></ComboBoxItem>
-					<ComboBoxItem Content="Отсутствующие"></ComboBoxItem>
+				<ComboBox Margin=" 20 5 0 0" HorizontalContentAlignment="Left" Height="30" Items="{Binding Filters}"
+						  Width="250" FontSize="11" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
 				</ComboBox>
 			</StackPanel>
 
@@ -282,8 +267,8 @@
 					</Style>
 				</TreeDataGrid.Styles>
 			</TreeDataGrid>
-			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
-						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0"/>
+			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" 
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0" IsVisible="False"/>
 			<StackPanel Grid.Row="5" Margin="10 0 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
 				<TextBlock Classes="f1">

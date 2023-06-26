@@ -115,6 +115,7 @@ namespace FileControlAvalonia.ViewModels
             get => _notChecked;
             set => this.RaiseAndSetIfChanged(ref _notChecked, value);
         }
+        public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
         public Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?> ShowDialogFileExplorerWindow { get; }
@@ -153,7 +154,7 @@ namespace FileControlAvalonia.ViewModels
                         ),
 
                     new TemplateColumn<FileTree>(
-                        "Эталон|Фактическое значение",
+                        $"{new string(' ',38)}Эталон{new string(' ',33)}|{new string(' ',25)}Фактическое значение{new string(' ',19)}|",
                         "FileCell",
                         new GridLength(1,GridUnitType.Star),
                         new ColumnOptions<FileTree>(){}
