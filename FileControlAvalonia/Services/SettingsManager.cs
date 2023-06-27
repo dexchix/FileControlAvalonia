@@ -26,21 +26,28 @@ namespace FileControlAvalonia.Services
 
         public static void SaveSettings(Settings settings)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-            using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
+            try
             {
-                serializer.Serialize(streamWriter, settings);
-            }
-            settingsString = settings.AvalibleFileExtensions;
-            extensions.Clear();
-            modifyExtensions.Clear();
-            extensions = settings.AvalibleFileExtensions.Split('/').ToList();
-            if(extensions.Count > 0 && extensions[0] != "")
-            {
-                foreach (string extension in extensions)
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {
-                    modifyExtensions.Add("." + extension);
+                    serializer.Serialize(streamWriter, settings);
                 }
+                settingsString = settings.AvalibleFileExtensions;
+                extensions.Clear();
+                modifyExtensions.Clear();
+                extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
+                if (extensions.Count > 0 && extensions[0] != "")
+                {
+                    foreach (string extension in extensions)
+                    {
+                        modifyExtensions.Add("." + extension);
+                    }
+                }
+            }
+            catch
+            {
+                Program.logger.Error("Отсутствует файл Settings.xml");
             }
         }
         public static Settings? GetSettings()
@@ -56,7 +63,7 @@ namespace FileControlAvalonia.Services
             catch (Exception ex)
             {
                 Program.logger.Error(ex);
-                return null;
+                return new Settings();
             }
         }
     }

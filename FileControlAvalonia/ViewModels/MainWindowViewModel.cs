@@ -7,6 +7,7 @@ using Avalonia.Platform;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
 using FileControlAvalonia.FileTreeLogic;
+using FileControlAvalonia.Helper;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels.Interfaces;
@@ -31,7 +32,6 @@ namespace FileControlAvalonia.ViewModels
         public HierarchicalTreeDataGridSource<FileTree> _source;
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
-        private WindowServise _windowServise = new WindowServise();
         private int _filterIndex = 0;
         private bool _mainWindowState;
         private string _userLevel;
@@ -132,10 +132,10 @@ namespace FileControlAvalonia.ViewModels
             };
             FilteredFiles = new ObservableCollection<FileTree>()
             {
-                new FileTree("C:\\1\\2", true),
+                
             };
 
-            Source = new HierarchicalTreeDataGridSource<FileTree>(Files)
+            Source = new HierarchicalTreeDataGridSource<FileTree>(FilteredFiles)
             {
                 Columns =
                 {
@@ -164,7 +164,9 @@ namespace FileControlAvalonia.ViewModels
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(transportFiles =>
             {
-                TestingFilesCollectionManager.AddFiles(Files, transportFiles);
+                //TestingFilesCollectionManager.AddFiles(Files, transportFiles);
+         
+                FilteredFiles.AddFiles(transportFiles);
                 //foreach (var file in files)
                 //{
                 //    filteredfiles.add(file);
@@ -323,7 +325,7 @@ namespace FileControlAvalonia.ViewModels
         {
             try
             {
-                foreach (var file in Files)
+                foreach (var file in FilteredFiles)
                 {
                     if (file.Path == element.Path)
                     {
@@ -333,10 +335,10 @@ namespace FileControlAvalonia.ViewModels
                 }
                 for (int i = 0; i < Files.Count; i++)
                 {
-                    var delitedFile = FileTreeNavigator.SearchFile(element.Path, Files[i]);
+                    var delitedFile = FileTreeNavigator.SearchFile(element.Path, FilteredFiles[i]);
                     if (delitedFile != null)
                     {
-                        FileTreeNavigator.SearchFile(delitedFile.Parent!.Path, Files[i]).Children!.Remove(FileTreeNavigator.SearchFile(delitedFile.Path, Files[i]));
+                        FileTreeNavigator.SearchFile(delitedFile.Parent!.Path, FilteredFiles[i]).Children!.Remove(FileTreeNavigator.SearchFile(delitedFile.Path, FilteredFiles[i]));
                     }
 
                 }

@@ -13,7 +13,6 @@ namespace FileControlAvalonia.Helper
         #region FIELDS
         private string _pathRootFolder;
         private FileTree _fileTree;
-        private FileTree _copyFileTree;
         private List<FileTree> _removedChildrens;
         private List<FileTree> _parentOfRemoveChild;
         #endregion 
@@ -22,7 +21,6 @@ namespace FileControlAvalonia.Helper
         {
             _pathRootFolder = pathRootFolder;
             _fileTree = rootFolder;
-            _copyFileTree = GetCopyFileTree();
             _removedChildrens = new List<FileTree>();
             _parentOfRemoveChild = new List<FileTree>();
         }
@@ -34,9 +32,9 @@ namespace FileControlAvalonia.Helper
         /// <returns></returns>
         public ObservableCollection<FileTree> GetSelectedFiles()
         {
-            SortingFileTree(_copyFileTree.Children!);
+            SortingFileTree(_fileTree.Children!);
             RemoveEmptyFoldersAndUnselectedFiles();
-            return _copyFileTree.Children!;
+            return _fileTree.Children!;
         }
         /// <summary>
         /// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 
@@ -69,7 +67,7 @@ namespace FileControlAvalonia.Helper
                 }
                 _parentOfRemoveChild.Clear();
                 _removedChildrens.Clear();
-                CheckEmptyFolders(_copyFileTree.Children!);
+                CheckEmptyFolders(_fileTree.Children!);
             }
             while (_parentOfRemoveChild.Count > 0);
         }
@@ -91,35 +89,6 @@ namespace FileControlAvalonia.Helper
                     CheckEmptyFolders(file.Children!);
                 }
             }
-        }
-        /// <summary>
-        /// Выставляет в копии колекции деревьев свойство IsChecked в соответствии с оригинальной колекцией
-        /// </summary>
-        /// <param name="original"></param>
-        /// <param name="copy"></param>
-        private void CopyIsChecked(ObservableCollection<FileTree> original, ObservableCollection<FileTree> copy)
-        {
-            for (int i = 0; i < original.Count; i++)
-            {
-                if (original[i].IsChecked)
-                {
-                    copy[i].IsChecked = true;
-                }
-                if (original[i].IsDirectory)
-                {
-                    CopyIsChecked(original[i].Children, copy[i].Children);
-                }
-            }
-        }
-        /// <summary>
-        /// Создает и возвращяет копию файлового дерева
-        /// </summary>
-        /// <returns></returns>
-        private FileTree GetCopyFileTree()
-        {
-            var copy = new FileTree(_pathRootFolder, true);
-            CopyIsChecked(_fileTree.Children!, copy.Children!);
-            return copy;
         }
     }
     #endregion

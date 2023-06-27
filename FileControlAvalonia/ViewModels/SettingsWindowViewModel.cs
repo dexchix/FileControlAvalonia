@@ -15,26 +15,26 @@ namespace FileControlAvalonia.ViewModels
 {
     public class SettingsWindowViewModel : ReactiveObject, ISettingsWindowViewModel
     {
-        private Settings _settings = SettingsManager.GetSettings();
-        private string _serverVM;
-        private string _dataBaseVM;
-        private string _userVM;
-        private string _passwordVM;
-        private string _nameTableVM;
-        private string _pathOPCServerVM;
-        private string _tagTotalStatusVM;
-        private string _tagTotalNumberofFilesVM;
-        private string _tagNumberOfMatchesVM;
-        private string _tagNumberMissmatchesVM;
-        private string _tagPartiallyMatchedVM;
-        private string _tagNumberOfUnaccessedVM;
-        private string _tagNotFoundVM;
-        private string _avalibleFileExtensionsVM;
-        private string _accessParametrForCheckButtonVM;
+        private Settings _settings = SettingsManager.GetSettings()!;
+        private string? _serverVM;
+        private string? _dataBaseVM;
+        private string? _userVM;
+        private string? _passwordVM;
+        private string? _nameTableVM;
+        private string? _pathOPCServerVM;
+        private string? _tagTotalStatusVM;
+        private string? _tagTotalNumberofFilesVM;
+        private string? _tagNumberOfMatchesVM;
+        private string? _tagNumberMissmatchesVM;
+        private string? _tagPartiallyMatchedVM;
+        private string? _tagNumberOfUnaccessedVM;
+        private string? _tagNotFoundVM;
+        private string? _avalibleFileExtensionsVM;
+        private string? _accessParametrForCheckButtonVM;
 
         public string ServerVM
         {
-            get => _serverVM;
+            get => _serverVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _serverVM, value);
@@ -43,7 +43,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string DataBaseVM
         {
-            get => _dataBaseVM;
+            get => _dataBaseVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _dataBaseVM, value);
@@ -52,7 +52,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string UserVM
         {
-            get => _userVM;
+            get => _userVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _userVM, value);
@@ -61,7 +61,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string PasswordVM
         {
-            get => _passwordVM;
+            get => _passwordVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _passwordVM, value);
@@ -70,7 +70,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string NameTableVM
         {
-            get => _nameTableVM;
+            get => _nameTableVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _nameTableVM, value);
@@ -79,7 +79,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string PathOPCServerVM
         {
-            get => _pathOPCServerVM;
+            get => _pathOPCServerVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _pathOPCServerVM, value);
@@ -88,7 +88,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagTotalStatusVM
         {
-            get => _tagTotalStatusVM;
+            get => _tagTotalStatusVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagTotalStatusVM, value);
@@ -97,7 +97,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagTotalNumberofFilesVM
         {
-            get => _tagTotalNumberofFilesVM;
+            get => _tagTotalNumberofFilesVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagTotalNumberofFilesVM, value);
@@ -106,7 +106,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagNumberOfMatchesVM
         {
-            get => _tagNumberOfMatchesVM;
+            get => _tagNumberOfMatchesVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagNumberOfMatchesVM, value);
@@ -115,7 +115,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagNumberMissmatchesVM
         {
-            get => _tagNumberMissmatchesVM;
+            get => _tagNumberMissmatchesVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagNumberMissmatchesVM, value);
@@ -124,7 +124,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagPartiallyMatchedVM
         {
-            get => _tagPartiallyMatchedVM;
+            get => _tagPartiallyMatchedVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagPartiallyMatchedVM, value);
@@ -133,7 +133,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagNumberOfUnaccessedVM
         {
-            get => _tagNumberOfUnaccessedVM;
+            get => _tagNumberOfUnaccessedVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagNumberOfUnaccessedVM, value);
@@ -142,7 +142,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string TagNotFoundVM
         {
-            get => _tagNotFoundVM;
+            get => _tagNotFoundVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _tagNotFoundVM, value);
@@ -151,7 +151,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string AvalibleFileExtensionsVM
         {
-            get => _avalibleFileExtensionsVM;
+            get => _avalibleFileExtensionsVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _avalibleFileExtensionsVM, value);
@@ -160,7 +160,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public string AccessParametrForCheckButtonVM
         {
-            get => _accessParametrForCheckButtonVM;
+            get => _accessParametrForCheckButtonVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _accessParametrForCheckButtonVM, value);
