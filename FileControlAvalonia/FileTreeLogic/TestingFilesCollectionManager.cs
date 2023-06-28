@@ -45,5 +45,24 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
+        {
+            foreach (var file in addedFileTree.Children!.ToList())
+            {
+                if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
+                {
+                    var mainParent = FileTreeNavigator.SearchFile(file.Parent!.Path, mainFileTree);
+                    mainFileTree.Children!.Add(file);
+                    file.Parent = mainParent;
+                }
+                else if (mainFileTree.Children!.Any(x => x.Path == file.Path) && file.IsDirectory)
+                {
+                    AddFiles(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
+                }
+            }
+        }
     }
 }

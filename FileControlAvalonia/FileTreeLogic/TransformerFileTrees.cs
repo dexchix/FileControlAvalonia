@@ -1,4 +1,5 @@
-﻿using FileControlAvalonia.Models;
+﻿using FileControlAvalonia.FileTreeLogic;
+using FileControlAvalonia.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,14 +28,14 @@ namespace FileControlAvalonia.Helper
 
         #region METHODS
         /// <summary>
-        /// Возвращяет колекцию (деревья) выбранных элементов
+        /// Возвращяет дерево с выбраными элементами
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<FileTree> GetSelectedFiles()
+        public FileTree RemoveUnSelectedFiles()
         {
             SortingFileTree(_fileTree.Children!);
             RemoveEmptyFoldersAndUnselectedFiles();
-            return _fileTree.Children!;
+            return _fileTree;
         }
         /// <summary>
         /// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 

@@ -94,10 +94,13 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            var transmitterSelectedFiles = new TransformerFileTrees(_fileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchTreeParent(_fileTreeNavigator.pathRootFolder, FileTree));
-            var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
-            TestChekingFiles.TEST(selectedItemsCollection);
-            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
+            //var transmitterSelectedFiles = new TransformerFileTrees(_fileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchTreeParent(_fileTreeNavigator.pathRootFolder, FileTree));
+            //var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
+            //TestChekingFiles.TEST(selectedItemsCollection);
+            //MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
+            var sadasd = new TransformerFileTrees(FileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchFile(FileTreeNavigator.pathRootFolder, FileTree)).RemoveUnSelectedFiles();
+             
+            MessageBus.Current.SendMessage<FileTree>(sadasd);
             window.Close();
         }
         public void UpCommand()

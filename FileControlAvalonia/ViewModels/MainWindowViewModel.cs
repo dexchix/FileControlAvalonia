@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
 
@@ -28,7 +29,20 @@ namespace FileControlAvalonia.ViewModels
     {
         #region FIELDS
         public static ObservableCollection<FileTree>? fileTree;
+
+        private static FileTree test;
+
         private ObservableCollection<FileTree>? _filteredFiles;
+
+
+        private ObservableCollection<FileTree>? _allFilesFilter;
+        private ObservableCollection<FileTree>? _checkedFilter;
+        private ObservableCollection<FileTree>? _partiallyChecedFilter;
+        private ObservableCollection<FileTree>? _notCheckedFilter;
+        private ObservableCollection<FileTree>? _noAccessFilter;
+        private ObservableCollection<FileTree>? _missingFilter;
+
+
         public HierarchicalTreeDataGridSource<FileTree> _source;
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
@@ -124,6 +138,8 @@ namespace FileControlAvalonia.ViewModels
 
         public MainWindowViewModel()
         {
+            test = new FileTree(FileTreeNavigator.pathRootFolder, true);
+            test.Children!.Clear();
 
             MainWindowState = true;
             Files = new ObservableCollection<FileTree>()
@@ -162,16 +178,27 @@ namespace FileControlAvalonia.ViewModels
                 }
             };
 
-            MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(transportFiles =>
+            //MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(transportFiles =>
+            //{
+            //    //TestingFilesCollectionManager.AddFiles(Files, transportFiles);
+
+            //    FilteredFiles.AddFiles(transportFiles);
+            //    //foreach (var file in files)
+            //    //{
+            //    //    filteredfiles.add(file);
+            //    //}
+            //    //FilteredFiles = transportFiles;
+            //});
+
+            MessageBus.Current.Listen<FileTree>().Subscribe(transportFileTree =>
             {
-                //TestingFilesCollectionManager.AddFiles(Files, transportFiles);
-         
-                FilteredFiles.AddFiles(transportFiles);
-                //foreach (var file in files)
-                //{
-                //    filteredfiles.add(file);
-                //}
-                //FilteredFiles = transportFiles;
+                TestingFilesCollectionManager.AddFiles(test, transportFileTree);
+                FilteredFiles.Clear();
+                foreach(var file in test.Children!.ToList())
+                {
+                    FilteredFiles.Add(file);
+                }
+                
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -321,32 +348,57 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public void DeliteFile(FileTree element)
+        public void DeliteFile(FileTree delitedFile)
         {
-            try
+            foreach(var file in FilteredFiles.ToList())
             {
-                foreach (var file in FilteredFiles)
+                if(file.Path == delitedFile.Path)
                 {
-                    if (file.Path == element.Path)
-                    {
-                        Files.Remove(file);
-                        return;
-                    }
+                    FilteredFiles.Remove(file);
+                    return;
                 }
-                for (int i = 0; i < Files.Count; i++)
+            }
+            foreach(var file in FilteredFiles.ToList())
+            {
+                var awdaw = FileTreeNavigator.SearchFile(delitedFile.Path, file);
+                if (awdaw != null)
                 {
-                    var delitedFile = FileTreeNavigator.SearchFile(element.Path, FilteredFiles[i]);
-                    if (delitedFile != null)
-                    {
-                        FileTreeNavigator.SearchFile(delitedFile.Parent!.Path, FilteredFiles[i]).Children!.Remove(FileTreeNavigator.SearchFile(delitedFile.Path, FilteredFiles[i]));
-                    }
+                    awdaw.Parent.Children.Remove(awdaw);
+                    //var eeee = awdaw.GetHashCode();
+                    //var wwww = delitedFile.GetHashCode();
+                    //var qqqq = FileTreeNavigator.SearchFile(delitedFile.Path, file).GetHashCode();
 
+                    //awdaw.Children!.Remove(awdaw);
+
+
+                    return;
                 }
             }
-            catch (Exception ex)
-            {
-                Program.logger.Error($"{ex}, Не удалось удалить файл");
-            }
+
+            //try
+            //{
+            //    foreach (var file in FilteredFiles)
+            //    {
+            //        if (file.Path == element.Path)
+            //        {
+            //            Files.Remove(file);
+            //            return;
+            //        }
+            //    }
+            //    for (int i = 0; i < Files.Count; i++)
+            //    {
+            //        var delitedFile = FileTreeNavigator.SearchFile(element.Path, FilteredFiles[i]);
+            //        if (delitedFile != null)
+            //        {
+            //            FileTreeNavigator.SearchFile(delitedFile.Parent!.Path, FilteredFiles[i]).Children!.Remove(FileTreeNavigator.SearchFile(delitedFile.Path, FilteredFiles[i]));
+            //        }
+
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Program.logger.Error($"{ex}, Не удалось удалить файл");
+            //}
         }
 
         private void ChangeIsExpandedProp(FileTree folder, bool flag)
