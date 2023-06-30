@@ -48,6 +48,8 @@ namespace FileControlAvalonia.FileTreeLogic
                 if (file.Path == delitedFile.Path)
                 {
                     viewCollectionFiles.Remove(file);
+                    var delitedFileInFileTree = FileTreeNavigator.SearchFile(delitedFile.Path, mainFileTree);
+                    delitedFile.Parent.Children!.Remove(delitedFileInFileTree);
                     return;
                 }
             }
@@ -58,7 +60,7 @@ namespace FileControlAvalonia.FileTreeLogic
                 {
                     delFileInViewCollection.Parent!.Children!.Remove(delFileInViewCollection);
                     var delitedFileInFileTree = FileTreeNavigator.SearchFile(delitedFile.Path, mainFileTree);
-                    delitedFile.Children!.Remove(delitedFileInFileTree);
+                    delitedFile.Parent.Children!.Remove(delitedFileInFileTree);
                     return;
                 }
             }
