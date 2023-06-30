@@ -28,10 +28,10 @@ namespace FileControlAvalonia.Helper
 
         #region METHODS
         /// <summary>
-        /// Возвращяет дерево с выбраными элементами
+        /// Возвращяет дерево в котором находятся только выбранные элементы
         /// </summary>
         /// <returns></returns>
-        public FileTree RemoveUnSelectedFiles()
+        public FileTree RemoveUnSelectedFilesInFileTree()
         {
             SortingFileTree(_fileTree.Children!);
             RemoveEmptyFoldersAndUnselectedFiles();

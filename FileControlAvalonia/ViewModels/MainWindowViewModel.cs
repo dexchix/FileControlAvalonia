@@ -30,9 +30,9 @@ namespace FileControlAvalonia.ViewModels
         #region FIELDS
         public static ObservableCollection<FileTree>? fileTree;
 
-        private static FileTree test;
+        private static FileTree _mainFileTree;
 
-        private ObservableCollection<FileTree>? _filteredFiles;
+        private ObservableCollection<FileTree>? _viewCollewtionFiles;
 
 
         private ObservableCollection<FileTree>? _allFilesFilter;
@@ -70,10 +70,10 @@ namespace FileControlAvalonia.ViewModels
             get => fileTree!;
             set => this.RaiseAndSetIfChanged(ref fileTree, value);
         }
-        public ObservableCollection<FileTree> FilteredFiles
+        public ObservableCollection<FileTree> ViewCollectionFiles
         {
-            get => _filteredFiles!;
-            set => this.RaiseAndSetIfChanged(ref _filteredFiles, value); 
+            get => _viewCollewtionFiles!;
+            set => this.RaiseAndSetIfChanged(ref _viewCollewtionFiles, value); 
         }
         public int FilterIndex
         {
@@ -133,25 +133,24 @@ namespace FileControlAvalonia.ViewModels
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
         public Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?> ShowDialogFileExplorerWindow { get; }
-
         #endregion
 
         public MainWindowViewModel()
         {
-            test = new FileTree(FileTreeNavigator.pathRootFolder, true);
-            test.Children!.Clear();
+            _mainFileTree = new FileTree(FileTreeNavigator.pathRootFolder, true);
+            _mainFileTree.Children!.Clear();
 
             MainWindowState = true;
             Files = new ObservableCollection<FileTree>()
             {
                 new FileTree("C:\\1\\2", true),
             };
-            FilteredFiles = new ObservableCollection<FileTree>()
+            ViewCollectionFiles = new ObservableCollection<FileTree>()
             {
                 
             };
 
-            Source = new HierarchicalTreeDataGridSource<FileTree>(FilteredFiles)
+            Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
             {
                 Columns =
                 {
@@ -178,27 +177,16 @@ namespace FileControlAvalonia.ViewModels
                 }
             };
 
-            //MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(transportFiles =>
-            //{
-            //    //TestingFilesCollectionManager.AddFiles(Files, transportFiles);
-
-            //    FilteredFiles.AddFiles(transportFiles);
-            //    //foreach (var file in files)
-            //    //{
-            //    //    filteredfiles.add(file);
-            //    //}
-            //    //FilteredFiles = transportFiles;
-            //});
-
             MessageBus.Current.Listen<FileTree>().Subscribe(transportFileTree =>
             {
-                TestingFilesCollectionManager.AddFiles(test, transportFileTree);
-                FilteredFiles.Clear();
-                foreach(var file in test.Children!.ToList())
-                {
-                    FilteredFiles.Add(file);
-                }
-                
+                //MainFilesCollectionManager.AddFiles(test, transportFileTree);
+                //ViewCollectionFiles.Clear();
+                //foreach(var file in test.Children!.ToList())
+                //{
+                //    ViewCollectionFiles.Add(file);
+                //}
+                FilesCollectionManager.AddFiles(_mainFileTree, transportFileTree);
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -350,30 +338,33 @@ namespace FileControlAvalonia.ViewModels
 
         public void DeliteFile(FileTree delitedFile)
         {
-            foreach(var file in FilteredFiles.ToList())
-            {
-                if(file.Path == delitedFile.Path)
-                {
-                    FilteredFiles.Remove(file);
-                    return;
-                }
-            }
-            foreach(var file in FilteredFiles.ToList())
-            {
-                var awdaw = FileTreeNavigator.SearchFile(delitedFile.Path, file);
-                if (awdaw != null)
-                {
-                    awdaw.Parent.Children.Remove(awdaw);
-                    //var eeee = awdaw.GetHashCode();
-                    //var wwww = delitedFile.GetHashCode();
-                    //var qqqq = FileTreeNavigator.SearchFile(delitedFile.Path, file).GetHashCode();
+            FilesCollectionManager.DeliteFile(delitedFile, 
+                ViewCollectionFiles, _mainFileTree);
 
-                    //awdaw.Children!.Remove(awdaw);
+            //foreach(var file in ViewCollectionFiles.ToList())
+            //{
+            //    if(file.Path == delitedFile.Path)
+            //    {
+            //        ViewCollectionFiles.Remove(file);
+            //        return;
+            //    }
+            //}
+            //foreach(var file in ViewCollectionFiles.ToList())
+            //{
+            //    var awdaw = FileTreeNavigator.SearchFile(delitedFile.Path, file);
+            //    if (awdaw != null)
+            //    {
+            //        awdaw.Parent.Children.Remove(awdaw);
+            //        //var eeee = awdaw.GetHashCode();
+            //        //var wwww = delitedFile.GetHashCode();
+            //        //var qqqq = FileTreeNavigator.SearchFile(delitedFile.Path, file).GetHashCode();
+
+            //        //awdaw.Children!.Remove(awdaw);
 
 
-                    return;
-                }
-            }
+            //        return;
+            //    }
+            //}
 
             //try
             //{
