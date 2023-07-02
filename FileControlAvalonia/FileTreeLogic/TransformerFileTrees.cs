@@ -31,9 +31,9 @@ namespace FileControlAvalonia.Helper
         /// Возвращяет дерево в котором находятся только выбранные элементы
         /// </summary>
         /// <returns></returns>
-        public FileTree RemoveUnSelectedFilesInFileTree()
+        public FileTree GetUpdatedFileTree()
         {
-            SortingFileTree(_fileTree.Children!);
+            RemoveUnSelectedFiles(_fileTree.Children!);
             RemoveEmptyFoldersAndUnselectedFiles();
             return _fileTree;
         }
@@ -41,7 +41,7 @@ namespace FileControlAvalonia.Helper
         /// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 
         /// </summary>
         /// <param name="folder"></param>
-        private void SortingFileTree(ObservableCollection<FileTree> folder)
+        private void RemoveUnSelectedFiles(ObservableCollection<FileTree> folder)
         {
             foreach (var file in folder.ToList())
             {
@@ -51,7 +51,7 @@ namespace FileControlAvalonia.Helper
                 }
                 if (file.IsDirectory)
                 {
-                    SortingFileTree(file.Children!);
+                    RemoveUnSelectedFiles(file.Children!);
                 }
             }
         }

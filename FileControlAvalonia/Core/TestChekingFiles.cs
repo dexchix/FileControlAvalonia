@@ -11,14 +11,14 @@ namespace FileControlAvalonia.Core
 {
     public class TestChekingFiles
     {
-        public static void TEST(ObservableCollection<FileTree> files)
+        public static void TEST(FileTree files)
         {
-            foreach (FileTree file in files)
+            foreach (FileTree file in files.Children!.ToList())
             {
                 file.Status = TEST2();
                 if (file.IsDirectory)
                 {
-                    TEST(file.Children!);
+                    TEST(file);
                 }
             }
         }

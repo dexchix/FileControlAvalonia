@@ -81,7 +81,8 @@ namespace FileControlAvalonia.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _filterIndex, value);
-                //FileTreeFilter.Filter(StatusFile.NoAccess, FilteredFiles);
+                //FilterFiles.Filter(StatusFile.NoAccess, _mainFileTree, ViewCollectionFiles);
+                new FilterFiles().Filter(StatusFile.NoAccess, _mainFileTree, ViewCollectionFiles);
             }
         }
         public HierarchicalTreeDataGridSource<FileTree> Source
@@ -186,6 +187,7 @@ namespace FileControlAvalonia.ViewModels
                 //    ViewCollectionFiles.Add(file);
                 //}
                 FilesCollectionManager.AddFiles(_mainFileTree, transportFileTree);
+                TestChekingFiles.TEST(_mainFileTree);
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
             });
 
