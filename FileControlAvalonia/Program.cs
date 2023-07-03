@@ -30,6 +30,7 @@ namespace FileControlAvalonia
             config.AddTarget(fileTarget);
             config.AddRule(rule);
             LogManager.Configuration = config;
+            DataBase.DataBaseCreator.InitializeDataBase();
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
 

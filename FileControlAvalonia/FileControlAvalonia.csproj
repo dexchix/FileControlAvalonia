@@ -31,6 +31,7 @@
     <PackageReference Include="EmitMapper" Version="1.0.0" />
     <PackageReference Include="NLog" Version="5.1.4" />
     <PackageReference Include="Splat" Version="14.6.37" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
   </ItemGroup>
 
