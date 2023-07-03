@@ -1,4 +1,5 @@
 ﻿using FileControlAvalonia.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -6,23 +7,8 @@ namespace FileControlAvalonia.FileTreeLogic
 {
     public static class FilesCollectionManager
     {
-        public static void AddFiles(this ObservableCollection<FileTree> mainCollection,
-                                         ObservableCollection<FileTree> addedCollection)
-        {
-            foreach (var file in addedCollection)
-            {
-                if (!mainCollection.Any(x => x.Path == file.Path))
-                {
-                    mainCollection.Add(file);
-                }
-                else if (mainCollection.Any(x => x.Path == file.Path) && file.IsDirectory)
-                {
-                    AddFiles(mainCollection.Where(x => x.Path == file.Path).FirstOrDefault()!.Children!, file.Children!);
-                }
-            }
-        }
         /// <summary>
-        /// 
+        /// Добавление файлов в главное дерево 
         /// </summary>
         public static void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
         {
@@ -40,31 +26,49 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
+        /// <summary>
+        /// Удаление файла из главного дерева и view-коллекции
+        /// </summary>
+        /// <param name="delitedFile"></param>
+        /// <param name="viewCollectionFiles"></param>
+        /// <param name="mainFileTree"></param>
         public static void DeliteFile(FileTree delitedFile, ObservableCollection<FileTree> viewCollectionFiles, 
                                       FileTree mainFileTree)
         {
-            foreach (var file in viewCollectionFiles.ToList())
+            try
             {
-                if (file.Path == delitedFile.Path)
+                foreach (var file in viewCollectionFiles.ToList())
                 {
-                    viewCollectionFiles.Remove(file);
-                    var delitedFileInFileTree = FileTreeNavigator.SearchFile(delitedFile.Path, mainFileTree);
-                    delitedFile.Parent.Children!.Remove(delitedFileInFileTree);
-                    return;
+                    if (file.Path == delitedFile.Path)
+                    {
+                        viewCollectionFiles.Remove(file);
+                        var delitedFileInFileTree = FileTreeNavigator.SearchFile(delitedFile.Path, mainFileTree);
+                        delitedFileInFileTree.Parent!.Children!.Remove(delitedFileInFileTree);
+                        return;
+                    }
+                }
+                foreach (var file in viewCollectionFiles.ToList())
+                {
+                    var delFileInViewCollection = FileTreeNavigator.SearchFile(delitedFile.Path, file);
+                    if (delFileInViewCollection != null)
+                    {
+                        delFileInViewCollection.Parent!.Children!.Remove(delFileInViewCollection);
+                        var delitedFileInFileTree = FileTreeNavigator.SearchFile(delitedFile.Path, mainFileTree);
+                        delitedFileInFileTree.Parent!.Children!.Remove(delitedFileInFileTree);
+                        return;
+                    }
                 }
             }
-            foreach (var file in viewCollectionFiles.ToList())
+            catch(Exception ex)
             {
-                var delFileInViewCollection = FileTreeNavigator.SearchFile(delitedFile.Path, file);
-                if (delFileInViewCollection != null)
-                {
-                    delFileInViewCollection.Parent!.Children!.Remove(delFileInViewCollection);
-                    var delitedFileInFileTree = FileTreeNavigator.SearchFile(delitedFile.Path, mainFileTree);
-                    delitedFile.Parent.Children!.Remove(delitedFileInFileTree);
-                    return;
-                }
+
             }
         }
+        /// <summary>
+        /// Обновляет view коллекцию файлов
+        /// </summary>
+        /// <param name="viewCollectionFiles"></param>
+        /// <param name="mainFileTree"></param>
         public static void UpdateViewFilesCollection(ObservableCollection<FileTree> viewCollectionFiles, FileTree mainFileTree)
         {
             viewCollectionFiles.Clear();
@@ -72,13 +76,6 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 viewCollectionFiles?.Add(file);
             }
-        }
-        public static FileTree CreateEmptyFileTree()
-        {
-            var fileTree = new FileTree(FileTreeNavigator.pathRootFolder, true);
-            fileTree.Children!.Clear();
-            return fileTree;
-
         }
     }
 }

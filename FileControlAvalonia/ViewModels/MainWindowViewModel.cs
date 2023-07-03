@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Security.Permissions;
 using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels
@@ -33,6 +34,7 @@ namespace FileControlAvalonia.ViewModels
         private static FileTree _mainFileTree;
 
         private ObservableCollection<FileTree>? _viewCollewtionFiles;
+        private FilterFiles _filter = new FilterFiles();
 
 
         private ObservableCollection<FileTree>? _allFilesFilter;
@@ -73,16 +75,35 @@ namespace FileControlAvalonia.ViewModels
         public ObservableCollection<FileTree> ViewCollectionFiles
         {
             get => _viewCollewtionFiles!;
-            set => this.RaiseAndSetIfChanged(ref _viewCollewtionFiles, value); 
+            set => this.RaiseAndSetIfChanged(ref _viewCollewtionFiles, value);
         }
         public int FilterIndex
         {
-            get=> _filterIndex;
+            get => _filterIndex;
             set
             {
                 this.RaiseAndSetIfChanged(ref _filterIndex, value);
-                //FilterFiles.Filter(StatusFile.NoAccess, _mainFileTree, ViewCollectionFiles);
-                new FilterFiles().Filter(StatusFile.NoAccess, _mainFileTree, ViewCollectionFiles);
+                switch (_filterIndex)
+                {
+                    case 0:
+                        FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
+                        break;
+                    case 1:
+                        FilterFiles.Filter(StatusFile.Checked, _mainFileTree, ViewCollectionFiles);
+                        break;
+                    case 2:
+                        FilterFiles.Filter(StatusFile.PartiallyChecked, _mainFileTree, ViewCollectionFiles);
+                        break;
+                    case 3:
+                        FilterFiles.Filter(StatusFile.FailedChecked, _mainFileTree, ViewCollectionFiles);
+                        break;
+                    case 4:
+                        FilterFiles.Filter(StatusFile.NoAccess, _mainFileTree, ViewCollectionFiles);
+                        break;
+                    case 5:
+                        FilterFiles.Filter(StatusFile.Missing, _mainFileTree, ViewCollectionFiles);
+                        break;
+                }
             }
         }
         public HierarchicalTreeDataGridSource<FileTree> Source
@@ -148,7 +169,7 @@ namespace FileControlAvalonia.ViewModels
             };
             ViewCollectionFiles = new ObservableCollection<FileTree>()
             {
-                
+
             };
 
             Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
@@ -180,12 +201,6 @@ namespace FileControlAvalonia.ViewModels
 
             MessageBus.Current.Listen<FileTree>().Subscribe(transportFileTree =>
             {
-                //MainFilesCollectionManager.AddFiles(test, transportFileTree);
-                //ViewCollectionFiles.Clear();
-                //foreach(var file in test.Children!.ToList())
-                //{
-                //    ViewCollectionFiles.Add(file);
-                //}
                 FilesCollectionManager.AddFiles(_mainFileTree, transportFileTree);
                 TestChekingFiles.TEST(_mainFileTree);
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
@@ -282,7 +297,7 @@ namespace FileControlAvalonia.ViewModels
         {
             try
             {
-                for (int i = 0; i < Files.Count; i++)
+                for (int i = 0; i < ViewCollectionFiles.Count; i++)
                 {
                     Source.Expand(i);
                 }
@@ -293,7 +308,7 @@ namespace FileControlAvalonia.ViewModels
             }
             try
             {
-                foreach (var file in Files)
+                foreach (var file in ViewCollectionFiles)
                 {
                     if (file.IsDirectory)
                     {
@@ -312,7 +327,7 @@ namespace FileControlAvalonia.ViewModels
         {
             try
             {
-                for (int i = 0; i < Files.Count; i++)
+                for (int i = 0; i < ViewCollectionFiles.Count; i++)
                 {
                     Source.Collapse(i);
                 }
@@ -323,7 +338,7 @@ namespace FileControlAvalonia.ViewModels
             }
             try
             {
-                foreach (var file in Files)
+                foreach (var file in ViewCollectionFiles)
                 {
                     if (file.IsDirectory)
                     {
@@ -340,58 +355,8 @@ namespace FileControlAvalonia.ViewModels
 
         public void DeliteFile(FileTree delitedFile)
         {
-            FilesCollectionManager.DeliteFile(delitedFile, 
+            FilesCollectionManager.DeliteFile(delitedFile,
                 ViewCollectionFiles, _mainFileTree);
-
-            //foreach(var file in ViewCollectionFiles.ToList())
-            //{
-            //    if(file.Path == delitedFile.Path)
-            //    {
-            //        ViewCollectionFiles.Remove(file);
-            //        return;
-            //    }
-            //}
-            //foreach(var file in ViewCollectionFiles.ToList())
-            //{
-            //    var awdaw = FileTreeNavigator.SearchFile(delitedFile.Path, file);
-            //    if (awdaw != null)
-            //    {
-            //        awdaw.Parent.Children.Remove(awdaw);
-            //        //var eeee = awdaw.GetHashCode();
-            //        //var wwww = delitedFile.GetHashCode();
-            //        //var qqqq = FileTreeNavigator.SearchFile(delitedFile.Path, file).GetHashCode();
-
-            //        //awdaw.Children!.Remove(awdaw);
-
-
-            //        return;
-            //    }
-            //}
-
-            //try
-            //{
-            //    foreach (var file in FilteredFiles)
-            //    {
-            //        if (file.Path == element.Path)
-            //        {
-            //            Files.Remove(file);
-            //            return;
-            //        }
-            //    }
-            //    for (int i = 0; i < Files.Count; i++)
-            //    {
-            //        var delitedFile = FileTreeNavigator.SearchFile(element.Path, FilteredFiles[i]);
-            //        if (delitedFile != null)
-            //        {
-            //            FileTreeNavigator.SearchFile(delitedFile.Parent!.Path, FilteredFiles[i]).Children!.Remove(FileTreeNavigator.SearchFile(delitedFile.Path, FilteredFiles[i]));
-            //        }
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Program.logger.Error($"{ex}, Не удалось удалить файл");
-            //}
         }
 
         private void ChangeIsExpandedProp(FileTree folder, bool flag)
@@ -411,18 +376,6 @@ namespace FileControlAvalonia.ViewModels
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        private void FilterElements()
-        {
-            //FilteredItems = FileTree.File.Children;
-            //var extensions = Extensions.Split('/');
-            //FilteredItems = FileTree.File.Children!.Where(file =>
-            //{
-            //    if (Directory.Exists(file.Path))
-            //        return true;
-            //    string fileExtensions = Path.GetExtension(file.Name).TrimStart('.');
-            //    return extensions.Contains(fileExtensions);
-            //});
         }
         #endregion
     }
