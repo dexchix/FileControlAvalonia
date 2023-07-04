@@ -11,46 +11,46 @@ namespace FileControlAvalonia.DataBase
 {
     public static class DataBaseCreator
     {
-        private static string linuxPathDataBase = @"../../DataBase/FileIntegrityDB.db";
-        private static string windowsPathDataBase = @"..\..\DataBase\FileIntegrityDB.db";
-        private static string connectionStringlinuxPathDataBase = @"Data Source=../../DataBase/FileIntegrityDB.db;Version=3;";
-        private static string connectionStringWindowsPathDataBase = @"Data Source=..\..\DataBase\FileIntegrityDB.db;Version=3";
+        static string databaseFileName = "FileIntegrityDB.db";
+        static string currentDirectory = Directory.GetCurrentDirectory();
+        static string databasePath = Path.Combine(currentDirectory, databaseFileName);
         public static void InitializeDataBase()
         {
-            if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                if (!File.Exists(windowsPathDataBase))
+                if (!File.Exists(databasePath))
                 {
-                    CreateFileDataBase(connectionStringWindowsPathDataBase, windowsPathDataBase);
+                    ConnectionDataBase();
                 }
             }
             else
             {
-                if (!File.Exists(linuxPathDataBase))
+                if (!File.Exists(databasePath))
                 {
-                    CreateFileDataBase(connectionStringlinuxPathDataBase, linuxPathDataBase);
+                    ConnectionDataBase();
                 }
             }
-          
+
         }
-        private static void CreateFileDataBase(string conectionString, string pathDataBase)
+        private static void ConnectionDataBase()
         {
-            SQLiteConnection.CreateFile(pathDataBase);
-            using(var connection = new SQLiteConnection(conectionString))
+            using (var connection = new SQLiteConnection("Data Source=FileIntegrityDB.db"))
             {
                 connection.Open();
 
                 string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS Files (
-                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 Name TEXT,
-                                                 Path TEXT,
-                                                 DataChange TEXT,
-                                                 HashSum TEXT
+                                                 //ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                 //ParentID INT,
+                                                 //Name VARCHAR(512),
+                                                 //Path VARCHAR(512),
+                                                 //LustUpdate VARCHAR(512),
+                                                 //HashSum VARCHAR(512)
                                              );";
 
                 string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS Cheks (
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 Date TEXT,
+                                                 Creator VARCHAR(512),
+                                                 Date VARCHAR(512)
                                              );";
 
                 using (var command = new SQLiteCommand(connection))

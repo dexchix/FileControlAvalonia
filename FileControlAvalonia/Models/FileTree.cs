@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.OpenGL;
 using FileControlAvalonia.Core;
 using FileControlAvalonia.Services;
 using ReactiveUI;
@@ -22,6 +23,8 @@ namespace FileControlAvalonia.Models
         private string _fHash;
         private string _eInfo;
         private string _fInfo;
+        private string _eVersion;
+        private string _fVersion;
         private string _path;
         private string _name;
         private ObservableCollection<FileTree>? _children;
@@ -62,7 +65,17 @@ namespace FileControlAvalonia.Models
         }
         public string FHash
         {
-            get => _fHash;
+            //HashSumCalculator.CalculateMD5Hash(Path);
+            //get => _fHash;
+            get
+            {
+                if (File.Exists(Path))
+                {
+                    return HashSumCalculator.CalculateMD5Hash(Path);
+                }
+                else
+                    return "-";
+            }
             set => this.RaiseAndSetIfChanged(ref _fHash, value);
         }
         public string EInfo
@@ -72,8 +85,39 @@ namespace FileControlAvalonia.Models
         }
         public string FInfo
         {
-            get => _fInfo;
+            get
+            {
+                if (IsDirectory)
+                {
+                    return new DirectoryInfo(Path).LastWriteTime.ToString();
+                }
+                else
+                {
+                    return new FileInfo(Path).LastWriteTime.ToString();
+                }
+            }
             set => this.RaiseAndSetIfChanged(ref _fInfo, value);
+        }
+        public string EVersion
+        {
+            get
+            {
+                return _eVersion;
+            }
+            set => this.RaiseAndSetIfChanged(ref _eVersion, value);
+        }
+        public string FVersion
+        {
+            get
+            {
+                if (File.Exists(Path))
+                {
+                    var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path);
+                    return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
+                }
+                else return "-";
+            }
+            set => this.RaiseAndSetIfChanged(ref _fVersion, value);
         }
         public StatusFile Status
         {
