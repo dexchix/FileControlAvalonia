@@ -38,16 +38,17 @@ namespace FileControlAvalonia.DataBase
             {
                 connection.Open();
 
-                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS Files (
-                                                 //ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 //ParentID INT,
-                                                 //Name VARCHAR(512),
-                                                 //Path VARCHAR(512),
-                                                 //LustUpdate VARCHAR(512),
-                                                 //HashSum VARCHAR(512)
+                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
+                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                 ParentID INT,
+                                                 Name VARCHAR(512),
+                                                 Path VARCHAR(512),
+                                                 LastUpdate VARCHAR(512),
+                                                 Version VARCHAR(512),
+                                                 HashSum VARCHAR(512)
                                              );";
 
-                string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS Cheks (
+                string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                  Creator VARCHAR(512),
                                                  Date VARCHAR(512)

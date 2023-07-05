@@ -266,26 +266,38 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region COMMANDS
-        public void CloseProgram()
+        public void CheckCommand()
+        {
+            var qqq = new DataBase.DataBaseConverter();
+            var  fgfg = qqq.ConvertFileTreeToDBFormat(_mainFileTree);
+            CheckManager.CreateEtalon(fgfg);
+
+            var awdwa = CheckManager.GetEtalon();
+        }
+        public void CreateEtalonCommand()
+        {
+
+        }
+        public void CloseProgramCommand()
         {
             App.CurrentApplication!.Shutdown();
         }
 
-        public ICommand OpenInfoWindow
+        public ICommand OpenInfoWindowCommand
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await ShowDialogInfoWindow.Handle(Locator.Current.GetService<InfoWindowViewModel>()!);
             });
         }
-        public ICommand OpenSettingsWindow
+        public ICommand OpenSettingsWindowCommand
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await ShowDialogSettingsWindow.Handle(Locator.Current.GetService<SettingsWindowViewModel>()!);
             });
         }
-        public ICommand OpenFileExplorerWindow
+        public ICommand OpenFileExplorerWindowCommand
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
@@ -293,7 +305,7 @@ namespace FileControlAvalonia.ViewModels
             });
         }
 
-        public void ExpandAllNodes()
+        public void ExpandAllNodesCommand()
         {
             try
             {
@@ -323,7 +335,7 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public void CollapseAllNodes()
+        public void CollapseAllNodesCommand()
         {
             try
             {
@@ -353,12 +365,14 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public void DeliteFile(FileTree delitedFile)
+        public void DeliteFileCommand(FileTree delitedFile)
         {
             FilesCollectionManager.DeliteFile(delitedFile,
                 ViewCollectionFiles, _mainFileTree);
         }
 
+        #endregion
+        #region METHODS
         private void ChangeIsExpandedProp(FileTree folder, bool flag)
         {
             folder.IsExpanded = flag;
@@ -371,8 +385,6 @@ namespace FileControlAvalonia.ViewModels
                 }
             }
         }
-        #endregion
-        #region METHODS
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

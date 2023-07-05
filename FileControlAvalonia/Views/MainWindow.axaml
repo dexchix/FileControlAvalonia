@@ -57,7 +57,7 @@
 			<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
 				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left"
 						 >
-				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1"
+				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1" Command="{Binding CheckCommand}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 					<ToolTip.Tip>
 						<StackPanel>
@@ -66,7 +66,7 @@
 						</StackPanel>
 					</ToolTip.Tip>
 				</Button>
-				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1"
+				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1" Command="{Binding CreateEtalonCommand}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
 				</Button>
 			</StackPanel>
@@ -74,11 +74,11 @@
 			<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Spacing="10"
 						Orientation="Horizontal" HorizontalAlignment="Left">
 				<Button Width="120" Height="25" Content="Развернуть все" FontSize="11" Classes="h1"
-						Command ="{Binding ExpandAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
+						Command ="{Binding ExpandAllNodesCommand}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 				</Button>
 				<Button Width="120" Height="25" Content="Свернуть все" FontSize="11" Classes="h1"
-						Command ="{Binding CollapseAllNodes}" CommandParameter="{Binding ElementName=fileViewer}"
+						Command ="{Binding CollapseAllNodesCommand}" CommandParameter="{Binding ElementName=fileViewer}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 
 				</Button>
@@ -93,7 +93,7 @@
 
 
 			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical">
-				<Button Command="{Binding CloseProgram}" VerticalAlignment="Top"
+				<Button Command="{Binding CloseProgramCommand}" VerticalAlignment="Top"
 					HorizontalAlignment="Right" Margin="0 0 1 0">
 					<Image Source="/Assets/close1.png" Width="10" Height="10"/>
 					<Button.Styles>
@@ -104,20 +104,20 @@
 						</Style>
 					</Button.Styles>
 				</Button>
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 10 5 0">
-					<Button  Height="27" Width="27" Command="{Binding OpenFileExplorerWindow}" Classes="h1">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 5 5 0">
+					<Button  Height="27" Width="27" Command="{Binding OpenFileExplorerWindowCommand}" Classes="h1">
 						<Canvas Margin="-5 -2 0 0">
 							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/add.png" ></Image>
 						</Canvas>
 					</Button>
-					<Button Height="27" Width="27" Command="{Binding OpenSettingsWindow}" Classes="h1">
+					<Button Height="27" Width="27" Command="{Binding OpenSettingsWindowCommand}" Classes="h1">
 						<Canvas Margin="-6 -3 0 0">
 							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/setting.png"></Image>
 						</Canvas>
 					</Button>
-					<Button  Height="27" Width="27" Command="{Binding OpenInfoWindow}" Classes="h1">
+					<Button  Height="27" Width="27" Command="{Binding OpenInfoWindowCommand}" Classes="h1">
 						<Canvas Margin="-8 -5 0 0">
 							<Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/info.png"></Image>
@@ -130,143 +130,162 @@
 			</StackPanel>
 
 			<TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 0" Text="Создатель эталона:"/>
+			
+			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*">
+				<Border Width="1185" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
+					<StackPanel Orientation="Horizontal">
+						<Canvas Margin="0 1 0 0">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="353" Margin="0 0 0 0">Файл</Label>
+						</Canvas>
+						<Canvas Margin="352 1 0 0">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335" Margin="0 0 0 0">Эталон</Label>
+						</Canvas>
+						<Canvas Margin="334 1 0 0">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335" Margin="0 0 0 0">Фактическое значение</Label>
+						</Canvas>
+						<Canvas Margin="334 1 0 0">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="165" Margin="0 0 0 0" Height="25"></Label>
+						</Canvas>
+					</StackPanel>
+				</Border>
+				<TreeDataGrid Name="fileViewer"  VerticalAlignment="Stretch" Grid.Row="1"
+						  Width="1185" HorizontalAlignment="Center" Margin= "0 -5 5 0" ShowColumnHeaders="False"
+						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
+					<TreeDataGrid.Resources>
+						<DataTemplate x:Key="FileCell" DataType="m:FileTree">
+							<Grid Name="EtalonGrid" RowDefinitions="* * *" ColumnDefinitions="335 335 *">
 
-			<TreeDataGrid Name="fileViewer" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
-						  Width="1185" HorizontalAlignment="Center" Margin= "0 0 5 0"  
-						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}" >
-				<TreeDataGrid.Resources>
-					<DataTemplate x:Key="FileCell" DataType="m:FileTree">
-						<Grid Name="EtalonGrid" RowDefinitions="* * *" ColumnDefinitions="335 335 *">
-	
-							<Label Grid.Row="0" Grid.Column="0" FontSize="12" Content="{Binding FHash}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
-							<Label Grid.Row="1" Grid.Column="0" FontSize="12" Content="{Binding FInfo}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-							<Label Grid.Row="2" Grid.Column="0" FontSize="12" Content="{Binding FVersion}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+								<Label Grid.Row="0" Grid.Column="0" FontSize="12" Content="{Binding FHash}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+								<Label Grid.Row="1" Grid.Column="0" FontSize="12" Content="{Binding FLastUpdate}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+								<Label Grid.Row="2" Grid.Column="0" FontSize="12" Content="{Binding FVersion}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
 
-							<Label Grid.Row="0" Grid.Column="1" FontSize="12" Content="{Binding FHash}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
-							<Label Grid.Row="1" Grid.Column="1" FontSize="12" Content="{Binding FInfo}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
-							<Label Grid.Row="2" Grid.Column="1" FontSize="12" Content="{Binding FVersion}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
+								<Label Grid.Row="0" Grid.Column="1" FontSize="12" Content="{Binding FHash}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
+								<Label Grid.Row="1" Grid.Column="1" FontSize="12" Content="{Binding FLastUpdate}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
+								<Label Grid.Row="2" Grid.Column="1" FontSize="12" Content="{Binding FVersion}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
 
-							<Button Grid.RowSpan="3" Grid.Column="2" Command="{Binding DataContext.DeliteFile, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
-								CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
-								<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-									<Image Source="/Assets/deliteFile.png" Height="20"></Image>
-									<Label Content="Удалить"></Label>
-								</StackPanel>
-								<Button.Styles>
-									<Style Selector="Button">
-										<Setter Property="HorizontalAlignment" Value="Center"></Setter>
-										<Setter Property="Background" Value="White"></Setter>
-										<Setter Property="Height" Value="60"></Setter>
-										<Setter Property="Width" Value="140"></Setter>
-										<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-										<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-										<Setter Property="Content" Value="Удалить"></Setter>
-										<Setter Property="BorderBrush" Value="Black"></Setter>
-										<Setter Property="BorderThickness" Value="2"></Setter>
-									</Style>
-									<Style Selector="Button:pointerover /template/ ContentPresenter">
-										<Setter Property="Background" Value="Gray"></Setter>
-										<Setter Property="BorderBrush" Value="Black"></Setter>
-										<Setter Property="BorderThickness" Value="2"></Setter>
-									</Style>
-								</Button.Styles>
-							</Button>
-							
-							<ToolTip.Tip>
-								<StackPanel>
-									<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
-									<TextBlock Text="{Binding Path=DataContext.Path, RelativeSource={RelativeSource Self}}"></TextBlock>
-								</StackPanel>
-							</ToolTip.Tip>
-						</Grid>
-					</DataTemplate>
-					<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
-						
-					</DataTemplate>
-				</TreeDataGrid.Resources>
-				<TreeDataGrid.Styles>
-					<Style Selector="TreeDataGridCellsPresenter">
-						<Setter Property="Background" Value="{Binding Path=Status, Converter={StaticResource BackGroundConverter}}"></Setter>
+								<Button Grid.RowSpan="3" Grid.Column="2" Command="{Binding DataContext.DeliteFileCommand, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
+									CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
+									<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+										<Image Source="/Assets/deliteFile.png" Height="20"></Image>
+										<Label Content="Удалить"></Label>
+									</StackPanel>
+									<Button.Styles>
+										<Style Selector="Button">
+											<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+											<Setter Property="Background" Value="White"></Setter>
+											<Setter Property="Height" Value="60"></Setter>
+											<Setter Property="Width" Value="140"></Setter>
+											<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+											<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+											<Setter Property="Content" Value="Удалить"></Setter>
+											<Setter Property="BorderBrush" Value="Black"></Setter>
+											<Setter Property="BorderThickness" Value="2"></Setter>
+										</Style>
+										<Style Selector="Button:pointerover /template/ ContentPresenter">
+											<Setter Property="Background" Value="Gray"></Setter>
+											<Setter Property="BorderBrush" Value="Black"></Setter>
+											<Setter Property="BorderThickness" Value="2"></Setter>
+										</Style>
+									</Button.Styles>
+								</Button>
 
-					</Style>
+								<ToolTip.Tip>
+									<StackPanel>
+										<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
+										<TextBlock Text="{Binding Path=DataContext.Path, RelativeSource={RelativeSource Self}}"></TextBlock>
+									</StackPanel>
+								</ToolTip.Tip>
+							</Grid>
+						</DataTemplate>
+						<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
 
-					<Style Selector="TreeDataGridRow">
-						<Setter Property="BorderThickness" Value="1"></Setter>
-						<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
-						<Setter Property="Height" Value="70"></Setter>
-					</Style>
-					<Style Selector="TreeDataGridRowsPresenter:checked /template/ ContentPresenter">
-						<Setter Property="BorderThickness" Value="1"></Setter>
-						<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
-						<Setter Property="Height" Value="70"></Setter>
-					</Style>
+						</DataTemplate>
+					</TreeDataGrid.Resources>
+					<TreeDataGrid.Styles>
+						<Style Selector="TreeDataGridCellsPresenter">
+							<Setter Property="Background" Value="{Binding Path=Status, Converter={StaticResource BackGroundConverter}}"></Setter>
+
+						</Style>
+
+						<Style Selector="TreeDataGridRow">
+							<Setter Property="BorderThickness" Value="1"></Setter>
+							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
+							<Setter Property="Height" Value="70"></Setter>
+						</Style>
+						<Style Selector="TreeDataGridRowsPresenter:checked /template/ ContentPresenter">
+							<Setter Property="BorderThickness" Value="1"></Setter>
+							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
+							<Setter Property="Height" Value="70"></Setter>
+						</Style>
 
 
 
-					<Style Selector="TreeDataGridExpanderCell">
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate>
-									<ToggleButton
+						<Style Selector="TreeDataGridExpanderCell">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<ToggleButton
                                         
-												  HorizontalAlignment="Stretch"
-												  VerticalAlignment="Stretch"
-												  Focusable="True"
-												  IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
-												  Background="Transparent"
-												  IsVisible="True">
-										<ContentControl>
-											<Border x:Name="CellBorder"
-													Background="{TemplateBinding Background}"
-													BorderBrush="{TemplateBinding BorderBrush}"
-													BorderThickness="{TemplateBinding BorderThickness}"
-													CornerRadius="{TemplateBinding CornerRadius}"
-													Padding="{TemplateBinding Indent, Converter={StaticResource IndentConverter}}}"
+													  HorizontalAlignment="Stretch"
+													  VerticalAlignment="Stretch"
+													  Focusable="True"
+													  IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
+													  Background="Transparent"
+													  IsVisible="True">
+											<ContentControl>
+												<Border x:Name="CellBorder"
+														Background="{TemplateBinding Background}"
+														BorderBrush="{TemplateBinding BorderBrush}"
+														BorderThickness="{TemplateBinding BorderThickness}"
+														CornerRadius="{TemplateBinding CornerRadius}"
+														Padding="{TemplateBinding Indent, Converter={StaticResource IndentConverter}}}"
                                                  >
-												<StackPanel Orientation="Horizontal" Margin=" 0 0 0 0">
-													<Image Margin="-0 0 4 0"
-														  VerticalAlignment="Center"
-														  Height="20">
-														<Image.Source>
-															<MultiBinding Converter="{x:Static vm:MainWindowViewModel.ArrowIconConverter}">
-																<Binding Path="IsDirectory"/>
-																<Binding Path="IsExpanded"/>
-																<Binding Path="HasChildren"/>
-															</MultiBinding>
-														</Image.Source>
-													</Image>
-													<Image Margin="10 0 4 0"
-														   VerticalAlignment="Center"
-														   Height="30">
-														<Image.Source>
-															<MultiBinding Converter="{x:Static vm:MainWindowViewModel.FileIconConverter}">
-																<Binding Path="IsDirectory"/>
-																<Binding Path="IsExpanded"/>
-															</MultiBinding>
-														</Image.Source>
-													</Image>
-													<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
-													<ToolTip.Tip>
+													<StackPanel Orientation="Horizontal" Margin=" 0 0 0 0">
+														<Image Margin="-0 0 4 0"
+															  VerticalAlignment="Center"
+															  Height="20">
+															<Image.Source>
+																<MultiBinding Converter="{x:Static vm:MainWindowViewModel.ArrowIconConverter}">
+																	<Binding Path="IsDirectory"/>
+																	<Binding Path="IsExpanded"/>
+																	<Binding Path="HasChildren"/>
+																</MultiBinding>
+															</Image.Source>
+														</Image>
+														<Image Margin="10 0 4 0"
+															   VerticalAlignment="Center"
+															   Height="30">
+															<Image.Source>
+																<MultiBinding Converter="{x:Static vm:MainWindowViewModel.FileIconConverter}">
+																	<Binding Path="IsDirectory"/>
+																	<Binding Path="IsExpanded"/>
+																</MultiBinding>
+															</Image.Source>
+														</Image>
+														<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
+														<ToolTip.Tip>
 															<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
-													</ToolTip.Tip>
-												</StackPanel>
-											</Border>
-										</ContentControl>
-										<ToggleButton.Styles>
-											<Style Selector="ToggleButton:checked  /template/ ContentPresenter">
-												<Setter Property="Background" Value="Transparent"></Setter>
-											</Style>
-											<Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
-												<Setter Property="Background" Value="Transparent"></Setter>
-											</Style>
-										</ToggleButton.Styles>
-									</ToggleButton>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</TreeDataGrid.Styles>
-			</TreeDataGrid>
+														</ToolTip.Tip>
+													</StackPanel>
+												</Border>
+											</ContentControl>
+											<ToggleButton.Styles>
+												<Style Selector="ToggleButton:checked  /template/ ContentPresenter">
+													<Setter Property="Background" Value="Transparent"></Setter>
+												</Style>
+												<Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
+													<Setter Property="Background" Value="Transparent"></Setter>
+												</Style>
+											</ToggleButton.Styles>
+										</ToggleButton>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</TreeDataGrid.Styles>
+				</TreeDataGrid>
+			</Grid>
+			
 			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" 
 						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0" IsVisible="False"/>
 			<StackPanel Grid.Row="5" Margin="10 0 10 10" VerticalAlignment="Bottom"

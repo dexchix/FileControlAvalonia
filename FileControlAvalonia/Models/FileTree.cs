@@ -21,8 +21,8 @@ namespace FileControlAvalonia.Models
         private int _id;
         private string _eHash;
         private string _fHash;
-        private string _eInfo;
-        private string _fInfo;
+        private string _eLastUpdate;
+        private string _fLastUpdate;
         private string _eVersion;
         private string _fVersion;
         private string _path;
@@ -65,8 +65,6 @@ namespace FileControlAvalonia.Models
         }
         public string FHash
         {
-            //HashSumCalculator.CalculateMD5Hash(Path);
-            //get => _fHash;
             get
             {
                 if (File.Exists(Path))
@@ -78,12 +76,12 @@ namespace FileControlAvalonia.Models
             }
             set => this.RaiseAndSetIfChanged(ref _fHash, value);
         }
-        public string EInfo
+        public string ELastUpdate
         {
-            get => _eInfo;
-            set => this.RaiseAndSetIfChanged(ref _eInfo, value);
+            get => _eLastUpdate;
+            set => this.RaiseAndSetIfChanged(ref _eLastUpdate, value);
         }
-        public string FInfo
+        public string FLastUpdate
         {
             get
             {
@@ -96,7 +94,7 @@ namespace FileControlAvalonia.Models
                     return new FileInfo(Path).LastWriteTime.ToString();
                 }
             }
-            set => this.RaiseAndSetIfChanged(ref _fInfo, value);
+            set => this.RaiseAndSetIfChanged(ref _fLastUpdate, value);
         }
         public string EVersion
         {
