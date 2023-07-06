@@ -273,7 +273,7 @@ namespace FileControlAvalonia.ViewModels
         public void CreateEtalonCommand()
         {
             var qqq = new DataBase.DataBaseConverter();
-            var fgfg = qqq.ConvertFileTreeToDBFormat(_mainFileTree);
+            var fgfg = qqq.ConvertFormatFileTreeToDB(_mainFileTree);
             CheckManager.CreateEtalon(fgfg);
         }
         public void CloseProgramCommand()

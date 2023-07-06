@@ -18,7 +18,7 @@ namespace FileControlAvalonia.DataBase
 
         private int fileCounter = 0;
         private Dictionary<string, FileDB> parents = new Dictionary<string, FileDB>();
-        public List<FileDB> ConvertFileTreeToDBFormat(FileTree mainFileTree)
+        public List<FileDB> ConvertFormatFileTreeToDB(FileTree mainFileTree)
         {
             var filesToDB = new List<FileDB>();
             FillDBListFiles(mainFileTree, filesToDB);
@@ -26,7 +26,7 @@ namespace FileControlAvalonia.DataBase
             fileCounter = 0;
             return filesToDB;
         }
-        public FileTree ConvertDBFormatToFileTree(List<FileDB> files)
+        public FileTree ConvertFormatDBToFileTree(List<FileDB> files)
         {
 
             var etalonTree = new FileTree(files[fileCounter].path, true, isRoot: true, loadChildren: false)
@@ -36,35 +36,55 @@ namespace FileControlAvalonia.DataBase
                 ELastUpdate = files[fileCounter].lastUpdate,
                 EVersion = files[fileCounter].version,
             };
+            if (etalonTree.IsDirectory)
+            {
+                etalonTree.Children.Clear();
+            }
             fileCounter++;
 
-            while (fileCounter< files.Count)
+            while (fileCounter < files.Count)
             {
-                var addFile = new FileTree(files[fileCounter].path, Directory.Exists(files[fileCounter].path), 
-                                           FileTreeNavigator.SearchFile(Path.GetDirectoryName(files[fileCounter].path), etalonTree), loadChildren: false)
+                var addFile = new FileTree(files[fileCounter].path, Directory.Exists(files[fileCounter].path),
+                                           FindObjectById(etalonTree, files[fileCounter].idParent), loadChildren: false)
                 {
                     ID = files[fileCounter].id,
                     EHash = files[fileCounter].hashSum,
                     ELastUpdate = files[fileCounter].lastUpdate,
                     EVersion = files[fileCounter].version,
                 };
-                var parent = FindObjectById(etalonTree, files[fileCounter].idParent);
-                if (parent.Children == null)
+                if (addFile.IsDirectory)
                 {
-                    parent.Children = new ObservableCollection<FileTree>();
-                    parent.Children.Add(addFile);
+                    addFile.Children.Clear();
                 }
+                var parent = FindObjectById(etalonTree, files[fileCounter].idParent);
+                    parent.Children.Add(addFile);
                 fileCounter++;
             }
             return etalonTree;
         }
+        //public FileTree FindObjectById(FileTree etalonFileTree, int targetId)
+        //{
+        //    if (etalonFileTree.ID == targetId)
+        //        return etalonFileTree;
+
+        //    var childObjects = etalonFileTree.Children.SelectMany(child => FindObjectById(child, targetId));
+        //    return childObjects.FirstOrDefault();
+        //}
         public FileTree FindObjectById(FileTree etalonFileTree, int targetId)
         {
             if (etalonFileTree.ID == targetId)
                 return etalonFileTree;
 
-            var childObjects = etalonFileTree.Children.Select(child => FindObjectById(child, targetId));
-            return childObjects.FirstOrDefault();
+            foreach (var child in etalonFileTree.Children.ToList())
+            {
+                if(child.IsDirectory)
+                {
+                    var result = FindObjectById(child, targetId);
+                    if (result != null)
+                        return result;
+                }
+            }
+            return null;
         }
         public void FillDBListFiles(FileTree mainFileTree, List<FileDB> filesDB)
         {

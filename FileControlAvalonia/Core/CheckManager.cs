@@ -79,7 +79,7 @@ namespace FileControlAvalonia.Core
             }
 
             var converter = new DataBaseConverter();
-            var etalon1 = converter.ConvertDBFormatToFileTree(etalon);
+            var etalon1 = converter.ConvertFormatDBToFileTree(etalon);
 
 
             return etalon1;

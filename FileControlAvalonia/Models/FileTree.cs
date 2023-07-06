@@ -148,16 +148,16 @@ namespace FileControlAvalonia.Models
         public FileTree? Parent { get; set; }
         public ObservableCollection<FileTree>? Children
         {
-            //get => _children ??= LoadChildren();
-            //set => this.RaiseAndSetIfChanged(ref _children, value);
-            get
-            {
-                if (_loadChildren == true)
-                    return _children ??= LoadChildren();
-                else
-                    return null;
-            }
+            get => _children ??= LoadChildren();
             set => this.RaiseAndSetIfChanged(ref _children, value);
+            //get
+            //{
+            //    if (_loadChildren == true)
+            //        return _children ??= LoadChildren();
+            //    else
+            //        return new ObservableCollection<FileTree>();
+            //}
+            //set => this.RaiseAndSetIfChanged(ref _children, value);
         }
         #endregion
 

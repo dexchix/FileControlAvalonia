@@ -9,7 +9,7 @@
         x:Class="FileControlAvalonia.Views.MainWindow"
         Icon="/Assets/CopyModelDifferences_32x32.ico"
         Title="Контроль целостности ПО ВУ"
-		MaxWidth="1200" MaxHeight="600"
+		MaxWidth="1197" MaxHeight="600"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
