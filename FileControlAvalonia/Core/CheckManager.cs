@@ -1,6 +1,8 @@
 ﻿using FileControlAvalonia.DataBase;
+using FileControlAvalonia.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -15,25 +17,42 @@ namespace FileControlAvalonia.Core
             using (var connection = new SQLiteConnection("Data Source=FileIntegrityDB.db"))
             {
                 connection.Open();
+                
+                using var commandClearTableFiles = new SQLiteCommand("DELETE FROM FilesTable", connection);
+                commandClearTableFiles.ExecuteNonQuery();
+
                 foreach (var file in etalonFiles)
                 {
                     string query = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum) " +
                                    "VALUES (@Id, @ParentId, @Name, @Path, @LastUpdate, @Version, @HashSum);";
 
-                    using var insertCommand = new SQLiteCommand(query, connection);
-                    insertCommand.Parameters.AddWithValue("@Id", file.id);
-                    insertCommand.Parameters.AddWithValue("@ParentId", file.idParent);
-                    insertCommand.Parameters.AddWithValue("@Name", file.name);
-                    insertCommand.Parameters.AddWithValue("@Path", file.path);
-                    insertCommand.Parameters.AddWithValue("@LastUpdate", file.lastUpdate);
-                    insertCommand.Parameters.AddWithValue("@Version", file.version);
-                    insertCommand.Parameters.AddWithValue("@HashSum", file.hashSum);
+                    using var insertCommandFilesTable = new SQLiteCommand(query, connection);
+                    insertCommandFilesTable.Parameters.AddWithValue("@Id", file.id);
+                    insertCommandFilesTable.Parameters.AddWithValue("@ParentId", file.idParent);
+                    insertCommandFilesTable.Parameters.AddWithValue("@Name", file.name);
+                    insertCommandFilesTable.Parameters.AddWithValue("@Path", file.path);
+                    insertCommandFilesTable.Parameters.AddWithValue("@LastUpdate", file.lastUpdate);
+                    insertCommandFilesTable.Parameters.AddWithValue("@Version", file.version);
+                    insertCommandFilesTable.Parameters.AddWithValue("@HashSum", file.hashSum);
 
-                    insertCommand.ExecuteNonQuery();
+                    insertCommandFilesTable.ExecuteNonQuery();
                 }
+
+                using var commandClearTableCheks = new SQLiteCommand("DELETE FROM CheksTable", connection);
+                commandClearTableCheks.ExecuteNonQuery();
+
+                string queryInfoAdd = "INSERT INTO CheksTable (ID, Creator, Date) " +
+                                   "VALUES (@Id, @Creator, @Date);";
+
+                using var insertCommandChecksTable = new SQLiteCommand(queryInfoAdd, connection);
+                insertCommandChecksTable.Parameters.AddWithValue("@Id", 1);
+                insertCommandChecksTable.Parameters.AddWithValue("@Creator", "Admin");
+                insertCommandChecksTable.Parameters.AddWithValue("@Date", $"{DateTime.Now.ToString()}");
+                insertCommandChecksTable.ExecuteNonQuery();
             }
         }
-        public static List<FileDB> GetEtalon()
+
+        public static FileTree GetEtalon()
         {
             var etalon = new List<FileDB>();
 
@@ -59,37 +78,12 @@ namespace FileControlAvalonia.Core
                 }
             }
 
-            return etalon;
+            var converter = new DataBaseConverter();
+            var etalon1 = converter.ConvertDBFormatToFileTree(etalon);
+
+
+            return etalon1;
         }
+
     }
 }
-//private static void ConnectionDataBase()
-//{
-//    using (var connection = new SQLiteConnection("Data Source=FileIntegrityDB.db"))
-//    {
-//        connection.Open();
-
-//        string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
-//                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-//                                                 ParentID INT,
-//                                                 Name VARCHAR(512),
-//                                                 Path VARCHAR(512),
-//                                                 LustUpdate VARCHAR(512),
-//                                                 HashSum VARCHAR(512)
-//                                             );";
-
-//        string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
-//                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-//                                                 Creator VARCHAR(512),
-//                                                 Date VARCHAR(512)
-//                                             );";
-
-//        using (var command = new SQLiteCommand(connection))
-//        {
-//            command.CommandText = createFilesTableQuery;
-//            command.ExecuteNonQuery();
-//            command.CommandText = createCheksTableQuery;
-//            command.ExecuteNonQuery();
-//        }
-//    }
-//}

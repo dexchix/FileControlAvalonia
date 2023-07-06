@@ -19,6 +19,7 @@ namespace FileControlAvalonia.Models
     {
         #region FIELDS
         private int _id;
+        private bool _loadChildren;
         private string _eHash;
         private string _fHash;
         private string _eLastUpdate;
@@ -147,20 +148,30 @@ namespace FileControlAvalonia.Models
         public FileTree? Parent { get; set; }
         public ObservableCollection<FileTree>? Children
         {
-            get => _children ??= LoadChildren();
+            //get => _children ??= LoadChildren();
+            //set => this.RaiseAndSetIfChanged(ref _children, value);
+            get
+            {
+                if (_loadChildren == true)
+                    return _children ??= LoadChildren();
+                else
+                    return null;
+            }
             set => this.RaiseAndSetIfChanged(ref _children, value);
         }
         #endregion
 
-        public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false)
+        public FileTree(string path, bool isDirectory, FileTree? parent = null,  bool isRoot = false, bool loadChildren = true)
         {
             _path = path;
             _name = isRoot ? path : System.IO.Path.GetFileName(Path);
             _isExpanded = isRoot;
+            _loadChildren= loadChildren;
             IsDirectory = isDirectory;
             HasChildren = isDirectory;
             _isChecked = false;
             Parent = parent;
+            this._loadChildren = loadChildren;
         }
 
         private ObservableCollection<FileTree>? LoadChildren()

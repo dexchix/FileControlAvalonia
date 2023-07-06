@@ -268,15 +268,13 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void CheckCommand()
         {
-            var qqq = new DataBase.DataBaseConverter();
-            var  fgfg = qqq.ConvertFileTreeToDBFormat(_mainFileTree);
-            CheckManager.CreateEtalon(fgfg);
-
             var awdwa = CheckManager.GetEtalon();
         }
         public void CreateEtalonCommand()
         {
-
+            var qqq = new DataBase.DataBaseConverter();
+            var fgfg = qqq.ConvertFileTreeToDBFormat(_mainFileTree);
+            CheckManager.CreateEtalon(fgfg);
         }
         public void CloseProgramCommand()
         {
