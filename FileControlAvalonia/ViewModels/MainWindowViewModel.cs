@@ -202,7 +202,7 @@ namespace FileControlAvalonia.ViewModels
             MessageBus.Current.Listen<FileTree>().Subscribe(transportFileTree =>
             {
                 FilesCollectionManager.AddFiles(_mainFileTree, transportFileTree);
-                TestChekingFiles.TEST(_mainFileTree);
+                Comprasion.SetStatus(_mainFileTree);
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
             });
 
@@ -268,13 +268,16 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void CheckCommand()
         {
-            var awdwa = CheckManager.GetEtalon();
+            var etalon = EtalonManager.GetEtalon();
+            FilesCollectionManager.MergeFileTrees(_mainFileTree, etalon);
+            Comprasion.CompareTrees(etalon);
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, etalon);
         }
         public void CreateEtalonCommand()
         {
             var qqq = new DataBase.DataBaseConverter();
             var fgfg = qqq.ConvertFormatFileTreeToDB(_mainFileTree);
-            CheckManager.CreateEtalon(fgfg);
+            EtalonManager.CreateEtalon(fgfg);
         }
         public void CloseProgramCommand()
         {

@@ -32,7 +32,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="delitedFile"></param>
         /// <param name="viewCollectionFiles"></param>
         /// <param name="mainFileTree"></param>
-        public static void DeliteFile(FileTree delitedFile, ObservableCollection<FileTree> viewCollectionFiles, 
+        public static void DeliteFile(FileTree delitedFile, ObservableCollection<FileTree> viewCollectionFiles,
                                       FileTree mainFileTree)
         {
             try
@@ -59,7 +59,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -75,6 +75,24 @@ namespace FileControlAvalonia.FileTreeLogic
             foreach (var file in mainFileTree.Children!.ToList())
             {
                 viewCollectionFiles?.Add(file);
+            }
+        }
+        public static void MergeFileTrees(FileTree mainFileTree, FileTree etalonFileTree)
+        {
+            foreach (var file in mainFileTree.Children!)
+            {
+                var etalonFile = FileTreeNavigator.SearchFile(file.Path, etalonFileTree);
+                if (etalonFile != null)
+                {
+                    file.FVersion = etalonFile.EVersion;
+                    file.EHash = etalonFile.EHash;
+                    file.ELastUpdate = etalonFile.ELastUpdate;
+
+                    if (file.IsDirectory)
+                    {
+                        MergeFileTrees(file, etalonFile);
+                    }
+                }
             }
         }
     }

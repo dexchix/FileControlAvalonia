@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Core
 {
-    public class CheckManager
+    public class EtalonManager
     {
         public static void CreateEtalon(List<FileDB> etalonFiles)
         {

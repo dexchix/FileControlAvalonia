@@ -18,7 +18,7 @@ namespace FileControlAvalonia.Models
     public class FileTree : ReactiveObject, ICloneable
     {
         #region FIELDS
-        private int _id;
+        private int _id = 0;
         private bool _loadChildren;
         private string _eHash;
         private string _fHash;
