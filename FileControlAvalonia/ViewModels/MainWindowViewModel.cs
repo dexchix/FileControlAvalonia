@@ -37,7 +37,6 @@ namespace FileControlAvalonia.ViewModels
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
         private int _filterIndex = 0;
-        private bool _mainWindowState;
         private string _userLevel;
         private int _totalFiles;
         private int _corresponds;
@@ -50,6 +49,11 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region PROPERTIES
+        public FileTree MainFileTree
+        {
+            get => _mainFileTree;
+            set => _mainFileTree = value;
+        }
         public ObservableCollection<FileTree> ViewCollectionFiles
         {
             get => _viewCollewtionFiles!;
@@ -139,7 +143,7 @@ namespace FileControlAvalonia.ViewModels
         {
             if (Directory.Exists(SettingsManager.rootPath))
             {
-                _mainFileTree = new FileTree(FileTreeNavigator.pathRootFolder, true);
+                _mainFileTree = new FileTree(SettingsManager.rootPath, true);
                 _mainFileTree.Children!.Clear();
             }
 

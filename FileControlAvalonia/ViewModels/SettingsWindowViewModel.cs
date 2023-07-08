@@ -173,7 +173,7 @@ namespace FileControlAvalonia.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _rootPath, value);
-                _settings.AccessParametrForCheckButton = value;
+                _settings.RootPath = value;
             }
         }
 

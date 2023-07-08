@@ -1,4 +1,5 @@
-﻿using FileControlAvalonia.Models;
+﻿using FileControlAvalonia.Core;
+using FileControlAvalonia.Models;
 using NLog;
 using ReactiveUI;
 using Splat;
@@ -13,7 +14,7 @@ namespace FileControlAvalonia.FileTreeLogic
     public class FileTreeNavigator : ReactiveObject
     {
         #region FIELDS
-        public static readonly string pathRootFolder = "C:\\1\\5";
+        //public static readonly string pathRootFolder = "C:\\1\\5";
         //public static readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
         public static FileTree? fileTree;
         public static Watcher? watcher;
@@ -31,10 +32,10 @@ namespace FileControlAvalonia.FileTreeLogic
         }
         public FileTreeNavigator()
         {
-            if (Directory.Exists(pathRootFolder))
+            if (Directory.Exists(SettingsManager.rootPath))
             {
-                fileTree = new FileTree(pathRootFolder, true);
-                watcher = new Watcher(pathRootFolder, this);
+                fileTree = new FileTree(SettingsManager.rootPath, true);
+                watcher = new Watcher(SettingsManager.rootPath, this);
                 CheckChangeRootPath();
             }
         }
@@ -156,7 +157,7 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 while (true)
                 {
-                    if (!Directory.Exists(pathRootFolder))
+                    if (!Directory.Exists(SettingsManager.rootPath))
                     {
                         CheckExistRootPath();
                         return;

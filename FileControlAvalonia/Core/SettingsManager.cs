@@ -1,5 +1,6 @@
 ﻿using FileControlAvalonia.ViewModels;
 using NLog;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -46,6 +47,12 @@ namespace FileControlAvalonia.Core
                     }
                 }
                 rootPath = settings.RootPath;
+                if (Directory.Exists(settings.RootPath))
+                {
+                    var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
+                    mainVM.MainFileTree = new Models.FileTree(rootPath,true);
+                }
+             
             }
             catch
             {

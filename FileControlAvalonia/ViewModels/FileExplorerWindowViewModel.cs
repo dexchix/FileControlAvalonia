@@ -97,7 +97,7 @@ namespace FileControlAvalonia.ViewModels
             //var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
             //TestChekingFiles.TEST(selectedItemsCollection);
             //MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
-            var sadasd = new TransformerFileTrees(FileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchFile(FileTreeNavigator.pathRootFolder, FileTree)).GetUpdatedFileTree();
+            var sadasd = new TransformerFileTrees(SettingsManager.rootPath, FileTreeNavigator.SearchFile(SettingsManager.rootPath, FileTree)).GetUpdatedFileTree();
              
             MessageBus.Current.SendMessage<FileTree>(sadasd);
             window.Close();
