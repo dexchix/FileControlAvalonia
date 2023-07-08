@@ -1,5 +1,5 @@
-﻿using FileControlAvalonia.Core;
-using FileControlAvalonia.ViewModels;
+﻿using FileControlAvalonia.ViewModels;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,12 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace FileControlAvalonia.Services
+namespace FileControlAvalonia.Core
 {
     public static class SettingsManager
     {
         private static List<string> extensions = new List<string>();
         public static List<string> modifyExtensions = new List<string>();
+        public static string rootPath;
         public static string? settingsString;
 
         public static void SetStartupSettings()
@@ -44,10 +45,11 @@ namespace FileControlAvalonia.Services
                         modifyExtensions.Add("." + extension);
                     }
                 }
+                rootPath = settings.RootPath;
             }
             catch
             {
-                Program.logger.Error("Отсутствует файл Settings.xml");
+                LogManager.GetCurrentClassLogger().Error("Отсутствует файл Settings.xml");
             }
         }
         public static Settings? GetSettings()
@@ -62,7 +64,7 @@ namespace FileControlAvalonia.Services
             }
             catch (Exception ex)
             {
-                Program.logger.Error(ex);
+                LogManager.GetCurrentClassLogger().Error(ex);
                 return new Settings();
             }
         }

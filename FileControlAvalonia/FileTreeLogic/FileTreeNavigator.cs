@@ -1,5 +1,7 @@
 ﻿using FileControlAvalonia.Models;
+using NLog;
 using ReactiveUI;
+using Splat;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -11,7 +13,7 @@ namespace FileControlAvalonia.FileTreeLogic
     public class FileTreeNavigator : ReactiveObject
     {
         #region FIELDS
-        public static readonly string pathRootFolder = "C:\\1\\2";
+        public static readonly string pathRootFolder = "C:\\1\\5";
         //public static readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
         public static FileTree? fileTree;
         public static Watcher? watcher;
@@ -110,7 +112,7 @@ namespace FileControlAvalonia.FileTreeLogic
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"Не удалось найти файл в дереве {ex.Message}");
+                LogManager.GetCurrentClassLogger().Error($"Не удалось найти файл в дереве {ex.Message}");
                 return null;
             }
         }
@@ -142,7 +144,7 @@ namespace FileControlAvalonia.FileTreeLogic
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"Ошибка отчиски формы. {ex}");
+                LogManager.GetCurrentClassLogger().Error($"Ошибка отчиски формы. {ex}");
             }
         }
         /// <summary>

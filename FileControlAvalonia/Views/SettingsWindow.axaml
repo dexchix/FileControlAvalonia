@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
         x:Class="FileControlAvalonia.Views.SettingsWindow"
         Title="Настройки" Icon="/Assets/setting.png"
-		Width="600" Height="585"
+		Width="600" Height="625"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
@@ -59,6 +59,7 @@
 				<Label Content = "Тег не найденых"></Label>
 				<Label Content = "Доступные расширения файлов"></Label>
 				<Label Content = "Параметр доступа для кнопки «Проверить»"></Label>
+				<Label Content = "Корневой путь"></Label>
 			</StackPanel>
 			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
 						HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
@@ -77,6 +78,7 @@
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagNotFoundVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay" Watermark="exe/stu/xlsx/png/zef/xef"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding RootPath}, Mode=TwoWay"></TextBox>
 			</StackPanel>
 			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 
 						VerticalAlignment="Bottom" Margin="5 -8 0 5" Spacing="10">

@@ -78,21 +78,6 @@ namespace FileControlAvalonia.Core
                     ChangeStatusParents(parent, status);
                 }
             }
-            //if (fileTree.Parent != null)
-            //{
-            //    var parent = fileTree.Parent;
-            //    if (parent.Status == StatusFile.FailedChecked)
-            //        return;
-            //    else if (parent.Status == StatusFile.PartiallyChecked && status == StatusFile.Checked)
-            //    {
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        parent.Status = status;
-            //        ChangeStatusParents(parent, status);
-            //    }
-            //}
         }
     }
 }

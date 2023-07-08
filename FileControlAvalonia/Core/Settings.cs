@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -26,5 +27,6 @@ namespace FileControlAvalonia.Core
         public string? TagNotFound { get; set; }
         public string? AvalibleFileExtensions { get; set; }
         public string? AccessParametrForCheckButton { get; set; }
+        public string? RootPath { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.OpenGL;
 using FileControlAvalonia.Core;
-using FileControlAvalonia.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;

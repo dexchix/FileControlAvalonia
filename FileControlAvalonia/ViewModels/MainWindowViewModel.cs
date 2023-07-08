@@ -30,21 +30,9 @@ namespace FileControlAvalonia.ViewModels
     {
         #region FIELDS
         public static ObservableCollection<FileTree>? fileTree;
-
         private static FileTree _mainFileTree;
-
         private ObservableCollection<FileTree>? _viewCollewtionFiles;
         private FilterFiles _filter = new FilterFiles();
-
-
-        private ObservableCollection<FileTree>? _allFilesFilter;
-        private ObservableCollection<FileTree>? _checkedFilter;
-        private ObservableCollection<FileTree>? _partiallyChecedFilter;
-        private ObservableCollection<FileTree>? _notCheckedFilter;
-        private ObservableCollection<FileTree>? _noAccessFilter;
-        private ObservableCollection<FileTree>? _missingFilter;
-
-
         public HierarchicalTreeDataGridSource<FileTree> _source;
         private static IconConverter? s_iconConverter;
         private static ArrowConverter? s_arrowConverter;
@@ -62,16 +50,6 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region PROPERTIES
-        public bool MainWindowState
-        {
-            get => _mainWindowState;
-            set => this.RaiseAndSetIfChanged(ref _mainWindowState, value);
-        }
-        public ObservableCollection<FileTree> Files
-        {
-            get => fileTree!;
-            set => this.RaiseAndSetIfChanged(ref fileTree, value);
-        }
         public ObservableCollection<FileTree> ViewCollectionFiles
         {
             get => _viewCollewtionFiles!;
@@ -159,14 +137,12 @@ namespace FileControlAvalonia.ViewModels
 
         public MainWindowViewModel()
         {
-            _mainFileTree = new FileTree(FileTreeNavigator.pathRootFolder, true);
-            _mainFileTree.Children!.Clear();
-
-            MainWindowState = true;
-            Files = new ObservableCollection<FileTree>()
+            if (Directory.Exists(SettingsManager.rootPath))
             {
-                new FileTree("C:\\1\\2", true),
-            };
+                _mainFileTree = new FileTree(FileTreeNavigator.pathRootFolder, true);
+                _mainFileTree.Children!.Clear();
+            }
+
             ViewCollectionFiles = new ObservableCollection<FileTree>()
             {
 

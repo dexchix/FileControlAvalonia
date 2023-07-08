@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using FileControlAvalonia.Core;
-using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels.Interfaces;
 using ReactiveUI;
 using System;
@@ -31,6 +30,7 @@ namespace FileControlAvalonia.ViewModels
         private string? _tagNotFoundVM;
         private string? _avalibleFileExtensionsVM;
         private string? _accessParametrForCheckButtonVM;
+        private string? _rootPath;
 
         public string ServerVM
         {
@@ -167,6 +167,15 @@ namespace FileControlAvalonia.ViewModels
                 _settings.AccessParametrForCheckButton = value;
             }
         }
+        public string RootPath
+        {
+            get => _rootPath!;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _rootPath, value);
+                _settings.AccessParametrForCheckButton = value;
+            }
+        }
 
         public SettingsWindowViewModel()
         {
@@ -186,6 +195,7 @@ namespace FileControlAvalonia.ViewModels
             _tagNotFoundVM = _settings.TagNotFound;
             _avalibleFileExtensionsVM = _settings.AvalibleFileExtensions;
             _accessParametrForCheckButtonVM = _settings.AccessParametrForCheckButton;
+            _rootPath = _settings.RootPath;
         }
 
         #region COMMANDS

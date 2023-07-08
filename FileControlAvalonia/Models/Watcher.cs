@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using FileControlAvalonia.FileTreeLogic;
+using NLog;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ namespace FileControlAvalonia.Models
                 }
                 catch (Exception ex)
                 {
-                    Program.logger.Error($"Ошибка добавления файла. {ex.Message}");
+                    LogManager.GetCurrentClassLogger().Error($"Ошибка добавления файла. {ex.Message}");
                 }
             });
         }
@@ -86,7 +87,7 @@ namespace FileControlAvalonia.Models
                 }
                 catch (Exception ex)
                 {
-                    Program.logger.Error($"Ошибка удаления файла. {ex.Message}");
+                    LogManager.GetCurrentClassLogger().Error($"Ошибка удаления файла. {ex.Message}");
                 }
             });
         }
@@ -112,7 +113,7 @@ namespace FileControlAvalonia.Models
                 catch (Exception ex)
                 {
                     StartWatch();
-                    Program.logger.Error($"Ошибка переименования файла. {ex.Message}");
+                    LogManager.GetCurrentClassLogger().Error($"Ошибка переименования файла. {ex.Message}");
                 }
             });
         }

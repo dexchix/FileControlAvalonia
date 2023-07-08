@@ -16,7 +16,6 @@ using NLog.LayoutRenderers.Wrappers;
 using FileControlAvalonia.Helper;
 using System.Collections.ObjectModel;
 using FileControlAvalonia.ViewModels.Interfaces;
-using FileControlAvalonia.Services;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Core;
 
