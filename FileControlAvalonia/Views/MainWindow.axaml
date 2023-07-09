@@ -14,9 +14,8 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly"
-		xmlns:avalonia="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.TreeDataGrid"
-		
-		>
+		xmlns:avalonia="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.TreeDataGrid">
+	
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
 		<c:ForegroundConverter x:Key="ForegroundConverter"/>
@@ -59,12 +58,6 @@
 						 >
 				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1" Command="{Binding CheckCommand}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-					<ToolTip.Tip>
-						<StackPanel>
-							<TextBlock>ToolTip</TextBlock>
-							<TextBlock>A control which pops up a hint when a control is hovered</TextBlock>
-						</StackPanel>
-					</ToolTip.Tip>
 				</Button>
 				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1" Command="{Binding CreateEtalonCommand}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
@@ -83,13 +76,25 @@
 
 				</Button>
 			</StackPanel>
-			<!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"-->
-
-			<StackPanel Spacing="150" Orientation="Horizontal"
-						Grid.Row="1" Grid.Column="1" Margin="0 7 0 0">
-				<TextBlock>Дата создания эталона: </TextBlock>
-				<TextBlock>Дата последней проверки: </TextBlock>
-			</StackPanel>
+			
+			<Grid  Grid.Row="1" Grid.Column="1" ColumnDefinitions="365 *">
+				<TextBlock Grid.Column="0" TextWrapping="NoWrap">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Дата создания эталона: {0}">
+							<Binding Path="DateCreateEtalon"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<Canvas Margin="370 0 0 0">
+					<TextBlock  Grid.Column="1" MaxWidth="350" ZIndex="5">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Дата последней проверки: {0}">
+								<Binding Path="DateLastCheck"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</Canvas>
+			</Grid>
 
 
 			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical">
@@ -129,7 +134,13 @@
 				</ComboBox>
 			</StackPanel>
 
-			<TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 0" Text="Создатель эталона:"/>
+			<TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 0">
+				<TextBlock.Text>
+					<MultiBinding StringFormat="Создатель эталона: {0}">
+						<Binding Path="UserLevelCreateEtalon"></Binding>
+					</MultiBinding>
+				</TextBlock.Text>
+			</TextBlock>
 			
 			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*">
 				<Border Width="1185" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
@@ -286,8 +297,8 @@
 				</TreeDataGrid>
 			</Grid>
 			
-			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" 
-						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0" IsVisible="False"/>
+			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Maximum="100" Minimum="0" Value="{Binding ProgressBarValue}"
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0" IsVisible="{Binding NeedProgressBar}"/>
 			<StackPanel Grid.Row="5" Margin="10 0 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
 				<TextBlock Classes="f1">
@@ -308,21 +319,21 @@
 				<TextBlock Classes="f1">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="Соответствует: {0}">
-							<Binding Path="Corresponds"></Binding>
+							<Binding Path="Checked"></Binding>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>
 				<TextBlock Classes="f1">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="Частично соответствует: {0}">
-							<Binding Path="PartialCorresponds"></Binding>
+							<Binding Path="PartialChecked"></Binding>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>
 				<TextBlock Classes="f1">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="Не соответствует: {0}">
-							<Binding Path="DontCoresponds"></Binding>
+							<Binding Path="UnChecked"></Binding>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>

@@ -103,8 +103,12 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <returns>Элемент типа FileTree (Файл)</returns>
         public static FileTree? SearchChildren(string searchedFilePath, FileTree rootFolder)
         {
-            var maxMatchFile = rootFolder.Children!.Where(x => searchedFilePath.StartsWith(x.Path))
-                                                  .FirstOrDefault()!;
+            //var maxMatchFile = rootFolder.Children!.Where(x => searchedFilePath.StartsWith(x.Path))
+            //                                      .FirstOrDefault()!;
+            var maxMatchFile = rootFolder.Children!
+                                         .Where(x => searchedFilePath.StartsWith(x.Path))
+                                         .OrderByDescending(x => x.Path.Length)
+                                         .FirstOrDefault()!;
             try
             {
                 return maxMatchFile.Path == searchedFilePath

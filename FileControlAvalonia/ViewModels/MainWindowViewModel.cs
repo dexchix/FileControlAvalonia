@@ -4,6 +4,8 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
+using Avalonia.Utilities;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
 using FileControlAvalonia.FileTreeLogic;
@@ -22,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Permissions;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels
@@ -39,12 +42,17 @@ namespace FileControlAvalonia.ViewModels
         private int _filterIndex = 0;
         private string _userLevel;
         private int _totalFiles;
-        private int _corresponds;
-        private int _partialCorresponds;
-        private int _dontCoresponds;
+        private int _checked;
+        private int _partialChecked;
+        private int _unChecked;
         private int _noAccess;
         private int _notFound;
         private int _notChecked;
+        private string _dateLastCheck;
+        private string _dateCreateEtalon;
+        private string _userLevelCreateEtalon;
+        private bool _needProgressBar;
+        private int _progressBarValue;
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
@@ -103,20 +111,20 @@ namespace FileControlAvalonia.ViewModels
             get => _totalFiles;
             set => this.RaiseAndSetIfChanged(ref _totalFiles, value);
         }
-        public int Corresponds
+        public int Checked
         {
-            get => _corresponds;
-            set => this.RaiseAndSetIfChanged(ref _corresponds, value);
+            get => _checked;
+            set => this.RaiseAndSetIfChanged(ref _checked, value);
         }
-        public int PartialCorresponds
+        public int PartialChecked
         {
-            get => _partialCorresponds;
-            set => this.RaiseAndSetIfChanged(ref _partialCorresponds, value);
+            get => _partialChecked;
+            set => this.RaiseAndSetIfChanged(ref _partialChecked, value);
         }
-        public int DontCoresponds
+        public int UnChecked
         {
-            get => _dontCoresponds;
-            set => this.RaiseAndSetIfChanged(ref _dontCoresponds, value);
+            get => _unChecked;
+            set => this.RaiseAndSetIfChanged(ref _unChecked, value);
         }
         public int NoAccess
         {
@@ -133,6 +141,31 @@ namespace FileControlAvalonia.ViewModels
             get => _notChecked;
             set => this.RaiseAndSetIfChanged(ref _notChecked, value);
         }
+        public string DateLastCheck
+        {
+            get => _dateLastCheck;
+            set => this.RaiseAndSetIfChanged(ref _dateLastCheck, value);
+        }
+        public string DateCreateEtalon
+        {
+            get => _dateCreateEtalon;
+            set => this.RaiseAndSetIfChanged(ref _dateCreateEtalon, value);
+        }
+        public string UserLevelCreateEtalon
+        {
+            get => _userLevelCreateEtalon;
+            set => this.RaiseAndSetIfChanged(ref _userLevelCreateEtalon, value);
+        }
+        public bool NeedProgressBar
+        {
+            get => _needProgressBar;
+            set => this.RaiseAndSetIfChanged(ref _needProgressBar, value);
+        }
+        public int ProgressBarValue
+        {
+            get => _progressBarValue;
+            set => this.RaiseAndSetIfChanged(ref _progressBarValue, value);
+        }
         public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
@@ -141,16 +174,12 @@ namespace FileControlAvalonia.ViewModels
 
         public MainWindowViewModel()
         {
+            ViewCollectionFiles = new ObservableCollection<FileTree>();
             if (Directory.Exists(SettingsManager.rootPath))
             {
                 _mainFileTree = new FileTree(SettingsManager.rootPath, true);
                 _mainFileTree.Children!.Clear();
             }
-
-            ViewCollectionFiles = new ObservableCollection<FileTree>()
-            {
-
-            };
 
             Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
             {
@@ -181,9 +210,9 @@ namespace FileControlAvalonia.ViewModels
 
             MessageBus.Current.Listen<FileTree>().Subscribe(transportFileTree =>
             {
-                FilesCollectionManager.AddFiles(_mainFileTree, transportFileTree);
-                Comprasion.SetStatus(_mainFileTree);
-                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
+                FilesCollectionManager.AddFiles(MainFileTree, transportFileTree);
+                //Comprasion.SetStatus(MainFileTree);
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -192,12 +221,15 @@ namespace FileControlAvalonia.ViewModels
 
             _userLevel = "admin";
             _totalFiles = 0;
-            _corresponds = 0;
-            _partialCorresponds = 0;
-            _dontCoresponds = 0;
+            _checked = 0;
+            _partialChecked = 0;
+            _unChecked = 0;
             _noAccess = 0;
             _notFound = 0;
             _notChecked = 0;
+
+            _needProgressBar = false;
+            _progressBarValue = 0;
         }
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
@@ -248,16 +280,41 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void CheckCommand()
         {
-            var etalon = EtalonManager.GetEtalon();
-            FilesCollectionManager.MergeFileTrees(_mainFileTree, etalon);
-            Comprasion.CompareTrees(etalon);
-            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, etalon);
+            NeedProgressBar = true;
+            Dispatcher.UIThread.Post(() =>
+            {
+                var etalon = EtalonManager.GetEtalon();
+                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+                var comparator = new Comprasion();
+                comparator.CompareTrees(MainFileTree);
+                Checked = comparator.Checked;
+
+                ProgressBarValue = 50;
+
+                Task.Delay(2000);
+
+                UnChecked = comparator.UnChecked;
+                PartialChecked = comparator.PartiallyChecked;
+
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+                CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+                DateLastCheck = DateTime.Now.ToString();
+            });
+            
+ 
+            ProgressBarValue = 100;
+
+            NeedProgressBar = false;
         }
         public void CreateEtalonCommand()
         {
-            var qqq = new DataBase.DataBaseConverter();
-            var fgfg = qqq.ConvertFormatFileTreeToDB(_mainFileTree);
-            EtalonManager.CreateEtalon(fgfg);
+            EtalonManager.CreateEtalon(MainFileTree);
+            CheksInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
+
+            CheckCommand(); // ?
+
+            UserLevelCreateEtalon = "Admin";
+            DateCreateEtalon = DateTime.Now.ToString();
         }
         public void CloseProgramCommand()
         {

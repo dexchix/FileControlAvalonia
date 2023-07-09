@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Markup.Xaml.Templates;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace FileControlAvalonia.Core
         {
             using (var md5 = MD5.Create())
             {
+
                 using (var stream = File.OpenRead(filePath))
                 {
                     byte[] hashBytes = md5.ComputeHash(stream);

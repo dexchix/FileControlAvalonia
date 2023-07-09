@@ -12,8 +12,10 @@ namespace FileControlAvalonia.Core
 {
     public class EtalonManager
     {
-        public static void CreateEtalon(List<FileDB> etalonFiles)
+        public static void CreateEtalon(FileTree fileTree)
         {
+            var converter = new DataBase.DataBaseConverter();
+            var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(fileTree);
             using (var connection = new SQLiteConnection("Data Source=FileIntegrityDB.db"))
             {
                 connection.Open();
@@ -21,7 +23,7 @@ namespace FileControlAvalonia.Core
                 using var commandClearTableFiles = new SQLiteCommand("DELETE FROM FilesTable", connection);
                 commandClearTableFiles.ExecuteNonQuery();
 
-                foreach (var file in etalonFiles)
+                foreach (var file in etalonFilesCollection)
                 {
                     string query = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum) " +
                                    "VALUES (@Id, @ParentId, @Name, @Path, @LastUpdate, @Version, @HashSum);";

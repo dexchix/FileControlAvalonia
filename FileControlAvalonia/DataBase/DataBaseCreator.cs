@@ -51,7 +51,8 @@ namespace FileControlAvalonia.DataBase
                 string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                  Creator VARCHAR(512),
-                                                 Date VARCHAR(512)
+                                                 Date VARCHAR(512),
+                                                 DateLastCheck VARCHAR(512)
                                              );";
 
                 using (var command = new SQLiteCommand(connection))

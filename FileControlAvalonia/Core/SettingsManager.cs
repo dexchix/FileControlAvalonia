@@ -51,6 +51,8 @@ namespace FileControlAvalonia.Core
                 {
                     var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
                     mainVM.MainFileTree = new Models.FileTree(rootPath,true);
+                    mainVM.MainFileTree.Children.Clear();
+
                 }
              
             }

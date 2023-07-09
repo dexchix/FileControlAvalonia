@@ -10,7 +10,13 @@ namespace FileControlAvalonia.Core
 {
     public class Comprasion
     {
-        public static void CompareTrees(FileTree mainFileTree)
+        public int Checked = 0;
+        public int PartiallyChecked = 0;
+        public int FailedChecked = 0;
+        public int UnChecked = 0;
+        public int NoAccess = 0;
+        public int Missing = 0;
+        public void CompareTrees(FileTree mainFileTree)
         {
             foreach (var file in mainFileTree.Children)
             {
@@ -22,7 +28,7 @@ namespace FileControlAvalonia.Core
             }
         }
 
-        public static void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
+        public void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
         {
             foreach (var file in addedFileTree.Children!.ToList())
             {
@@ -38,13 +44,14 @@ namespace FileControlAvalonia.Core
                 }
             }
         }
-        public static void SetStatus(FileTree fileTree)
+        public void SetStatus(FileTree fileTree)
         {
             if (fileTree.EHash == fileTree.FHash &&
                fileTree.ELastUpdate == fileTree.FLastUpdate &&
                fileTree.EVersion == fileTree.FVersion)
             {
                 fileTree.Status = StatusFile.Checked;
+                Checked++;
                 ChangeStatusParents(fileTree, fileTree.Status);
                 return;
             }
@@ -53,6 +60,7 @@ namespace FileControlAvalonia.Core
                fileTree.ELastUpdate != fileTree.FLastUpdate)
             {
                 fileTree.Status = StatusFile.PartiallyChecked;
+                PartiallyChecked++;
                 ChangeStatusParents(fileTree, fileTree.Status);
                 return;
             }
@@ -60,10 +68,11 @@ namespace FileControlAvalonia.Core
             {
                 fileTree.Status = StatusFile.UnChecked;
                 ChangeStatusParents(fileTree, fileTree.Status);
+                UnChecked++;
                 return;
             }
         }
-        private static void ChangeStatusParents(FileTree fileTree, StatusFile status)
+        private void ChangeStatusParents(FileTree fileTree, StatusFile status)
         {
             if (fileTree.Parent != null)
             {

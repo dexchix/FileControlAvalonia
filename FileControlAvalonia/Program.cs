@@ -6,6 +6,7 @@ using NLog.Config;
 using NLog.Targets;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.DataBase;
+using FileControlAvalonia.Core;
 
 namespace FileControlAvalonia
 {
@@ -17,6 +18,7 @@ namespace FileControlAvalonia
             AppBootstrapper.RegisterClasses();
             Logger.InitializeLogger();
             DataBaseCreator.InitializeDataBase();
+            SettingsManager.SetStartupSettings();
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         public static AppBuilder BuildAvaloniaApp()

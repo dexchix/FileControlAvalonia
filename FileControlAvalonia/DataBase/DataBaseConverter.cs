@@ -62,14 +62,7 @@ namespace FileControlAvalonia.DataBase
             }
             return etalonTree;
         }
-        //public FileTree FindObjectById(FileTree etalonFileTree, int targetId)
-        //{
-        //    if (etalonFileTree.ID == targetId)
-        //        return etalonFileTree;
 
-        //    var childObjects = etalonFileTree.Children.SelectMany(child => FindObjectById(child, targetId));
-        //    return childObjects.FirstOrDefault();
-        //}
         public FileTree FindObjectById(FileTree etalonFileTree, int targetId)
         {
             if (etalonFileTree.ID == targetId)

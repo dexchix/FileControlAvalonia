@@ -79,12 +79,15 @@ namespace FileControlAvalonia.FileTreeLogic
         }
         public static void MergeFileTrees(FileTree mainFileTree, FileTree etalonFileTree)
         {
-            foreach (var file in mainFileTree.Children!)
+            
+
+            foreach (var file in mainFileTree.Children!.ToList())
             {
                 var etalonFile = FileTreeNavigator.SearchFile(file.Path, etalonFileTree);
                 if (etalonFile != null)
                 {
-                    file.FVersion = etalonFile.EVersion;
+
+                    file.EVersion = etalonFile.EVersion;
                     file.EHash = etalonFile.EHash;
                     file.ELastUpdate = etalonFile.ELastUpdate;
 

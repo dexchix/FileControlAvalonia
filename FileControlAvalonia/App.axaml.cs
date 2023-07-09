@@ -29,7 +29,6 @@ namespace FileControlAvalonia
                     DataContext = mainWindowViewModel,
                 };
                 CurrentApplication = desktop;
-                SettingsManager.SetStartupSettings();
             }
             base.OnFrameworkInitializationCompleted();
             
