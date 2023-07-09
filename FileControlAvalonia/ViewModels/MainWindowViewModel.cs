@@ -4,7 +4,6 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
 using Avalonia.Utilities;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
@@ -24,7 +23,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Permissions;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels
@@ -158,7 +156,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public bool NeedProgressBar
         {
-            get => _needProgressBar;
+            get=> _needProgressBar;
             set => this.RaiseAndSetIfChanged(ref _needProgressBar, value);
         }
         public int ProgressBarValue
@@ -281,30 +279,25 @@ namespace FileControlAvalonia.ViewModels
         public void CheckCommand()
         {
             NeedProgressBar = true;
-            Dispatcher.UIThread.Post(() =>
-            {
-                var etalon = EtalonManager.GetEtalon();
-                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
-                var comparator = new Comprasion();
-                comparator.CompareTrees(MainFileTree);
-                Checked = comparator.Checked;
 
-                ProgressBarValue = 50;
 
-                Task.Delay(2000);
+            var etalon = EtalonManager.GetEtalon();
+            FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+            var comparator = new Comprasion();
+            comparator.CompareTrees(MainFileTree);
+            Checked = comparator.Checked;
 
-                UnChecked = comparator.UnChecked;
-                PartialChecked = comparator.PartiallyChecked;
+            ProgressBarValue = 50;
 
-                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-                CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-                DateLastCheck = DateTime.Now.ToString();
-            });
-            
- 
+            UnChecked= comparator.UnChecked;
+            PartialChecked = comparator.PartiallyChecked;
+
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            DateLastCheck = DateTime.Now.ToString();
+
+
             ProgressBarValue = 100;
-
-            NeedProgressBar = false;
         }
         public void CreateEtalonCommand()
         {

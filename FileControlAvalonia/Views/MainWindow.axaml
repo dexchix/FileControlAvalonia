@@ -298,7 +298,7 @@
 			</Grid>
 			
 			<ProgressBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Maximum="100" Minimum="0" Value="{Binding ProgressBarValue}"
-						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0" IsVisible="{Binding NeedProgressBar}"/>
+						 Height="30" VerticalAlignment="Bottom" Margin="-5 0 -5 0" IsVisible="{Binding NeedProgressBar}" Foreground="#f90" />
 			<StackPanel Grid.Row="5" Margin="10 0 10 10" VerticalAlignment="Bottom"
 						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
 				<TextBlock Classes="f1">
