@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileControlAvalonia.ViewModels;
+using FileControlAvalonia.Views;
 using Splat;
 
 namespace FileControlAvalonia.Services
@@ -16,6 +17,7 @@ namespace FileControlAvalonia.Services
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
             Locator.CurrentMutable.RegisterLazySingleton(() => new InfoWindowViewModel(), typeof(InfoWindowViewModel));
             Locator.CurrentMutable.RegisterLazySingleton(() => new SettingsWindowViewModel(), typeof(SettingsWindowViewModel));
+            Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindow(), typeof(MainWindow));
         }
     }
 }

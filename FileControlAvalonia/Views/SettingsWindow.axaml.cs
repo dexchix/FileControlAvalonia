@@ -11,7 +11,23 @@ namespace FileControlAvalonia.Views
         public SettingsWindow()
         {
             InitializeComponent();
+            Deactivated += DeactivatedWindow;
         }
+
+        private void DeactivatedWindow(object? sender, EventArgs e)
+        {
+            string activeWindow = WindowsAPI.GetActiveProcessName();
+            if (activeWindow != WindowsAPI.programProcessName)
+            {
+                var window = App.CurrentApplication!.Windows;
+                for (int i = 1; i < window.Count; i++)
+                {
+                    window[i].Close();
+                }
+                window[0].Hide();
+            }
+        }
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);

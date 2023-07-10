@@ -8,6 +8,10 @@ using ReactiveUI;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
 using Splat;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using System.Security.Policy;
 
 namespace FileControlAvalonia.Views
 {
@@ -16,7 +20,7 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
-            //Deactivated += DeactivatedWindow;
+            Deactivated += DeactivatedWindow;
             this.WhenActivated(d => d(ViewModel!.ShowDialogInfoWindow.RegisterHandler(InfoWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogSettingsWindow.RegisterHandler(SettingsWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogFileExplorerWindow.RegisterHandler(FileExplorerWindowShodDialog)));
@@ -29,7 +33,6 @@ namespace FileControlAvalonia.Views
         #region ShowDialogs
         private async Task InfoWindowShowDialog(InteractionContext<InfoWindowViewModel, InfoWindowViewModel?> interaction)
         {
-            //var dialog = Locator.Current.GetService<InfoWindow>();
             var dialog = new InfoWindow();
             dialog.DataContext = interaction.Input;
 
@@ -39,7 +42,6 @@ namespace FileControlAvalonia.Views
 
         private async Task SettingsWindowShowDialog(InteractionContext<SettingsWindowViewModel, SettingsWindowViewModel?> interaction)
         {
-            //var dialog = Locator.Current.GetService<SettingsWindow>();
             var dialog = new SettingsWindow();
             dialog.DataContext = interaction.Input;
 
@@ -61,7 +63,15 @@ namespace FileControlAvalonia.Views
         private void DeactivatedWindow(object? sender, EventArgs e)
         {
             string activeWindow = WindowsAPI.GetActiveProcessName();
-            if (activeWindow != WindowsAPI.programProcessName) App.CurrentApplication!.Shutdown();
+            if (activeWindow != WindowsAPI.programProcessName)
+            {
+                var window = App.CurrentApplication.Windows;
+                for (int i = 1; i < window.Count; i++)
+                {
+                    window[i].Close();
+                }
+                window[0].Hide();
+            }
         }
 
 

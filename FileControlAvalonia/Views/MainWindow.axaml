@@ -15,7 +15,7 @@
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly"
 		xmlns:avalonia="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.TreeDataGrid">
-	
+
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
 		<c:ForegroundConverter x:Key="ForegroundConverter"/>
