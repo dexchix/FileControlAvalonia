@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace FileControlAvalonia.Models
 {
     [Serializable]
-    public class FileTree : ReactiveObject, ICloneable
+    public class FileTree : ReactiveObject
     {
         #region FIELDS
         private int _id = 0;
@@ -31,7 +31,7 @@ namespace FileControlAvalonia.Models
         private bool _hasChildren = true;
         private bool _isExpanded;
         private bool _isChecked;
-        private StatusFile _status;
+        private StatusFile _status = StatusFile.UnChecked;
         #endregion
 
         #region PROPERTIES

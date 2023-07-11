@@ -205,7 +205,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void Confirm(Window window)
         {
-            SettingsManager.SaveSettings(_settings);
+            SettingsManager.SetSettings(_settings);
             window.Close();
         }
         #endregion

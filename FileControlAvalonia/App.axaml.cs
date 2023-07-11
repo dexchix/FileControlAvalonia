@@ -50,7 +50,7 @@ namespace FileControlAvalonia
             var mainWindow = Locator.Current.GetService<MainWindow>();
 
             var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-            var bitmap = new Bitmap(assets.Open(new Uri("avares://FileControlAvalonia/Assets/CopyModelDifferences_32x32.ico")));
+            var bitmap = new Bitmap(assets!.Open(new Uri("avares://FileControlAvalonia/Assets/CopyModelDifferences_32x32.ico")));
             trayIcon = new TrayIcon();
             trayIcon.Icon = new WindowIcon(bitmap);
             trayIcon.IsVisible = true;

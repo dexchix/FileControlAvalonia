@@ -23,10 +23,10 @@ namespace FileControlAvalonia.Core
         public static void SetStartupSettings()
         {
             var settings = GetSettings();
-            SaveSettings(settings);
+            SetSettings(settings);
         }
 
-        public static void SaveSettings(Settings settings)
+        public static void SetSettings(Settings settings)
         {
             try
             {
@@ -38,12 +38,15 @@ namespace FileControlAvalonia.Core
                 settingsString = settings.AvalibleFileExtensions;
                 extensions.Clear();
                 modifyExtensions.Clear();
-                extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
-                if (extensions.Count > 0 && extensions[0] != "")
+                if (settings.AvalibleFileExtensions != null)
                 {
-                    foreach (string extension in extensions)
+                    extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
+                    if (extensions.Count > 0 && extensions[0] != "")
                     {
-                        modifyExtensions.Add("." + extension);
+                        foreach (string extension in extensions)
+                        {
+                            modifyExtensions.Add("." + extension);
+                        }
                     }
                 }
                 rootPath = settings.RootPath;
@@ -52,7 +55,6 @@ namespace FileControlAvalonia.Core
                     var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
                     mainVM.MainFileTree = new Models.FileTree(rootPath,true);
                     mainVM.MainFileTree.Children.Clear();
-
                 }
              
             }
@@ -74,7 +76,13 @@ namespace FileControlAvalonia.Core
             catch (Exception ex)
             {
                 LogManager.GetCurrentClassLogger().Error(ex);
-                return new Settings();
+                var settings = new Settings();
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
+                {
+                    serializer.Serialize(streamWriter, settings);
+                }
+                return settings;
             }
         }
     }

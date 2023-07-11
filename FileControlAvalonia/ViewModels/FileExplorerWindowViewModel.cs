@@ -84,7 +84,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void GoBackFolderCommand()
         {
-            if (_fileTreeNavigator.FileTree.Parent != null)
+            if (_fileTreeNavigator.FileTree != null && _fileTreeNavigator.FileTree.Parent != null)
                 _fileTreeNavigator.GoBackFolder();
         }
         public void CancelCommand(Window window)

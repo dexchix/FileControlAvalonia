@@ -16,15 +16,18 @@ namespace FileControlAvalonia.Views
 
         private void DeactivatedWindow(object? sender, EventArgs e)
         {
-            string activeWindow = WindowsAPI.GetActiveProcessName();
-            if (activeWindow != WindowsAPI.programProcessName)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                var window = App.CurrentApplication!.Windows;
-                for (int i = 1; i < window.Count; i++)
+                string activeWindow = WindowsAPI.GetActiveProcessName();
+                if (activeWindow != WindowsAPI.programProcessName)
                 {
-                    window[i].Close();
+                    var window = App.CurrentApplication!.Windows;
+                    for (int i = 1; i < window.Count; i++)
+                    {
+                        window[i].Close();
+                    }
+                    window[0].Hide();
                 }
-                window[0].Hide();
             }
         }
 
