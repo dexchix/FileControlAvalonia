@@ -4,6 +4,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using Avalonia.Utilities;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
@@ -23,6 +24,8 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Permissions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels
@@ -50,7 +53,7 @@ namespace FileControlAvalonia.ViewModels
         private string _dateCreateEtalon;
         private string _userLevelCreateEtalon;
         private bool _needProgressBar;
-        private int _progressBarValue;
+        private int _progressBarValue = 0;
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
@@ -156,7 +159,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public bool NeedProgressBar
         {
-            get=> _needProgressBar;
+            get => _needProgressBar;
             set => this.RaiseAndSetIfChanged(ref _needProgressBar, value);
         }
         public int ProgressBarValue
@@ -278,27 +281,50 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void CheckCommand()
         {
-            NeedProgressBar = true;
+            //NeedProgressBar = true;
 
 
-            var etalon = EtalonManager.GetEtalon();
-            FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
-            var comparator = new Comprasion();
-            comparator.CompareTrees(MainFileTree);
-            Checked = comparator.Checked;
+            //var etalon = EtalonManager.GetEtalon();
+            //FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+            //var comparator = new Comprasion();
+            //comparator.CompareTrees(MainFileTree);
+            //Checked = comparator.Checked;
 
-            ProgressBarValue = 50;
+            //ProgressBarValue = 50;
 
-            UnChecked= comparator.UnChecked;
-            PartialChecked = comparator.PartiallyChecked;
+            //UnChecked = comparator.UnChecked;
+            //PartialChecked = comparator.PartiallyChecked;
 
-            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-            DateLastCheck = DateTime.Now.ToString();
+            //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            //CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            //DateLastCheck = DateTime.Now.ToString();
 
 
-            ProgressBarValue = 100;
+            //ProgressBarValue = 100;
+
+            var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
+            var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
+            progressBar.IsVisible = true;
+            //progressBar.Minimum = 0;
+            //progressBar.Maximum = 100;
+            //progressBar.Value = 0;
+            //progressBar.IsIndeterminate = true;
+            //progressBar.
+
+            TEST();
+
         }
+
+        async public void TEST()
+        {
+
+            while (ProgressBarValue != 100)
+            {
+                ProgressBarValue++;
+                await Task.Delay(TimeSpan.FromMilliseconds(20));
+            }
+        }
+
         public void CreateEtalonCommand()
         {
             EtalonManager.CreateEtalon(MainFileTree);

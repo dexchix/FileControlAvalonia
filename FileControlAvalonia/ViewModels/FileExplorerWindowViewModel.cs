@@ -21,7 +21,7 @@ using FileControlAvalonia.Core;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class FileExplorerWindowViewModel : ReactiveObject, IFileExplorerWindowViewModel
+    public class FileExplorerWindowViewModel : ReactiveObject, IFileExplorerWindowViewModel, IDisposable
     {
         #region FIELDS
         private int _itemIndex = 0;
@@ -100,6 +100,7 @@ namespace FileControlAvalonia.ViewModels
             var sadasd = new TransformerFileTrees(SettingsManager.rootPath, FileTreeNavigator.SearchFile(SettingsManager.rootPath, FileTree)).GetUpdatedFileTree();
              
             MessageBus.Current.SendMessage<FileTree>(sadasd);
+            Dispose();
             window.Close();
         }
         public void UpCommand()
@@ -115,6 +116,12 @@ namespace FileControlAvalonia.ViewModels
                 ItemIndex++;
             else if (ItemIndex == FileTree.Children?.Count - 1)
                 ItemIndex = 0;
+        }
+
+        public void Dispose()
+        {
+            _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;
+            _fileTreeNavigator = null;
         }
         #endregion
     }
