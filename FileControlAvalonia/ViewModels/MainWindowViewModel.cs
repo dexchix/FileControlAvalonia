@@ -305,13 +305,15 @@ namespace FileControlAvalonia.ViewModels
             var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
             var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
             progressBar.IsVisible = true;
+            //progressBar.IsIndeterminate = true;
+
+            progressBar.IsIndeterminate = true;
+
+
             //progressBar.Minimum = 0;
             //progressBar.Maximum = 100;
             //progressBar.Value = 0;
-            //progressBar.IsIndeterminate = true;
-            //progressBar.
-
-            TEST();
+            //TEST();
 
         }
 
