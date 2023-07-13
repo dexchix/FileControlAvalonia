@@ -279,35 +279,53 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region COMMANDS
-        public void CheckCommand()
+        public async void CheckCommand1()
         {
-            //NeedProgressBar = true;
+            NeedProgressBar = true;
+            var comparator = new Comprasion();
 
 
-            //var etalon = EtalonManager.GetEtalon();
-            //FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
-            //var comparator = new Comprasion();
-            //comparator.CompareTrees(MainFileTree);
-            //Checked = comparator.Checked;
 
-            //ProgressBarValue = 50;
+            await Task.Run(() =>
+            {
+                ProgressBarValue = 20;
+            });
 
-            //UnChecked = comparator.UnChecked;
-            //PartialChecked = comparator.PartiallyChecked;
+            await Task.Run(() =>
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
 
-            //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-            //CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-            //DateLastCheck = DateTime.Now.ToString();
+                var etalon = EtalonManager.GetEtalon();
+                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+                comparator.CompareTrees(MainFileTree);
+            });
+        });
+
+            await Task.Run(() =>
+            {
+                ProgressBarValue = 60;
+            });
+
+            Checked = comparator.Checked;
+            UnChecked = comparator.UnChecked;
+            PartialChecked = comparator.PartiallyChecked;
+
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            DateLastCheck = DateTime.Now.ToString();
 
 
-            //ProgressBarValue = 100;
+            ProgressBarValue = 100;
+            //========================================================================
 
-            var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
-            var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
-            progressBar.IsVisible = true;
-            //progressBar.IsIndeterminate = true;
+            //var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
+            //var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
+            //progressBar.IsVisible = true;
 
-            progressBar.IsIndeterminate = true;
+
+
+            //////progressBar.IsIndeterminate = true;
 
 
             //progressBar.Minimum = 0;
@@ -317,6 +335,48 @@ namespace FileControlAvalonia.ViewModels
 
         }
 
+
+        //=======================================================
+        public void CheckCommand()
+        {
+            NeedProgressBar = true;
+            var comparator = new Comprasion();
+
+
+
+            Task.Run(() =>
+            {
+                ProgressBarValue = 20;
+            });
+
+            Task.Run(() =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    var etalon = EtalonManager.GetEtalon();
+                    FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+                    comparator.CompareTrees(MainFileTree);
+                });
+            });
+
+            Task.Run(() =>
+            {
+                ProgressBarValue = 60;
+            });
+
+            Checked = comparator.Checked;
+            UnChecked = comparator.UnChecked;
+            PartialChecked = comparator.PartiallyChecked;
+
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            DateLastCheck = DateTime.Now.ToString();
+
+
+            ProgressBarValue = 100;
+        }
+
+        //==============================
         async public void TEST()
         {
 
