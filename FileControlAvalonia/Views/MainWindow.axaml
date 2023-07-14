@@ -314,7 +314,7 @@
 								</Panel>
 							</Border>
 							<LayoutTransformControl HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True" Name="PART_LayoutTransformControl">
-								<TextBlock Foreground="Black" Text="WWWWWWWW" />
+								<TextBlock Foreground="Black" Text="{Binding ProgressBarText}" />
 							</LayoutTransformControl>
 						</Grid>
 					</ControlTemplate>

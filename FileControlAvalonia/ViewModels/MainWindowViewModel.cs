@@ -54,6 +54,7 @@ namespace FileControlAvalonia.ViewModels
         private string _userLevelCreateEtalon;
         private bool _needProgressBar;
         private int _progressBarValue = 0;
+        private string _progressBarText;
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
@@ -167,6 +168,11 @@ namespace FileControlAvalonia.ViewModels
             get => _progressBarValue;
             set => this.RaiseAndSetIfChanged(ref _progressBarValue, value);
         }
+        public string ProgressBarText
+        {
+            get => _progressBarText;
+            set => this.RaiseAndSetIfChanged(ref _progressBarText, value);
+        }
         public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
@@ -279,101 +285,105 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region COMMANDS
-        public async void CheckCommand1()
-        {
-            NeedProgressBar = true;
-            var comparator = new Comprasion();
+        //public async void CheckCommand()
+        //{
+        //    NeedProgressBar = true;
+        //    var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
+        //    var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
+        //    var comparator = new Comprasion();
 
 
 
-            await Task.Run(() =>
-            {
-                ProgressBarValue = 20;
-            });
 
-            await Task.Run(() =>
-        {
-            Dispatcher.UIThread.Post(() =>
-            {
-
-                var etalon = EtalonManager.GetEtalon();
-                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
-                comparator.CompareTrees(MainFileTree);
-            });
-        });
-
-            await Task.Run(() =>
-            {
-                ProgressBarValue = 60;
-            });
-
-            Checked = comparator.Checked;
-            UnChecked = comparator.UnChecked;
-            PartialChecked = comparator.PartiallyChecked;
-
-            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-            DateLastCheck = DateTime.Now.ToString();
+        //        Dispatcher.UIThread.Post(() =>
+        //        {
+        //            progressBar.IsIndeterminate = true;
+        //            ProgressBarText = "Загрузка эталона";
+        //        });
 
 
-            ProgressBarValue = 100;
-            //========================================================================
+        //    await Task.Run(() =>
+        //    {
+        //        Dispatcher.UIThread.Post(() =>
+        //        {
 
-            //var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
-            //var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
-            //progressBar.IsVisible = true;
+        //            var etalon = EtalonManager.GetEtalon();
+        //            FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+        //            comparator.CompareTrees(MainFileTree);
+        //        });
+        //    });
+
+        //    await Task.Run(() =>
+        //    {
+        //        //progressBar.IsIndeterminate = false;
+        //    });
+
+        //    Checked = comparator.Checked;
+        //    UnChecked = comparator.UnChecked;
+        //    PartialChecked = comparator.PartiallyChecked;
+
+        //    FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+        //    CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+        //    DateLastCheck = DateTime.Now.ToString();
+
+
+        //    ProgressBarValue = 100;
+        //    //========================================================================
+
+        //    //var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
+        //    //var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
+        //    //progressBar.IsVisible = true;
 
 
 
-            //////progressBar.IsIndeterminate = true;
+        //    //////progressBar.IsIndeterminate = true;
 
 
-            //progressBar.Minimum = 0;
-            //progressBar.Maximum = 100;
-            //progressBar.Value = 0;
-            //TEST();
+        //    //progressBar.Minimum = 0;
+        //    //progressBar.Maximum = 100;
+        //    //progressBar.Value = 0;
+        //    //TEST();
 
-        }
+        //}
 
 
         //=======================================================
-        public void CheckCommand()
+        public async Task CheckCommand()
         {
             NeedProgressBar = true;
+            var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
+            var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
             var comparator = new Comprasion();
 
+            progressBar.IsIndeterminate = true;
+            ProgressBarText = "Загрузка эталона";
 
-
-            Task.Run(() =>
+            await Task.Run(() =>
             {
-                ProgressBarValue = 20;
-            });
-
-            Task.Run(() =>
-            {
-                Dispatcher.UIThread.Post(() =>
+                var etalon = EtalonManager.GetEtalon();
+                Dispatcher.UIThread.Post(() => 
                 {
-                    var etalon = EtalonManager.GetEtalon();
-                    FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
-                    comparator.CompareTrees(MainFileTree);
+                    progressBar.IsIndeterminate = false;
                 });
+                ProgressBarValue = 50;
+                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
             });
 
-            Task.Run(() =>
-            {
-                ProgressBarValue = 60;
-            });
-
+ 
+            comparator.CompareTrees(MainFileTree);
             Checked = comparator.Checked;
             UnChecked = comparator.UnChecked;
             PartialChecked = comparator.PartiallyChecked;
-
-            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-            DateLastCheck = DateTime.Now.ToString();
+            await Task.Run(() =>
+            {
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+                CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+                DateLastCheck = DateTime.Now.ToString();
+            });
 
 
             ProgressBarValue = 100;
+            ProgressBarText = "Проверка прошла успешно";
         }
 
         //==============================
