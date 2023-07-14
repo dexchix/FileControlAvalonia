@@ -52,9 +52,15 @@ namespace FileControlAvalonia.ViewModels
         private string _dateLastCheck;
         private string _dateCreateEtalon;
         private string _userLevelCreateEtalon;
-        private bool _needProgressBar;
+
+        #region ProgressBar
+        private bool _progressBarIsVisible;
         private int _progressBarValue = 0;
         private string _progressBarText;
+        private bool _progressBarLoopScrol;
+        private int _progressBarMaximum;
+        #endregion
+
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
@@ -158,10 +164,12 @@ namespace FileControlAvalonia.ViewModels
             get => _userLevelCreateEtalon;
             set => this.RaiseAndSetIfChanged(ref _userLevelCreateEtalon, value);
         }
-        public bool NeedProgressBar
+
+        #region ProgressBar
+        public bool ProgressBarIsVisible
         {
-            get => _needProgressBar;
-            set => this.RaiseAndSetIfChanged(ref _needProgressBar, value);
+            get => _progressBarIsVisible;
+            set => this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
         }
         public int ProgressBarValue
         {
@@ -173,6 +181,18 @@ namespace FileControlAvalonia.ViewModels
             get => _progressBarText;
             set => this.RaiseAndSetIfChanged(ref _progressBarText, value);
         }
+        public bool ProgressBarLoopScrol
+        {
+            get => _progressBarLoopScrol;
+            set => this.RaiseAndSetIfChanged(ref _progressBarLoopScrol, value);
+        }
+        public int ProgressBarMaximum
+        {
+            get => _progressBarMaximum;
+            set => this.RaiseAndSetIfChanged(ref _progressBarMaximum, value);
+        }
+        #endregion
+
         public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
@@ -235,7 +255,7 @@ namespace FileControlAvalonia.ViewModels
             _notFound = 0;
             _notChecked = 0;
 
-            _needProgressBar = false;
+            _progressBarIsVisible = false;
             _progressBarValue = 0;
         }
         #region CONVERTERS
@@ -285,108 +305,41 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region COMMANDS
-        //public async void CheckCommand()
-        //{
-        //    NeedProgressBar = true;
-        //    var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
-        //    var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
-        //    var comparator = new Comprasion();
-
-
-
-
-        //        Dispatcher.UIThread.Post(() =>
-        //        {
-        //            progressBar.IsIndeterminate = true;
-        //            ProgressBarText = "Загрузка эталона";
-        //        });
-
-
-        //    await Task.Run(() =>
-        //    {
-        //        Dispatcher.UIThread.Post(() =>
-        //        {
-
-        //            var etalon = EtalonManager.GetEtalon();
-        //            FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
-        //            comparator.CompareTrees(MainFileTree);
-        //        });
-        //    });
-
-        //    await Task.Run(() =>
-        //    {
-        //        //progressBar.IsIndeterminate = false;
-        //    });
-
-        //    Checked = comparator.Checked;
-        //    UnChecked = comparator.UnChecked;
-        //    PartialChecked = comparator.PartiallyChecked;
-
-        //    FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-        //    CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-        //    DateLastCheck = DateTime.Now.ToString();
-
-
-        //    ProgressBarValue = 100;
-        //    //========================================================================
-
-        //    //var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
-        //    //var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
-        //    //progressBar.IsVisible = true;
-
-
-
-        //    //////progressBar.IsIndeterminate = true;
-
-
-        //    //progressBar.Minimum = 0;
-        //    //progressBar.Maximum = 100;
-        //    //progressBar.Value = 0;
-        //    //TEST();
-
-        //}
-
-
-        //=======================================================
         public async Task CheckCommand()
         {
-            NeedProgressBar = true;
-            var mainWindow = (MainWindow)Locator.Current.GetService(typeof(MainWindow));
-            var progressBar = mainWindow.FindControl<ProgressBar>("ProgressBar");
-            var comparator = new Comprasion();
-
-            progressBar.IsIndeterminate = true;
+            ProgressBarIsVisible = true;
+            ProgressBarLoopScrol = true;
             ProgressBarText = "Загрузка эталона";
 
             await Task.Run(() =>
             {
                 var etalon = EtalonManager.GetEtalon();
-                Dispatcher.UIThread.Post(() => 
-                {
-                    progressBar.IsIndeterminate = false;
-                });
-                ProgressBarValue = 50;
+                ProgressBarLoopScrol = false;
+                ProgressBarMaximum = EtalonManager.CountFiles;
+                ProgressBarValue = 0;
                 FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
             });
 
- 
-            comparator.CompareTrees(MainFileTree);
-            Checked = comparator.Checked;
-            UnChecked = comparator.UnChecked;
-            PartialChecked = comparator.PartiallyChecked;
+            var comparator = new Comprasion();
+            await comparator.CompareTrees(MainFileTree, ProgressBarValue);
+
             await Task.Run(() =>
             {
+     
+                Checked = comparator.Checked;
+                UnChecked = comparator.UnChecked;
+                PartialChecked = comparator.PartiallyChecked;
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
                 CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
                 DateLastCheck = DateTime.Now.ToString();
             });
 
 
-            ProgressBarValue = 100;
             ProgressBarText = "Проверка прошла успешно";
         }
-
-        //==============================
+        /// <summary>
+        /// Тестовый метод заполнения ProgressBar
+        /// </summary>
         async public void TEST()
         {
 

@@ -1,5 +1,8 @@
-﻿using FileControlAvalonia.FileTreeLogic;
+﻿using Avalonia.Threading;
+using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.ViewModels;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +19,39 @@ namespace FileControlAvalonia.Core
         public int UnChecked = 0;
         public int NoAccess = 0;
         public int Missing = 0;
-        public void CompareTrees(FileTree mainFileTree)
+        public async Task CompareTrees(FileTree mainFileTree, int count)
         {
             foreach (var file in mainFileTree.Children)
             {
                 SetStatus(file);
+                await Task.Run(() =>
+                {
+                    count++;
+                });
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
                 if (file.IsDirectory)
                 {
-                    CompareTrees(file);
+                    CompareTrees(file, count);
                 }
             }
         }
+
+        //public async Task CompareTrees(FileTree mainFileTree)
+        //{
+        //    foreach (var file in mainFileTree.Children)
+        //    {
+        //        SetStatus(file);
+        //        await Dispatcher.UIThread.InvokeAsync(() =>
+        //        {
+        //            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+        //        });
+
+        //        if (file.IsDirectory)
+        //        {
+        //            await CompareTrees(file);
+        //        }
+        //    }
+        //}
 
         public void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
         {
