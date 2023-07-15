@@ -17,6 +17,7 @@ namespace FileControlAvalonia.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
+        public static bool IsChildWindowOpen { get; set; } = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -76,7 +77,19 @@ namespace FileControlAvalonia.Views
                     window[0].Hide();
                 }
             }
-            
+            else
+            {
+                if (MainWindow.IsChildWindowOpen == false)
+                {
+                    var window = App.CurrentApplication!.Windows;
+                    for (int i = 1; i < window.Count; i++)
+                    {
+                        window[i].Close();
+                    }
+                    window[0].WindowState = WindowState.Minimized;
+                }
+            }
+
 
         }
 

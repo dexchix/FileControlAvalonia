@@ -369,6 +369,7 @@ namespace FileControlAvalonia.ViewModels
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
+                MainWindow.IsChildWindowOpen = true;
                 var result = await ShowDialogInfoWindow.Handle(Locator.Current.GetService<InfoWindowViewModel>()!);
             });
         }
@@ -376,6 +377,7 @@ namespace FileControlAvalonia.ViewModels
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
+                MainWindow.IsChildWindowOpen = true;
                 var result = await ShowDialogSettingsWindow.Handle(Locator.Current.GetService<SettingsWindowViewModel>()!);
             });
         }
@@ -383,6 +385,7 @@ namespace FileControlAvalonia.ViewModels
         {
             get => ReactiveCommand.CreateFromTask(async () =>
             {
+                MainWindow.IsChildWindowOpen = true;
                 var result = await ShowDialogFileExplorerWindow.Handle(Locator.Current.GetService<FileExplorerWindowViewModel>()!);
             });
         }

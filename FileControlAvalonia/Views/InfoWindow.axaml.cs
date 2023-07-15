@@ -29,6 +29,16 @@ namespace FileControlAvalonia.Views
                     window[0].Hide();
                 }
             }
+            else
+            {
+                var window = App.CurrentApplication!.Windows;
+                for (int i = 1; i < window.Count; i++)
+                {
+                    window[i].Close();
+                }
+                window[0].WindowState = WindowState.Minimized;
+                MainWindow.IsChildWindowOpen = false;
+            }
         }
 
         private void InitializeComponent()
