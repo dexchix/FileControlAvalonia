@@ -305,57 +305,61 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region COMMANDS
-        public async Task CheckCommand()
+        async public void CheckCommand()
+        {
+            FileTree etalon = null;
+            Comprasion comparator = new Comprasion();
+            ProgressBarIsVisible = true;
+            ProgressBarLoopScrol = true;
+            ProgressBarText = "Выгрузка эталона";
+
+            await Task.Run(() =>
+            {
+                etalon = EtalonManager.GetEtalon();
+            });
+
+            ProgressBarLoopScrol = false;
+            ProgressBarMaximum = EtalonManager.CountFiles;
+            ProgressBarValue = 0;
+            ProgressBarText = $"{ProgressBarValue} из {ProgressBarMaximum}";
+
+            await Task.Run(() =>
+            {
+                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+                comparator.CompareTrees(MainFileTree, ProgressBarValue);
+            });
+
+            Checked = comparator.Checked;
+            UnChecked = comparator.UnChecked;
+            PartialChecked = comparator.PartiallyChecked;
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            DateLastCheck = DateTime.Now.ToString();
+            ProgressBarText = "Проверка прошла успешно";
+
+            await Task.Delay(1000);
+            ProgressBarIsVisible = false;
+        }
+
+        async public void CreateEtalonCommand()
         {
             ProgressBarIsVisible = true;
             ProgressBarLoopScrol = true;
-            ProgressBarText = "Загрузка эталона";
-
+            ProgressBarText = "Создание эталона";
             await Task.Run(() =>
             {
-                var etalon = EtalonManager.GetEtalon();
-                ProgressBarLoopScrol = false;
-                ProgressBarMaximum = EtalonManager.CountFiles;
-                ProgressBarValue = 0;
-                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+                EtalonManager.CreateEtalon(MainFileTree);
+                CheksInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
             });
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            ProgressBarMaximum = 0;
+            ProgressBarValue = 0;
+            ProgressBarText = "Создание эталона завершено";
 
-            var comparator = new Comprasion();
-            await comparator.CompareTrees(MainFileTree, ProgressBarValue);
+            await Task.Delay(1000);
 
-            await Task.Run(() =>
-            {
-     
-                Checked = comparator.Checked;
-                UnChecked = comparator.UnChecked;
-                PartialChecked = comparator.PartiallyChecked;
-                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-                CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-                DateLastCheck = DateTime.Now.ToString();
-            });
+            ProgressBarIsVisible = false;
 
-
-            ProgressBarText = "Проверка прошла успешно";
-        }
-        /// <summary>
-        /// Тестовый метод заполнения ProgressBar
-        /// </summary>
-        async public void TEST()
-        {
-
-            while (ProgressBarValue != 100)
-            {
-                ProgressBarValue++;
-                await Task.Delay(TimeSpan.FromMilliseconds(20));
-            }
-        }
-
-        public void CreateEtalonCommand()
-        {
-            EtalonManager.CreateEtalon(MainFileTree);
-            CheksInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
-
-            CheckCommand(); // ?
 
             UserLevelCreateEtalon = "Admin";
             DateCreateEtalon = DateTime.Now.ToString();

@@ -84,6 +84,13 @@ namespace FileControlAvalonia.DataBase
             if (filesDB.Count == 0)
             {
                 var addedFileDB = new FileDB(fileCounter, mainFileTree.Name, mainFileTree.Path, mainFileTree.FLastUpdate, mainFileTree.FVersion, mainFileTree.FHash);
+                //================================================================
+                mainFileTree.EHash = mainFileTree.FHash;
+                mainFileTree.ELastUpdate = mainFileTree.FLastUpdate;
+                mainFileTree.EVersion = mainFileTree.FVersion;
+                mainFileTree.Status = Core.StatusFile.Checked;
+                //================================================================
+
                 filesDB.Add(addedFileDB);
                 parents.Add(addedFileDB.path, addedFileDB);
                 fileCounter++;
@@ -99,11 +106,26 @@ namespace FileControlAvalonia.DataBase
                     parents.Add(addedFileDB.path, addedFileDB);
                     fileCounter++;
                     FillDBListFiles(file, filesDB);
+
+
+                    //================================================================
+                    file.EHash = file.FHash;
+                    file.ELastUpdate = file.FLastUpdate;
+                    file.EVersion = file.FVersion;
+                    file.Status = Core.StatusFile.Checked;
+                    //================================================================
                 }
                 else
                 {
                     filesDB.Add(new FileDB(fileCounter, file.Name, file.Path, file.FLastUpdate, file.FVersion, file.FHash));
                     fileCounter++;
+
+                    //================================================================
+                    file.EHash = file.FHash;
+                    file.ELastUpdate = file.FLastUpdate;
+                    file.EVersion = file.FVersion;
+                    file.Status = Core.StatusFile.Checked;
+                    //================================================================
                 }
             }
         }

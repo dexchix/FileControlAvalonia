@@ -36,32 +36,34 @@ namespace FileControlAvalonia.DataBase
         {
             using (var connection = new SQLiteConnection("Data Source=FileIntegrityDB.db"))
             {
+                connection.SetPassword("gfhdrtsgdrbvcxbc");
+
                 connection.Open();
 
-                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
-                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 ParentID INT,
-                                                 Name VARCHAR(512),
-                                                 Path VARCHAR(512),
-                                                 LastUpdate VARCHAR(512),
-                                                 Version VARCHAR(512),
-                                                 HashSum VARCHAR(512)
-                                             );";
+                //string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
+                //                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                //                                 ParentID INT,
+                //                                 Name VARCHAR(512),
+                //                                 Path VARCHAR(512),
+                //                                 LastUpdate VARCHAR(512),
+                //                                 Version VARCHAR(512),
+                //                                 HashSum VARCHAR(512)
+                //                             );";
 
-                string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
-                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 Creator VARCHAR(512),
-                                                 Date VARCHAR(512),
-                                                 DateLastCheck VARCHAR(512)
-                                             );";
+                //string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
+                //                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                //                                 Creator VARCHAR(512),
+                //                                 Date VARCHAR(512),
+                //                                 DateLastCheck VARCHAR(512)
+                //                             );";
 
-                using (var command = new SQLiteCommand(connection))
-                {
-                    command.CommandText = createFilesTableQuery;
-                    command.ExecuteNonQuery();
-                    command.CommandText = createCheksTableQuery;
-                    command.ExecuteNonQuery();
-                }
+                //using (var command = new SQLiteCommand(connection))
+                //{
+                //    command.CommandText = createFilesTableQuery;
+                //    command.ExecuteNonQuery();
+                //    command.CommandText = createCheksTableQuery;
+                //    command.ExecuteNonQuery();
+                //}
             }
         }
     }
