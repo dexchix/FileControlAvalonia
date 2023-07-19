@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SQLite;
+//using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite;
+using SQLitePCL;
 
 namespace FileControlAvalonia.DataBase
 {
     public static class DataBaseCreator
     {
-        static string databaseFileName = "FileIntegrityDB.db";
-        static string currentDirectory = Directory.GetCurrentDirectory();
-        static string databasePath = Path.Combine(currentDirectory, databaseFileName);
+        private static string databaseFileName = "FileIntegrityDB.db";
+        private static string currentDirectory = Directory.GetCurrentDirectory();
+        private static string databasePath = Path.Combine(currentDirectory, databaseFileName);
         public static void InitializeDataBase()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -34,36 +36,32 @@ namespace FileControlAvalonia.DataBase
         }
         private static void ConnectionDataBase()
         {
-            using (var connection = new SQLiteConnection("Data Source=FileIntegrityDB.db"))
+            var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
+            using (var connection = new SQLiteConnection(options))
             {
-                connection.SetPassword("gfhdrtsgdrbvcxbc");
+                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
+                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                 ParentID INT,
+                                                 Name VARCHAR(512),
+                                                 Path VARCHAR(512),
+                                                 LastUpdate VARCHAR(512),
+                                                 Version VARCHAR(512),
+                                                 HashSum VARCHAR(512)
+                                             );";
 
-                connection.Open();
+                string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
+                                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                 Creator VARCHAR(512),
+                                                 Date VARCHAR(512),
+                                                 DateLastCheck VARCHAR(512)
+                                             );";
 
-                //string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
-                //                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                //                                 ParentID INT,
-                //                                 Name VARCHAR(512),
-                //                                 Path VARCHAR(512),
-                //                                 LastUpdate VARCHAR(512),
-                //                                 Version VARCHAR(512),
-                //                                 HashSum VARCHAR(512)
-                //                             );";
+                var command = new SQLiteCommand(connection);
 
-                //string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
-                //                                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                //                                 Creator VARCHAR(512),
-                //                                 Date VARCHAR(512),
-                //                                 DateLastCheck VARCHAR(512)
-                //                             );";
-
-                //using (var command = new SQLiteCommand(connection))
-                //{
-                //    command.CommandText = createFilesTableQuery;
-                //    command.ExecuteNonQuery();
-                //    command.CommandText = createCheksTableQuery;
-                //    command.ExecuteNonQuery();
-                //}
+                command.CommandText = createFilesTableQuery;
+                command.ExecuteNonQuery();
+                command.CommandText = createCheksTableQuery;
+                command.ExecuteNonQuery();
             }
         }
     }
