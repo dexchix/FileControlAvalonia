@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tmds.DBus;
 
 namespace FileControlAvalonia.Core
 {
@@ -32,7 +33,7 @@ namespace FileControlAvalonia.Core
                     var insertCommandFilesTable = new SQLiteCommand(connection)
                     {
                         CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum) " +
-                                   $"VALUES ({file.id}, {file.idParent}, '{file.name}', '{file.path}', '{file.lastUpdate}', '{file.version}', '{file.hashSum}');"
+                                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.LastUpdate}', '{file.Version}', '{file.HashSum}');"
                     };
 
                     insertCommandFilesTable.ExecuteNonQuery();
@@ -55,35 +56,22 @@ namespace FileControlAvalonia.Core
 
         public static FileTree GetEtalon()
         {
-            var etalon = new List<FileDB>();
+            List<FileDB> etalon;
             var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
-            //using (var connection = new SQLiteConnection(options))
-            //{
-            //    var command = new SQLiteCommand(connection)
-            //    {
-            //        CommandText = "SELECT ID, ParentID, Name, Path, LastUpdate, Version, HashSum FROM FilesTable"
-            //    };
-            //    using var reader = command.;
 
-            //    while (reader.Read())
-            //    {
-            //        int id = Convert.ToInt32(reader["ID"]);
-            //        int parentId = Convert.ToInt32(reader["ParentID"]);
-            //        string name = reader["Name"].ToString();
-            //        string path = reader["Path"].ToString();
-            //        string lastUpdate = reader["LastUpdate"].ToString();
-            //        string version = reader["Version"].ToString();
-            //        string hashSum = reader["HashSum"].ToString();
-
-            //        etalon.Add(new FileDB(id, name, path, lastUpdate, version, hashSum, parentId));
-            //    }
-            //}
-
+            using (var connection = new SQLiteConnection(options))
+            {
+                var command = new SQLiteCommand(connection)
+                {
+                    CommandText = "SELECT ID, ParentID, Name, Path, LastUpdate, Version, HashSum FROM FilesTable"
+                };
+                etalon = command.ExecuteQuery<FileDB>();
+            }
             var converter = new DataBaseConverter();
-            var etalon1 = converter.ConvertFormatDBToFileTree(etalon);
+            var etalonInDBContext = converter.ConvertFormatDBToFileTree(etalon);
             CountFiles = etalon.Count;
 
-            return etalon1;
+            return etalonInDBContext;
         }
 
     }

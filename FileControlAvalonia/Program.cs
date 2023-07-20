@@ -17,7 +17,7 @@ namespace FileControlAvalonia
         {
             AppBootstrapper.RegisterClasses();
             Logger.InitializeLogger();
-            DataBaseCreator.InitializeDataBase();
+            DataBaseManager.InitializeDataBase();
             SettingsManager.SetStartupSettings();
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }

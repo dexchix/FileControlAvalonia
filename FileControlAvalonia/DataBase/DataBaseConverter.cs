@@ -29,12 +29,12 @@ namespace FileControlAvalonia.DataBase
         public FileTree ConvertFormatDBToFileTree(List<FileDB> files)
         {
 
-            var etalonTree = new FileTree(files[fileCounter].path, true, isRoot: true, loadChildren: false)
+            var etalonTree = new FileTree(files[fileCounter].Path, true, isRoot: true, loadChildren: false)
             {
-                ID = files[fileCounter].id,
-                EHash = files[fileCounter].hashSum,
-                ELastUpdate = files[fileCounter].lastUpdate,
-                EVersion = files[fileCounter].version,
+                ID = files[fileCounter].ID,
+                EHash = files[fileCounter].HashSum,
+                ELastUpdate = files[fileCounter].LastUpdate,
+                EVersion = files[fileCounter].Version,
             };
             if (etalonTree.IsDirectory)
             {
@@ -44,20 +44,20 @@ namespace FileControlAvalonia.DataBase
 
             while (fileCounter < files.Count)
             {
-                var addFile = new FileTree(files[fileCounter].path, Directory.Exists(files[fileCounter].path),
-                                           FindObjectById(etalonTree, files[fileCounter].idParent), loadChildren: false)
+                var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path),
+                                           FindObjectById(etalonTree, files[fileCounter].ParentID), loadChildren: false)
                 {
-                    ID = files[fileCounter].id,
-                    EHash = files[fileCounter].hashSum,
-                    ELastUpdate = files[fileCounter].lastUpdate,
-                    EVersion = files[fileCounter].version,
+                    ID = files[fileCounter].ID,
+                    EHash = files[fileCounter].HashSum,
+                    ELastUpdate = files[fileCounter].LastUpdate,
+                    EVersion = files[fileCounter].Version,
                 };
                 if (addFile.IsDirectory)
                 {
                     addFile.Children.Clear();
                 }
-                var parent = FindObjectById(etalonTree, files[fileCounter].idParent);
-                    parent.Children.Add(addFile);
+                var parent = FindObjectById(etalonTree, files[fileCounter].ParentID);
+                parent.Children.Add(addFile);
                 fileCounter++;
             }
             return etalonTree;
@@ -70,7 +70,7 @@ namespace FileControlAvalonia.DataBase
 
             foreach (var child in etalonFileTree.Children.ToList())
             {
-                if(child.IsDirectory)
+                if (child.IsDirectory)
                 {
                     var result = FindObjectById(child, targetId);
                     if (result != null)
@@ -92,7 +92,7 @@ namespace FileControlAvalonia.DataBase
                 //================================================================
 
                 filesDB.Add(addedFileDB);
-                parents.Add(addedFileDB.path, addedFileDB);
+                parents.Add(addedFileDB.Path, addedFileDB);
                 fileCounter++;
             }
             foreach (var file in mainFileTree.Children!)
@@ -103,7 +103,7 @@ namespace FileControlAvalonia.DataBase
                     var addedFileDB = new FileDB(fileCounter, file.Name, file.Path, file.FLastUpdate, file.FVersion, file.FHash);
                     filesDB.Add(addedFileDB);
                     //if (parents.All(x => x.Key == addedFileDB.path))
-                    parents.Add(addedFileDB.path, addedFileDB);
+                    parents.Add(addedFileDB.Path, addedFileDB);
                     fileCounter++;
                     FillDBListFiles(file, filesDB);
 
@@ -133,12 +133,12 @@ namespace FileControlAvalonia.DataBase
         {
             foreach (var file in filesDB)
             {
-                var pathParent = Path.GetDirectoryName(file.path);
+                var pathParent = Path.GetDirectoryName(file.Path);
                 foreach (var parent in parents)
                 {
                     if (pathParent == parent.Key)
                     {
-                        file.idParent = parent.Value.id;
+                        file.ParentID = parent.Value.ID;
                     }
                 }
             }

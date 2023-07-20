@@ -11,7 +11,7 @@ using SQLitePCL;
 
 namespace FileControlAvalonia.DataBase
 {
-    public static class DataBaseCreator
+    public static class DataBaseManager
     {
         private static string databaseFileName = "FileIntegrityDB.db";
         private static string currentDirectory = Directory.GetCurrentDirectory();
@@ -63,6 +63,10 @@ namespace FileControlAvalonia.DataBase
                 command.CommandText = createCheksTableQuery;
                 command.ExecuteNonQuery();
             }
+        }
+        public static void ChangePasswordDataBase()
+        {
+
         }
     }
 }
