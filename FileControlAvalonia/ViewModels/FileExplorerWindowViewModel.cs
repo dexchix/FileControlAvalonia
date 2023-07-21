@@ -36,7 +36,7 @@ namespace FileControlAvalonia.ViewModels
             get => _itemIndex;
             set => this.RaiseAndSetIfChanged(ref _itemIndex, value);
         }
-        public string Extensions { get => SettingsManager.settingsString!; }
+        public string Extensions { get => SettingsManager.SettingsString!; }
 
         public static IMultiValueConverter FileIconConverter
         {
@@ -97,7 +97,7 @@ namespace FileControlAvalonia.ViewModels
             //var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
             //TestChekingFiles.TEST(selectedItemsCollection);
             //MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
-            var sadasd = new TransformerFileTrees(SettingsManager.rootPath, FileTreeNavigator.SearchFile(SettingsManager.rootPath, FileTree)).GetUpdatedFileTree();
+            var sadasd = new TransformerFileTrees(SettingsManager.RootPath, FileTreeNavigator.SearchFile(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
              
             MessageBus.Current.SendMessage<FileTree>(sadasd);
             Dispose();

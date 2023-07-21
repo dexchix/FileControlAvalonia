@@ -58,7 +58,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <returns></returns>
         public static FileTree GetSimpleCopy(FileTree mainFileTree)
         {
-            var copyFileTree = new FileTree(SettingsManager.rootPath, true);
+            var copyFileTree = new FileTree(SettingsManager.RootPath, true);
             RemoveNotExistentElementsAndCopyState(mainFileTree.Children!, copyFileTree.Children!);
             return copyFileTree;
         }

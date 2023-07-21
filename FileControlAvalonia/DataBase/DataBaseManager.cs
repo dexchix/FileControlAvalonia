@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Splat;
 using SQLite;
 using SQLitePCL;
 
@@ -36,8 +37,7 @@ namespace FileControlAvalonia.DataBase
         }
         private static void ConnectionDataBase()
         {
-            var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
-            using (var connection = new SQLiteConnection(options))
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
                 string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,9 +64,27 @@ namespace FileControlAvalonia.DataBase
                 command.ExecuteNonQuery();
             }
         }
-        public static void ChangePasswordDataBase()
+        public static void ChangePasswordDataBase(string newPassword)
         {
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            {
+                var command = new SQLiteCommand(connection)
+                {
+                    CommandText = $"PRAGMA rekey = '{newPassword}';"
+                };
+                command.ExecuteNonQuery();
 
+
+
+                //var command = connection.CreateCommand();
+                //command.CommandText = "SELECT quote($newPassword);";
+                //command.Parameters.AddWithValue("$newPassword", newPassword);
+                //var quotedNewPassword = (string)command.ExecuteScalar();
+
+                //command.CommandText = "PRAGMA rekey = " + quotedNewPassword;
+                //command.Parameters.Clear();
+                //command.ExecuteNonQuery();
+            }
         }
     }
 }

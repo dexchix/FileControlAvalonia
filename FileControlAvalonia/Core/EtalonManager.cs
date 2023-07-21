@@ -18,8 +18,7 @@ namespace FileControlAvalonia.Core
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(fileTree);
 
-            var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
-            using (var connection = new SQLiteConnection(options))
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
                 var commandClearTableFiles = new SQLiteCommand(connection)
                 {
@@ -56,9 +55,8 @@ namespace FileControlAvalonia.Core
         public static FileTree GetEtalon()
         {
             List<FileDB> etalon;
-            var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
 
-            using (var connection = new SQLiteConnection(options))
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
                 var command = new SQLiteCommand(connection)
                 {

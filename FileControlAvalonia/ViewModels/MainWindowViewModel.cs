@@ -202,9 +202,9 @@ namespace FileControlAvalonia.ViewModels
         public MainWindowViewModel()
         {
             ViewCollectionFiles = new ObservableCollection<FileTree>();
-            if (Directory.Exists(SettingsManager.rootPath))
+            if (Directory.Exists(SettingsManager.RootPath))
             {
-                _mainFileTree = new FileTree(SettingsManager.rootPath, true);
+                _mainFileTree = new FileTree(SettingsManager.RootPath, true);
                 _mainFileTree.Children!.Clear();
             }
 

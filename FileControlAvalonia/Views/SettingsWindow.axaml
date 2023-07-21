@@ -3,10 +3,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:FileControlAvalonia.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
+        mc:Ignorable="d"
         x:Class="FileControlAvalonia.Views.SettingsWindow"
         Title="Настройки" Icon="/Assets/setting.png"
-		Width="600" Height="625"
+		Width="600" Height="555"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
@@ -44,8 +44,6 @@
 			</Button>
 			
 			<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="11.5" Margin="5 0 0 0">
-				<Label Content = "Сервер"></Label>
-				<Label Content = "База данных"></Label>
 				<Label Content = "Пользователь"></Label>
 				<Label Content = "Пароль"></Label>
 				<Label Content = "Имя таблицы"></Label>
@@ -63,8 +61,6 @@
 			</StackPanel>
 			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
 						HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding ServerVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding DataBaseVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>
 				<TextBox PasswordChar="*" HorizontalAlignment="Stretch" Text ="{Binding PasswordVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}, Mode=TwoWay"></TextBox>

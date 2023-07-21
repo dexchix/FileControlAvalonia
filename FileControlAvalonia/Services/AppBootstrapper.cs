@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileControlAvalonia.DataBase;
 using FileControlAvalonia.ViewModels;
 using FileControlAvalonia.Views;
 using Splat;

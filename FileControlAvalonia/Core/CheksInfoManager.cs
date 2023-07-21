@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using FileControlAvalonia.DataBase;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,7 @@ namespace FileControlAvalonia.Core
     {
         public static void RecordDataOfLastCheck(string dateLastCheck)
         {
-            var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
-            using (var connection = new SQLiteConnection(options))
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
                 var insertInfoCommand = new SQLiteCommand(connection)
                 {
@@ -24,8 +24,7 @@ namespace FileControlAvalonia.Core
         }
         public static void RecordInfoOfCreateEtalon(string userLevel, string dateCreateEtalon)
         {
-            var options = new SQLiteConnectionString("FileIntegrityDB.db", true, "password");
-            using (var connection = new SQLiteConnection(options))
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
                 var insertInfoCommand = new SQLiteCommand(connection)
                 {

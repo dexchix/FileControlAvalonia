@@ -32,10 +32,10 @@ namespace FileControlAvalonia.FileTreeLogic
         }
         public FileTreeNavigator()
         {
-            if (Directory.Exists(SettingsManager.rootPath))
+            if (Directory.Exists(SettingsManager.RootPath))
             {
-                fileTree = new FileTree(SettingsManager.rootPath, true);
-                watcher = new Watcher(SettingsManager.rootPath, this);
+                fileTree = new FileTree(SettingsManager.RootPath, true);
+                watcher = new Watcher(SettingsManager.RootPath, this);
                 CheckChangeRootPath();
             }
         }
@@ -161,7 +161,7 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 while (true)
                 {
-                    if (!Directory.Exists(SettingsManager.rootPath))
+                    if (!Directory.Exists(SettingsManager.RootPath))
                     {
                         CheckExistRootPath();
                         return;

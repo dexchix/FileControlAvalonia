@@ -175,7 +175,7 @@ namespace FileControlAvalonia.Models
 
         private ObservableCollection<FileTree>? LoadChildren()
         {
-            var extensions = SettingsManager.modifyExtensions;
+            var extensions = SettingsManager.ModifyExtensions;
 
             if (!IsDirectory)
             {

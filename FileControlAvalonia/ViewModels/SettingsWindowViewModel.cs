@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using FileControlAvalonia.Core;
+using FileControlAvalonia.DataBase;
 using FileControlAvalonia.ViewModels.Interfaces;
 using ReactiveUI;
 using System;
@@ -15,8 +16,6 @@ namespace FileControlAvalonia.ViewModels
     public class SettingsWindowViewModel : ReactiveObject, ISettingsWindowViewModel
     {
         private Settings _settings = SettingsManager.GetSettings()!;
-        private string? _serverVM;
-        private string? _dataBaseVM;
         private string? _userVM;
         private string? _passwordVM;
         private string? _nameTableVM;
@@ -32,24 +31,6 @@ namespace FileControlAvalonia.ViewModels
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
 
-        public string ServerVM
-        {
-            get => _serverVM!;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _serverVM, value);
-                _settings.Server = value;
-            }
-        }
-        public string DataBaseVM
-        {
-            get => _dataBaseVM!;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _dataBaseVM, value);
-                _settings.DataBase = value;
-            }
-        }
         public string UserVM
         {
             get => _userVM!;
@@ -180,8 +161,6 @@ namespace FileControlAvalonia.ViewModels
         public SettingsWindowViewModel()
         {
             _settings = _settings ?? new Settings();
-            _serverVM = _settings.Server;
-            _dataBaseVM = _settings.DataBase;
             _userVM = _settings.User;
             _passwordVM = _settings.Password;
             _nameTableVM = _settings.NameTable;
@@ -206,6 +185,7 @@ namespace FileControlAvalonia.ViewModels
         public void Confirm(Window window)
         {
             SettingsManager.SetSettings(_settings);
+            DataBaseManager.ChangePasswordDataBase(PasswordVM);
             window.Close();
         }
         #endregion

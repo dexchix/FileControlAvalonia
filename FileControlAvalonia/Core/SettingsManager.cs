@@ -16,9 +16,11 @@ namespace FileControlAvalonia.Core
     public static class SettingsManager
     {
         private static List<string> extensions = new List<string>();
-        public static List<string> modifyExtensions = new List<string>();
-        public static string rootPath;
-        public static string? settingsString;
+
+        public static List<string> ModifyExtensions { get; set; } = new List<string>();
+        public static string RootPath { get; set; }
+        public static string? SettingsString { get; set; }
+        public static Settings AppSettings { get; set; }
 
         public static void SetStartupSettings()
         {
@@ -35,9 +37,9 @@ namespace FileControlAvalonia.Core
                 {
                     serializer.Serialize(streamWriter, settings);
                 }
-                settingsString = settings.AvalibleFileExtensions;
+                SettingsString = settings.AvalibleFileExtensions;
                 extensions.Clear();
-                modifyExtensions.Clear();
+                ModifyExtensions.Clear();
                 if (settings.AvalibleFileExtensions != null)
                 {
                     extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
@@ -45,15 +47,15 @@ namespace FileControlAvalonia.Core
                     {
                         foreach (string extension in extensions)
                         {
-                            modifyExtensions.Add("." + extension);
+                            ModifyExtensions.Add("." + extension);
                         }
                     }
                 }
-                rootPath = settings.RootPath;
+                RootPath = settings.RootPath;
                 if (Directory.Exists(settings.RootPath))
                 {
                     var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
-                    mainVM.MainFileTree = new Models.FileTree(rootPath,true);
+                    mainVM.MainFileTree = new Models.FileTree(RootPath,true);
                     mainVM.MainFileTree.Children.Clear();
                 }
              
@@ -70,13 +72,16 @@ namespace FileControlAvalonia.Core
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamReader streamReader = new StreamReader("Settings.xml"))
                 {
-                    return serializer.Deserialize(streamReader) as Settings;
+                    var settings = serializer.Deserialize(streamReader) as Settings;
+                    AppSettings = settings;
+                    return settings;
                 }
             }
             catch (Exception ex)
             {
                 LogManager.GetCurrentClassLogger().Error(ex);
                 var settings = new Settings();
+                AppSettings = settings;
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {
