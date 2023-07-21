@@ -3,7 +3,6 @@ using FileControlAvalonia.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;

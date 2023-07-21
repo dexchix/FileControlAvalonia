@@ -31,13 +31,11 @@
     <PackageReference Include="EmitMapper" Version="1.0.0" />
     <PackageReference Include="NLog" Version="5.1.4" />
     <PackageReference Include="Splat" Version="14.6.37" />
+    <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.5" />
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.5" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.5" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.5" />
-    <PackageReference Include="Stub.System.Data.SQLite.SEE" Version="1.0.118.1" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.0" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
   </ItemGroup>
 
