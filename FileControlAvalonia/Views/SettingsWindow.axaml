@@ -62,7 +62,7 @@
 			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2" 
 						HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>
-				<TextBox PasswordChar="*" HorizontalAlignment="Stretch" Text ="{Binding PasswordVM}, Mode=TwoWay"></TextBox>
+				<TextBox HorizontalAlignment="Stretch" Text ="{Binding PasswordVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding PathOPCServerVM}, Mode=TwoWay"></TextBox>
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding TagTotalStatusVM}, Mode=TwoWay"></TextBox>

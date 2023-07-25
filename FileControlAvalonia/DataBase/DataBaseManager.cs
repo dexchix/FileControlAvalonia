@@ -68,22 +68,19 @@ namespace FileControlAvalonia.DataBase
         {
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                var command = new SQLiteCommand(connection)
+                try
                 {
-                    CommandText = $"PRAGMA rekey = '{newPassword}';"
-                };
-                command.ExecuteNonQuery();
+                    var command = new SQLiteCommand(connection)
+                    {
+                        CommandText = $"PRAGMA rekey = '{newPassword}';"
+                    };
+                    command.ExecuteNonQuery();
+                }
+                catch
+                {
 
-
-
-                //var command = connection.CreateCommand();
-                //command.CommandText = "SELECT quote($newPassword);";
-                //command.Parameters.AddWithValue("$newPassword", newPassword);
-                //var quotedNewPassword = (string)command.ExecuteScalar();
-
-                //command.CommandText = "PRAGMA rekey = " + quotedNewPassword;
-                //command.Parameters.Clear();
-                //command.ExecuteNonQuery();
+                }
+                DataBaseOptions.ChangeDataBaseOptions();
             }
         }
     }

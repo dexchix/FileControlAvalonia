@@ -24,5 +24,10 @@ namespace FileControlAvalonia.DataBase
 
             Options = new SQLiteConnectionString(NameDB, true, Password);
         }
+        public static void ChangeDataBaseOptions()
+        {
+            Password = SettingsManager.AppSettings.Password;
+            Options = new SQLiteConnectionString(NameDB, false, Password);
+        }
     }
 }
