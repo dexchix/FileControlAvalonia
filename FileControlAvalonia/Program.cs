@@ -6,7 +6,7 @@ using NLog.Config;
 using NLog.Targets;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.DataBase;
-using FileControlAvalonia.Core;
+using FileControlAvalonia.SettingsApp;
 
 namespace FileControlAvalonia
 {

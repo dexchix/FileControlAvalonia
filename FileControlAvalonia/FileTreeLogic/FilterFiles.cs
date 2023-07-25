@@ -1,5 +1,6 @@
 ﻿using FileControlAvalonia.Core;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.SettingsApp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

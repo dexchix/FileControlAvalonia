@@ -12,6 +12,7 @@ using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Helper;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Services;
+using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
 using ReactiveUI;
@@ -321,7 +322,6 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = false;
             ProgressBarMaximum = EtalonManager.CountFiles;
             ProgressBarValue = 0;
-            ProgressBarText = $"{ProgressBarValue} из {ProgressBarMaximum}";
 
             await Task.Run(() =>
             {
@@ -461,6 +461,7 @@ namespace FileControlAvalonia.ViewModels
         }
 
         #endregion
+
         #region METHODS
         private void ChangeIsExpandedProp(FileTree folder, bool flag)
         {

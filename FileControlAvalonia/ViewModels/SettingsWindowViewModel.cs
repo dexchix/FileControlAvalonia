@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
-using FileControlAvalonia.Core;
 using FileControlAvalonia.DataBase;
+using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.ViewModels.Interfaces;
 using ReactiveUI;
 using System;
@@ -185,7 +185,6 @@ namespace FileControlAvalonia.ViewModels
         public void Confirm(Window window)
         {
             SettingsManager.SetSettings(_settings);
-            DataBaseManager.ChangePasswordDataBase(PasswordVM);
             window.Close();
         }
         #endregion

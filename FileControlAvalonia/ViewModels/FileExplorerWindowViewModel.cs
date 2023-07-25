@@ -17,7 +17,7 @@ using FileControlAvalonia.Helper;
 using System.Collections.ObjectModel;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.FileTreeLogic;
-using FileControlAvalonia.Core;
+using FileControlAvalonia.SettingsApp;
 
 namespace FileControlAvalonia.ViewModels
 {

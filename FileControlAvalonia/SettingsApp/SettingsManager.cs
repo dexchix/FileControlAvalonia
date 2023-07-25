@@ -1,4 +1,5 @@
-﻿using FileControlAvalonia.ViewModels;
+﻿using FileControlAvalonia.DataBase;
+using FileControlAvalonia.ViewModels;
 using NLog;
 using Splat;
 using System;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace FileControlAvalonia.Core
+namespace FileControlAvalonia.SettingsApp
 {
     public static class SettingsManager
     {
@@ -55,10 +56,10 @@ namespace FileControlAvalonia.Core
                 if (Directory.Exists(settings.RootPath))
                 {
                     var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
-                    mainVM.MainFileTree = new Models.FileTree(RootPath,true);
+                    mainVM.MainFileTree = new Models.FileTree(RootPath, true);
                     mainVM.MainFileTree.Children.Clear();
                 }
-             
+
             }
             catch
             {
@@ -81,6 +82,7 @@ namespace FileControlAvalonia.Core
             {
                 LogManager.GetCurrentClassLogger().Error(ex);
                 var settings = new Settings();
+                settings.Password = DataBaseOptions.Password;
                 AppSettings = settings;
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))

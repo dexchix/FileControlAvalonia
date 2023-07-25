@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace FileControlAvalonia.Core
+namespace FileControlAvalonia.SettingsApp
 {
     [XmlRoot("Settings")]
     public class Settings

@@ -26,8 +26,9 @@ namespace FileControlAvalonia.Core
                 SetStatus(file);
 
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"{Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue} " +
-                    $"из {Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum}";
+                //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"{Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue} " +
+                //    $"из {Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum}";
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}";
 
                 if (file.IsDirectory)
                 {

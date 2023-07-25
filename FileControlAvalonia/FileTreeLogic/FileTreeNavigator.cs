@@ -1,5 +1,5 @@
-﻿using FileControlAvalonia.Core;
-using FileControlAvalonia.Models;
+﻿using FileControlAvalonia.Models;
+using FileControlAvalonia.SettingsApp;
 using NLog;
 using ReactiveUI;
 using Splat;

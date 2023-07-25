@@ -5,7 +5,7 @@
 		xmlns:c ="using:FileControlAvalonia.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignHeight="600"
         x:Class="FileControlAvalonia.Views.MainWindow"
         Icon="/Assets/CopyModelDifferences_32x32.ico"
         Title="Контроль целостности ПО ВУ"
@@ -177,7 +177,7 @@
 								<Button Grid.RowSpan="3" Grid.Column="2" Command="{Binding DataContext.DeliteFileCommand, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
 									CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
 									<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-										<Image Source="/Assets/deliteFile.png" Height="20"></Image>
+										<Image Source="/Assets/deliteFile.png" Height="17"></Image>
 										<Label Content="Удалить"></Label>
 									</StackPanel>
 									<Button.Styles>
@@ -190,12 +190,12 @@
 											<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
 											<Setter Property="Content" Value="Удалить"></Setter>
 											<Setter Property="BorderBrush" Value="Black"></Setter>
-											<Setter Property="BorderThickness" Value="2"></Setter>
+											<Setter Property="BorderThickness" Value="1"></Setter>
 										</Style>
 										<Style Selector="Button:pointerover /template/ ContentPresenter">
 											<Setter Property="Background" Value="Gray"></Setter>
 											<Setter Property="BorderBrush" Value="Black"></Setter>
-											<Setter Property="BorderThickness" Value="2"></Setter>
+											<Setter Property="BorderThickness" Value="1"></Setter>
 										</Style>
 									</Button.Styles>
 								</Button>
@@ -314,7 +314,7 @@
 								</Panel>
 							</Border>
 							<LayoutTransformControl HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True" Name="PART_LayoutTransformControl">
-								<TextBlock Foreground="Black" Text="{Binding ProgressBarText}" />
+								<Label Foreground="Black" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Content="{Binding ProgressBarText}"></Label>
 							</LayoutTransformControl>
 						</Grid>
 					</ControlTemplate>
