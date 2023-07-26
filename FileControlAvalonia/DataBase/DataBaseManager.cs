@@ -53,7 +53,15 @@ namespace FileControlAvalonia.DataBase
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                  Creator VARCHAR(512),
                                                  Date VARCHAR(512),
-                                                 DateLastCheck VARCHAR(512)
+                                                 DateLastCheck VARCHAR(512),
+                                                 TotalFiles VARCHAR(512),
+                                                 Checked VARCHAR(512),
+                                                 PartialChecked VARCHAR(512),
+                                                 UnChecked VARCHAR(512),
+                                                 NoAccess VARCHAR(512),
+                                                 NotFound VARCHAR(512),
+                                                 NotChecked VARCHAR(512)
+                                                 
                                              );";
 
                 var command = new SQLiteCommand(connection);

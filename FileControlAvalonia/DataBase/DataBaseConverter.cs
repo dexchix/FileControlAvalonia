@@ -28,7 +28,7 @@ namespace FileControlAvalonia.DataBase
         public FileTree ConvertFormatDBToFileTree(List<FileDB> files)
         {
 
-            var etalonTree = new FileTree(files[fileCounter].Path, true, isRoot: true, loadChildren: false)
+            var etalonTree = new FileTree(files[fileCounter].Path, true, isRoot: true)
             {
                 ID = files[fileCounter].ID,
                 EHash = files[fileCounter].HashSum,
