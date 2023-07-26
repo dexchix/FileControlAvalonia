@@ -21,7 +21,7 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
-            Deactivated += DeactivatedWindow;
+            //Deactivated += DeactivatedWindow;
 
             this.WhenActivated(d => d(ViewModel!.ShowDialogInfoWindow.RegisterHandler(InfoWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogSettingsWindow.RegisterHandler(SettingsWindowShowDialog)));

@@ -44,7 +44,7 @@ namespace FileControlAvalonia.DataBase
             while (fileCounter < files.Count)
             {
                 var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path),
-                                           FindObjectById(etalonTree, files[fileCounter].ParentID), loadChildren: false)
+                                           FileTreeNavigator.FindObjectById(etalonTree, files[fileCounter].ParentID), loadChildren: false)
                 {
                     ID = files[fileCounter].ID,
                     EHash = files[fileCounter].HashSum,
@@ -55,29 +55,13 @@ namespace FileControlAvalonia.DataBase
                 {
                     addFile.Children.Clear();
                 }
-                var parent = FindObjectById(etalonTree, files[fileCounter].ParentID);
+                var parent = FileTreeNavigator.FindObjectById(etalonTree, files[fileCounter].ParentID);
                 parent.Children.Add(addFile);
                 fileCounter++;
             }
             return etalonTree;
         }
 
-        public FileTree FindObjectById(FileTree etalonFileTree, int targetId)
-        {
-            if (etalonFileTree.ID == targetId)
-                return etalonFileTree;
-
-            foreach (var child in etalonFileTree.Children.ToList())
-            {
-                if (child.IsDirectory)
-                {
-                    var result = FindObjectById(child, targetId);
-                    if (result != null)
-                        return result;
-                }
-            }
-            return null;
-        }
         public void FillDBListFiles(FileTree mainFileTree, List<FileDB> filesDB)
         {
             if (filesDB.Count == 0)

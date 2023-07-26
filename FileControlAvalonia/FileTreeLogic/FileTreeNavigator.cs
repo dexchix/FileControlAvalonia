@@ -139,7 +139,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <summary>
         /// Очистка формы 
         /// </summary>
-        public void CheckExistRootPath()
+        public void ClearFileExplorerForm()
         {
             try
             {
@@ -153,6 +153,28 @@ namespace FileControlAvalonia.FileTreeLogic
             }
         }
         /// <summary>
+        /// Поиск файла в дереве по ID
+        /// </summary>
+        /// <param name="etalonFileTree"></param>
+        /// <param name="targetId"></param>
+        /// <returns></returns>
+        public static FileTree FindObjectById(FileTree etalonFileTree, int targetId)
+        {
+            if (etalonFileTree.ID == targetId)
+                return etalonFileTree;
+
+            foreach (var child in etalonFileTree.Children.ToList())
+            {
+                if (child.IsDirectory)
+                {
+                    var result = FindObjectById(child, targetId);
+                    if (result != null)
+                        return result;
+                }
+            }
+            return null;
+        }
+        /// <summary>
         /// Проверка изменения путей родительской папки и до неё
         /// </summary>
         private void CheckChangeRootPath()
@@ -163,9 +185,10 @@ namespace FileControlAvalonia.FileTreeLogic
                 {
                     if (!Directory.Exists(SettingsManager.RootPath))
                     {
-                        CheckExistRootPath();
+                        ClearFileExplorerForm();
                         return;
                     }
+                    Task.Delay(1000);
                 }
             });
         }

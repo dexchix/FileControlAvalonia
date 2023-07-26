@@ -12,7 +12,8 @@ namespace FileControlAvalonia.Core
 {
     public class EtalonManager
     {
-        public static int CountFiles { get; set; }
+        public static FileTree CurentEtalon = GetEtalon();
+        public static int CountFilesEtalon { get; set; }
         public static void CreateEtalon(FileTree fileTree)
         {
             var converter = new DataBase.DataBaseConverter();
@@ -66,8 +67,8 @@ namespace FileControlAvalonia.Core
             }
             var converter = new DataBaseConverter();
             var etalonInDBContext = converter.ConvertFormatDBToFileTree(etalon);
-            CountFiles = etalon.Count;
-
+            CountFilesEtalon = etalon.Count;
+            FileTree._counter = -1;
             return etalonInDBContext;
         }
 

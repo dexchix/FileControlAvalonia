@@ -311,21 +311,13 @@ namespace FileControlAvalonia.ViewModels
             FileTree etalon = null;
             Comprasion comparator = new Comprasion();
             ProgressBarIsVisible = true;
-            ProgressBarLoopScrol = true;
-            ProgressBarText = "Выгрузка эталона";
 
-            await Task.Run(() =>
-            {
-                etalon = EtalonManager.GetEtalon();
-            });
-
-            ProgressBarLoopScrol = false;
-            ProgressBarMaximum = EtalonManager.CountFiles;
+            ProgressBarMaximum = EtalonManager.CountFilesEtalon;
             ProgressBarValue = 0;
 
             await Task.Run(() =>
             {
-                FilesCollectionManager.MergeFileTrees(MainFileTree, etalon);
+                FilesCollectionManager.MergeFileTrees(MainFileTree, EtalonManager.CurentEtalon);
                 comparator.CompareTrees(MainFileTree, ProgressBarValue);
             });
 
@@ -393,9 +385,17 @@ namespace FileControlAvalonia.ViewModels
                 var result = await ShowDialogFileExplorerWindow.Handle(Locator.Current.GetService<FileExplorerWindowViewModel>()!);
             });
         }
-        public void ShowEtalon()
+        async public void ShowEtalon()
         {
+            try
+            {
+                MainFileTree = EtalonManager.CurentEtalon;
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            }
+            catch
+            {
 
+            }
         }
 
         public void ExpandAllNodesCommand()

@@ -11,7 +11,7 @@ namespace FileControlAvalonia.Views
         public InfoWindow()
         {
             InitializeComponent();
-            Deactivated += DeactivatedWindow;
+            //Deactivated += DeactivatedWindow;
         }
 
         private void DeactivatedWindow(object? sender, EventArgs e)

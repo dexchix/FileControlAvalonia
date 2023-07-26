@@ -187,6 +187,10 @@ namespace FileControlAvalonia.ViewModels
             SettingsManager.SetSettings(_settings);
             window.Close();
         }
+        public void ChangePassword()
+        {
+
+        }
         #endregion
     }
 }
