@@ -5,6 +5,8 @@
 		xmlns:c ="using:FileControlAvalonia.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:i ="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+		xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         mc:Ignorable="d" d:DesignHeight="600"
         x:Class="FileControlAvalonia.Views.MainWindow"
         Icon="/Assets/CopyModelDifferences_32x32.ico"
@@ -21,6 +23,11 @@
 		<c:ForegroundConverter x:Key="ForegroundConverter"/>
 		<c:BackGroundConverter x:Key="BackGroundConverter"/>
 	</Window.Resources>
+	<i:Interaction.Behaviors>
+		<ia:EventTriggerBehavior EventName="Activated">
+			<ia:InvokeCommandAction Command="{Binding ShowEtalon}"/>
+		</ia:EventTriggerBehavior>
+	</i:Interaction.Behaviors>
 
 	<Design.DataContext>
 		<vm:MainWindowViewModel/>

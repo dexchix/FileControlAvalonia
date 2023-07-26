@@ -393,6 +393,10 @@ namespace FileControlAvalonia.ViewModels
                 var result = await ShowDialogFileExplorerWindow.Handle(Locator.Current.GetService<FileExplorerWindowViewModel>()!);
             });
         }
+        public void ShowEtalon()
+        {
+
+        }
 
         public void ExpandAllNodesCommand()
         {
