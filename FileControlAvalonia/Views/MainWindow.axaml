@@ -42,6 +42,7 @@
 		<Style Selector="Button:pointerover.h1 /template/ ContentPresenter">
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="1"></Setter>
+			<Setter Property="Background" Value="Gray"></Setter>
 		</Style>
 		<Style Selector="TextBlock.f1">
 			<Setter Property="FontSize" Value="12"></Setter>
