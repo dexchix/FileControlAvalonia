@@ -71,6 +71,55 @@ namespace FileControlAvalonia.Core
             FileTree._counter = -1;
             return etalonInDBContext;
         }
-
+        public static void AddFileInDB(FileTree file)
+        {
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            {
+                var insertCommandFilesTable = new SQLiteCommand(connection)
+                {
+                    CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum) " +
+                           $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.FLastUpdate}', '{file.FVersion}', '{file.FHash}');"
+                };
+                insertCommandFilesTable.ExecuteNonQuery();
+                if (file.Children != null)
+                    AddChildrenInDB(file);
+            }
+        }
+        private static void AddChildrenInDB(FileTree file)
+        {
+            foreach (var child in file.Children)
+            {
+                AddFileInDB(child);
+            }
+        }
+        public static void DeliteFileInDB(FileTree file)
+        {
+            if (file.Children != null)
+            {
+                var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(file);
+                using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+                {
+                    foreach (var diletedFile in listDelitedFiles)
+                    {
+                        var insertCommandFilesTable = new SQLiteCommand(connection)
+                        {
+                            CommandText = $"DELETE FROM FilesTable WHERE Path = '{diletedFile.Path}';"
+                        };
+                        insertCommandFilesTable.ExecuteNonQuery();
+                    }
+                }
+            }
+            else
+            {
+                using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+                {
+                    var insertCommandFilesTable = new SQLiteCommand(connection)
+                    {
+                        CommandText = $"DELETE FROM FilesTable WHERE Path = '{file.Path}';"
+                    };
+                    insertCommandFilesTable.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

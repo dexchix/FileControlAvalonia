@@ -236,9 +236,9 @@ namespace FileControlAvalonia.ViewModels
                 }
             };
 
-            MessageBus.Current.Listen<FileTree>().Subscribe(transportFileTree =>
+            MessageBus.Current.Listen<FileTree>().Subscribe(async transportFileTree =>
             {
-                FilesCollectionManager.AddFiles(MainFileTree, transportFileTree);
+                await Task.Run(() => { FilesCollectionManager.AddFiles(MainFileTree, transportFileTree); }); 
                 //Comprasion.SetStatus(MainFileTree);
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
             });
@@ -460,8 +460,8 @@ namespace FileControlAvalonia.ViewModels
 
         public void DeliteFileCommand(FileTree delitedFile)
         {
-            FilesCollectionManager.DeliteFile(delitedFile,
-                ViewCollectionFiles, _mainFileTree);
+            FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, _mainFileTree);
+            EtalonManager.DeliteFileInDB(delitedFile);
         }
 
         #endregion

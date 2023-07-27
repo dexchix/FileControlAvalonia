@@ -37,7 +37,7 @@ namespace FileControlAvalonia.DataBase
             };
             if (etalonTree.IsDirectory)
             {
-                etalonTree.Children.Clear();
+                etalonTree.Children!.Clear();
             }
             fileCounter++;
 
@@ -55,8 +55,8 @@ namespace FileControlAvalonia.DataBase
                 {
                     addFile.Children.Clear();
                 }
-                var parent = FileTreeNavigator.FindObjectById(etalonTree, files[fileCounter].ParentID);
-                parent.Children.Add(addFile);
+                var parent = FileTreeNavigator.SearchFile(Path.GetDirectoryName(addFile.Path)!,etalonTree);
+                parent.Children!.Add(addFile);
                 fileCounter++;
             }
             return etalonTree;
@@ -78,14 +78,13 @@ namespace FileControlAvalonia.DataBase
                 parents.Add(addedFileDB.Path, addedFileDB);
                 fileCounter++;
             }
-            foreach (var file in mainFileTree.Children!)
+            foreach (var file in mainFileTree.Children!.ToList())
             {
 
                 if (file.IsDirectory)
                 {
                     var addedFileDB = new FileDB(fileCounter, file.Name, file.Path, file.FLastUpdate, file.FVersion, file.FHash);
                     filesDB.Add(addedFileDB);
-                    //if (parents.All(x => x.Key == addedFileDB.path))
                     parents.Add(addedFileDB.Path, addedFileDB);
                     fileCounter++;
                     FillDBListFiles(file, filesDB);

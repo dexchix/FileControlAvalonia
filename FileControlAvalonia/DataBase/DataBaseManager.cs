@@ -23,19 +23,19 @@ namespace FileControlAvalonia.DataBase
             {
                 if (!File.Exists(databasePath))
                 {
-                    ConnectionDataBase();
+                    CreateDataBase();
                 }
             }
             else
             {
                 if (!File.Exists(databasePath))
                 {
-                    ConnectionDataBase();
+                    CreateDataBase();
                 }
             }
 
         }
-        private static void ConnectionDataBase()
+        private static void CreateDataBase()
         {
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {

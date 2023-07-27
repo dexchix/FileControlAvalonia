@@ -61,7 +61,7 @@ namespace FileControlAvalonia.Models
             get => _id;
             set => this.RaiseAndSetIfChanged(ref _id, value);
         }
-        public int IdParent
+        public int ParentID
         {
             get => _idParent;
             set => this.RaiseAndSetIfChanged(ref _idParent, value);

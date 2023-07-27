@@ -1,4 +1,7 @@
-﻿using FileControlAvalonia.Models;
+﻿using FileControlAvalonia.Core;
+using FileControlAvalonia.DataBase;
+using FileControlAvalonia.Models;
+using SQLite;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,6 +21,14 @@ namespace FileControlAvalonia.FileTreeLogic
                 {
                     var mainParent = FileTreeNavigator.SearchFile(file.Parent!.Path, mainFileTree);
                     mainFileTree.Children!.Add(file);
+                    //Добавление в БД
+                    //=======================================================================
+                    EtalonManager.AddFileInDB(file);
+                    file.EVersion = file.FVersion;
+                    file.EHash = file.FHash;
+                    file.ELastUpdate = file.FLastUpdate;
+                    //========================================================================
+
                     file.Parent = mainParent;
                 }
                 else if (mainFileTree.Children!.Any(x => x.Path == file.Path) && file.IsDirectory)
@@ -79,7 +90,7 @@ namespace FileControlAvalonia.FileTreeLogic
         }
         public static void MergeFileTrees(FileTree mainFileTree, FileTree etalonFileTree)
         {
-            
+
 
             foreach (var file in mainFileTree.Children!.ToList())
             {
