@@ -5,6 +5,7 @@ using FileControlAvalonia.ViewModels;
 using Splat;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,9 @@ namespace FileControlAvalonia.Core
         public int UnChecked = 0;
         public int NoAccess = 0;
         public int Missing = 0;
-        public void CompareTrees(FileTree mainFileTree, int count)
+        public void CompareFiles(ObservableCollection<FileTree> mainFileTreeCollection, int count)
         {
-            foreach (var file in mainFileTree.Children)
+            foreach (var file in mainFileTreeCollection.ToList())
             {
                 SetStatus(file);
 
@@ -32,27 +33,27 @@ namespace FileControlAvalonia.Core
 
                 if (file.IsDirectory)
                 {
-                    CompareTrees(file, count);
+                    CompareFiles(file.Children, count);
                 }
             }
         }
 
-        public void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
-        {
-            foreach (var file in addedFileTree.Children!.ToList())
-            {
-                if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
-                {
-                    var mainParent = FileTreeNavigator.SearchFileInFileTree(file.Parent!.Path, mainFileTree);
-                    mainFileTree.Children!.Add(file);
-                    file.Parent = mainParent;
-                }
-                else if (mainFileTree.Children!.Any(x => x.Path == file.Path) && file.IsDirectory)
-                {
-                    AddFiles(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
-                }
-            }
-        }
+        //public void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
+        //{
+        //    foreach (var file in addedFileTree.Children!.ToList())
+        //    {
+        //        if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
+        //        {
+        //            var mainParent = FileTreeNavigator.SearchFileInFileTree(file.Parent!.Path, mainFileTree);
+        //            mainFileTree.Children!.Add(file);
+        //            file.Parent = mainParent;
+        //        }
+        //        else if (mainFileTree.Children!.Any(x => x.Path == file.Path) && file.IsDirectory)
+        //        {
+        //            AddFiles(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
+        //        }
+        //    }
+        //}
         public void SetStatus(FileTree fileTree)
         {
             if (fileTree.EHash == fileTree.FHash &&

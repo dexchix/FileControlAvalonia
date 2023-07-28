@@ -15,6 +15,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// </summary>
         private static void AddFilesToExistingFileTree(FileTree mainFileTree, FileTree addedFileTree)
         {
+            var addedFilesCollection = new ObservableCollection<FileTree>();
             foreach (var file in addedFileTree.Children!.ToList())
             {
                 if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
@@ -23,7 +24,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     mainFileTree.Children!.Add(file);
                     //Добавление в БД
                     //=======================================================================
-                    EtalonManager.AddFileInDB(file);
+                    addedFilesCollection.Add(file);
                     file.EVersion = file.FVersion;
                     file.EHash = file.FHash;
                     file.ELastUpdate = file.FLastUpdate;
@@ -36,6 +37,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     AddFilesToExistingFileTree(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
                 }
             }
+            EtalonManager.CreateEtalon(addedFilesCollection);
         }
         public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles)
         {
@@ -50,13 +52,14 @@ namespace FileControlAvalonia.FileTreeLogic
                     mainCollectionFiles.Add(addFile);
                     //Добавление в БД
                     //=======================================================================
-                    EtalonManager.AddFileInDB(addFile);
+                    //EtalonManager.AddFileInDB(addFile);
                     addFile.EVersion = addFile.FVersion;
                     addFile.EHash = addFile.FHash;
                     addFile.ELastUpdate = addFile.FLastUpdate;
                     //=======================================================================
                 }
             }
+            EtalonManager.CreateEtalon(addedFiles);
         }
 
         /// <summary>

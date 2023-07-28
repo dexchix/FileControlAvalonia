@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
+using FileControlAvalonia.Core;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -96,6 +97,7 @@ namespace FileControlAvalonia.ViewModels
             var childrenTFL = transformFileTree.Children;
             foreach (var children in childrenTFL)
                 children.Parent = null;
+            FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
             Dispose();
             window.Close();

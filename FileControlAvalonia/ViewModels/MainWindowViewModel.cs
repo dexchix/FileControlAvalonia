@@ -234,8 +234,20 @@ namespace FileControlAvalonia.ViewModels
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
-                await Task.Run(() => { FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree); }); 
+                ProgressBarIsVisible = true;
+                ProgressBarLoopScrol = true;
+                ProgressBarText = "Добавление файлов";
+                await Task.Run(() =>
+                {
+                    FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree);
+             
+                });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+
+                ProgressBarLoopScrol = false;
+                ProgressBarText = "Добавление файлов завершно";
+                await Task.Delay(1000);
+                ProgressBarIsVisible = false;
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -334,8 +346,24 @@ namespace FileControlAvalonia.ViewModels
             //MainFileTreeCollection = etalon;
             //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
+            var etalon = EtalonManager.CurentEtalon;
+            ProgressBarIsVisible = true;
 
-            EtalonManager.SetActualsFactParametrsValues(MainFileTreeCollection);
+            ProgressBarMaximum = EtalonManager.CountFilesEtalon;
+            ProgressBarValue = 0;
+            await Task.Run(() =>
+            {
+                FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
+                new Comprasion().CompareFiles(MainFileTreeCollection, ProgressBarValue);
+            });
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            DateLastCheck = DateTime.Now.ToString();
+            ProgressBarText = "Проверка прошла успешно";
+
+            await Task.Delay(1000);
+            ProgressBarIsVisible = false;
+
         }
 
         async public void CreateEtalonCommand()

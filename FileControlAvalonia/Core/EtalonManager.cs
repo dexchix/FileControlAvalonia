@@ -72,28 +72,31 @@ namespace FileControlAvalonia.Core
             FileTree._counter = -1;
             return etalonInDBContext;
         }
-        public static void AddFileInDB(FileTree file)
-        {
-            string parentPath = file.Parent == null ? null : file.Parent.Path;
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            {
-                var insertCommandFilesTable = new SQLiteCommand(connection)
-                {
-                    CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum, ParentPath) " +
-                           $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.FLastUpdate}', '{file.FVersion}', '{file.FHash}', '{parentPath}');"
-                };
-                insertCommandFilesTable.ExecuteNonQuery();
-                if (file.Children != null)
-                    AddChildrenInDB(file);
-            }
-        }
-        private static void AddChildrenInDB(FileTree file)
-        {
-            foreach (var child in file.Children)
-            {
-                AddFileInDB(child);
-            }
-        }
+        //public static void AddFileInDB(FileTree file)
+        //{
+        //    string parentPath = file.Parent == null ? null : file.Parent.Path;
+        //    using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+        //    {
+        //        var insertCommandFilesTable = new SQLiteCommand(connection)
+        //        {
+        //            CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum, ParentPath) " +
+        //                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.FLastUpdate}', '{file.FVersion}', '{file.FHash}', '{parentPath}');"
+        //        };
+        //        insertCommandFilesTable.ExecuteNonQuery();
+        //        if (file.Children != null)
+        //            AddChildrenInDB(file);
+        //    }
+        //    file.EHash = file.FHash;
+        //    file.ELastUpdate = file.FLastUpdate;
+        //    file.EVersion = file.EVersion;
+        //}
+        //private static void AddChildrenInDB(FileTree file)
+        //{
+        //    foreach (var child in file.Children)
+        //    {
+        //        AddFileInDB(child);
+        //    }
+        //}
         public static void DeliteFileInDB(FileTree file)
         {
             if (file.Children != null)
@@ -121,18 +124,6 @@ namespace FileControlAvalonia.Core
                     };
                     insertCommandFilesTable.ExecuteNonQuery();
                 }
-            }
-        }
-        public static void SetActualsFactParametrsValues(ObservableCollection<FileTree> collectionFiles)
-        {
-            foreach(var file in collectionFiles)
-            {
-                file.FVersion = file.FVersion;
-                file.FLastUpdate = file.FLastUpdate;
-                file.FVersion = file.FVersion;
-
-                if (file.IsDirectory)
-                    SetActualsFactParametrsValues(file.Children);
             }
         }
     }

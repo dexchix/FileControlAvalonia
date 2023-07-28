@@ -73,15 +73,7 @@ namespace FileControlAvalonia.Models
         }
         public string FHash
         {
-            get
-            {
-                if (File.Exists(Path))
-                {
-                    return FactParameterizer.CalculateMD5Hash(Path);
-                }
-                else
-                    return "-";
-            }
+            get => _fHash;
             set => this.RaiseAndSetIfChanged(ref _fHash, value);
         }
         public string ELastUpdate
@@ -91,38 +83,17 @@ namespace FileControlAvalonia.Models
         }
         public string FLastUpdate
         {
-            get
-            {
-                if (IsDirectory)
-                {
-                    return new DirectoryInfo(Path).LastWriteTime.ToString();
-                }
-                else
-                {
-                    return new FileInfo(Path).LastWriteTime.ToString();
-                }
-            }
+            get => _fLastUpdate;
             set => this.RaiseAndSetIfChanged(ref _fLastUpdate, value);
         }
         public string EVersion
         {
-            get
-            {
-                return _eVersion;
-            }
+            get => _eVersion;
             set => this.RaiseAndSetIfChanged(ref _eVersion, value);
         }
         public string FVersion
         {
-            get
-            {
-                if (File.Exists(Path))
-                {
-                    var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path);
-                    return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
-                }
-                else return "-";
-            }
+            get => _fVersion;
             set => this.RaiseAndSetIfChanged(ref _fVersion, value);
         }
         public StatusFile Status

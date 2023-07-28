@@ -28,19 +28,6 @@ namespace FileControlAvalonia.DataBase
         }
         public ObservableCollection<FileTree> ConvertFormatDBToFileTreeCollection(List<FileDB> files)
         {
-
-            //var etalonTree = new FileTree(files[fileCounter].Path, true, isRoot: true)
-            //{
-            //    ID = files[fileCounter].ID,
-            //    EHash = files[fileCounter].HashSum,
-            //    ELastUpdate = files[fileCounter].LastUpdate,
-            //    EVersion = files[fileCounter].Version,
-            //};
-            //if (etalonTree.IsDirectory)
-            //{
-            //    etalonTree.Children!.Clear();
-            //}
-            //fileCounter++;
             var etalon = new ObservableCollection<FileTree>();
 
             while (fileCounter < files.Count)
@@ -54,12 +41,9 @@ namespace FileControlAvalonia.DataBase
                         ELastUpdate = files[fileCounter].LastUpdate,
                         EVersion = files[fileCounter].Version,
 
-                        //=======???=======
                         FHash = files[fileCounter].HashSum,
                         FLastUpdate = files[fileCounter].LastUpdate,
                         FVersion = files[fileCounter].Version
-                        //=======???=======
-
                     };
                     
                     if (addFile.IsDirectory)
@@ -77,11 +61,9 @@ namespace FileControlAvalonia.DataBase
                         ELastUpdate = files[fileCounter].LastUpdate,
                         EVersion = files[fileCounter].Version,
 
-                        //=======???=======
                         FHash = files[fileCounter].HashSum,
                         FLastUpdate = files[fileCounter].LastUpdate,
                         FVersion = files[fileCounter].Version
-                        //=======???=======
                     };
                     if (addFile.IsDirectory)
                     {
@@ -91,23 +73,6 @@ namespace FileControlAvalonia.DataBase
                     parent.Children!.Add(addFile);
                     fileCounter++;
                 }
-                //    var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path),
-                //                               FileTreeNavigator.FindObjectById(null, files[fileCounter].ParentID), loadChildren: false)
-                //    {
-                //        ID = files[fileCounter].ID,
-                //        EHash = files[fileCounter].HashSum,
-                //        ELastUpdate = files[fileCounter].LastUpdate,
-                //        EVersion = files[fileCounter].Version,
-                //    };
-                //    if (addFile.IsDirectory)
-                //    {
-                //        addFile.Children.Clear();
-                //    }
-                //    var parent = FileTreeNavigator.SearchFile(Path.GetDirectoryName(addFile.Path)!, null);
-                //    parent.Children!.Add(addFile);
-                //    fileCounter++;
-                //}
-                //return null;
             }
             return etalon;
         }
