@@ -54,7 +54,7 @@ namespace FileControlAvalonia.Models
             {
                 try
                 {
-                    var parent = FileTreeNavigator.SearchFile(Path.GetDirectoryName(e.FullPath)!, FileTreeNavigator.FileTree);
+                    var parent = FileTreeNavigator.SearchFileInFileTree(Path.GetDirectoryName(e.FullPath)!, FileTreeNavigator.FileTree);
                     if (parent.Children?.Where(x => x.Path == e.FullPath).FirstOrDefault() != null) return;
                     var addFile = new FileTree(e.FullPath, Directory.Exists(e.FullPath), parent);
                     addFile.IsChecked = addFile.Parent != null && addFile.Parent.IsChecked != false;
@@ -79,7 +79,7 @@ namespace FileControlAvalonia.Models
             {
                 try
                 {
-                    var file = FileTreeNavigator.SearchFile(e.FullPath, FileTreeNavigator.FileTree);
+                    var file = FileTreeNavigator.SearchFileInFileTree(e.FullPath, FileTreeNavigator.FileTree);
                     if (file == null) return;
                     file.Parent!.Children?.Remove(file);
                     if (e.FullPath == FileTreeNavigator.FileTree.Path)
@@ -102,7 +102,7 @@ namespace FileControlAvalonia.Models
             {
                 try
                 {
-                    var changedFile = FileTreeNavigator.SearchFile(e.OldFullPath, FileTreeNavigator.FileTree);
+                    var changedFile = FileTreeNavigator.SearchFileInFileTree(e.OldFullPath, FileTreeNavigator.FileTree);
                     var duplicat = changedFile.Parent!.Children?.Where(x => x.Path == e.FullPath).FirstOrDefault();
                     changedFile.Parent.Children?.Remove(duplicat!);
                     changedFile.Path = e.FullPath;

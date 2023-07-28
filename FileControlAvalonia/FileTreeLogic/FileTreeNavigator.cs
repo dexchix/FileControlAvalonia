@@ -4,9 +4,11 @@ using NLog;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.FileTreeLogic
@@ -72,7 +74,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// </summary>
         /// <param name="searchedFilePath"></param>
         /// <returns>Экземпляр типа FileTree (Файл)</returns>
-        public static FileTree SearchFile(string searchedFilePath, FileTree fileTree)
+        public static FileTree SearchFileInFileTree(string searchedFilePath, FileTree fileTree)
         {
             if (fileTree.Path == searchedFilePath)
                 return fileTree;
@@ -82,6 +84,19 @@ namespace FileControlAvalonia.FileTreeLogic
                 return SearchTreeParent(searchedFilePath, fileTree);
             else
                 return SearchChildren(searchedFilePath, SearchTreeParent(searchedFilePath, fileTree))!;
+        }
+        /// <summary>
+        /// Поиск файлов в коллекции файлов
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        public static FileTree SeachFileInFilesCollection(string searchedFilePath, ObservableCollection<FileTree> files)
+        {
+            var rootParant = files.Where(x => searchedFilePath.StartsWith(x.Path))
+                                         .OrderByDescending(x => x.Path.Length)
+                                         .FirstOrDefault()!;
+            var parent = SearchFileInFileTree(searchedFilePath,rootParant);
+            return parent;
         }
         /// <summary>
         /// Поиск родительского элемента в дереве

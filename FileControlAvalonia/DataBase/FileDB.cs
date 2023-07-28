@@ -19,32 +19,13 @@ namespace FileControlAvalonia.DataBase
         public string LastUpdate { get; set; }
         public string Version { get; set; }
         public string HashSum { get; set; }
-
-        //[PrimaryKey]
-        //public int ID { get => id; set => id = value; }
-        //public int ParentID { get => idParent; set => idParent = value; }
-        //public string Name { get => name; set => name = value; }
-        //public string Path { get => path; set => path = value; }
-        //public string LastUpdate { get => lastUpdate; set => lastUpdate = value; }
-        //public string Version { get => version; set => version = value; }
-        //public string HashSum { get => hashSum; set => hashSum = value; }
-
-        //public FileDB(int id, string name, string path, string lastUpdate, string version, string hashSum, int idParent =0)
-        //{
-        //    this.id = id;
-        //    this.name = name;
-        //    this.path = path;
-        //    this.lastUpdate = lastUpdate;
-        //    this.version = version;
-        //    this.hashSum = hashSum;
-        //    this.idParent = idParent;
-        //}
+        public string ParentPath { get; set; }
         public FileDB()
         {
 
         }
 
-        public FileDB(int iD, string name, string path, string lastUpdate, string version, string hashSum, int parentID = 0)
+        public FileDB(int iD, string name, string path, string lastUpdate, string version, string hashSum, string parentPath, int parentID = 0)
         {
             ID = iD;
             ParentID = parentID;
@@ -53,6 +34,7 @@ namespace FileControlAvalonia.DataBase
             LastUpdate = lastUpdate;
             Version = version;
             HashSum = hashSum;
+            ParentPath = parentPath;
         }
         public override string ToString()
         {

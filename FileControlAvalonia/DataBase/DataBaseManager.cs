@@ -46,7 +46,8 @@ namespace FileControlAvalonia.DataBase
                                                  Path VARCHAR(512),
                                                  LastUpdate VARCHAR(512),
                                                  Version VARCHAR(512),
-                                                 HashSum VARCHAR(512)
+                                                 HashSum VARCHAR(512),
+                                                 ParentPath VARCHAR(512)
                                              );";
 
                 string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
@@ -61,7 +62,6 @@ namespace FileControlAvalonia.DataBase
                                                  NoAccess VARCHAR(512),
                                                  NotFound VARCHAR(512),
                                                  NotChecked VARCHAR(512)
-                                                 
                                              );";
 
                 var command = new SQLiteCommand(connection);

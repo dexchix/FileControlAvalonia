@@ -77,7 +77,7 @@ namespace FileControlAvalonia.Models
             {
                 if (File.Exists(Path))
                 {
-                    return HashSumCalculator.CalculateMD5Hash(Path);
+                    return FactParameterizer.CalculateMD5Hash(Path);
                 }
                 else
                     return "-";

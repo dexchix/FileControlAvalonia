@@ -43,7 +43,7 @@ namespace FileControlAvalonia.Core
             {
                 if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
                 {
-                    var mainParent = FileTreeNavigator.SearchFile(file.Parent!.Path, mainFileTree);
+                    var mainParent = FileTreeNavigator.SearchFileInFileTree(file.Parent!.Path, mainFileTree);
                     mainFileTree.Children!.Add(file);
                     file.Parent = mainParent;
                 }

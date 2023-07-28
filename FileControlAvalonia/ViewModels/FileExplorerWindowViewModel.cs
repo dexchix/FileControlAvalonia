@@ -53,7 +53,6 @@ namespace FileControlAvalonia.ViewModels
                         s_iconConverter = new IconConverter(new Bitmap(fileStream), new Bitmap(folderStream), new Bitmap(folderOpenStream));
                     }
                 }
-
                 return s_iconConverter;
             }
         }
@@ -93,13 +92,11 @@ namespace FileControlAvalonia.ViewModels
         }
         public void OkCommand(Window window)
         {
-            //var transmitterSelectedFiles = new TransformerFileTrees(_fileTreeNavigator.pathRootFolder, FileTreeNavigator.SearchTreeParent(_fileTreeNavigator.pathRootFolder, FileTree));
-            //var selectedItemsCollection = transmitterSelectedFiles.GetSelectedFiles();
-            //TestChekingFiles.TEST(selectedItemsCollection);
-            //MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(selectedItemsCollection);
-            var sadasd = new TransformerFileTrees(SettingsManager.RootPath, FileTreeNavigator.SearchFile(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
-             
-            MessageBus.Current.SendMessage<FileTree>(sadasd);
+            var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
+            var childrenTFL = transformFileTree.Children;
+            foreach (var children in childrenTFL)
+                children.Parent = null;
+            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
             Dispose();
             window.Close();
         }

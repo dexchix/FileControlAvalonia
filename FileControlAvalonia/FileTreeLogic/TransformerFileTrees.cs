@@ -12,15 +12,13 @@ namespace FileControlAvalonia.Helper
     public class TransformerFileTrees
     {
         #region FIELDS
-        private string _pathRootFolder;
         private FileTree _fileTree;
         private List<FileTree> _removedChildrens;
         private List<FileTree> _parentOfRemoveChild;
         #endregion 
 
-        public TransformerFileTrees(string pathRootFolder, FileTree rootFolder)
+        public TransformerFileTrees(FileTree rootFolder)
         {
-            _pathRootFolder = pathRootFolder;
             _fileTree = rootFolder;
             _removedChildrens = new List<FileTree>();
             _parentOfRemoveChild = new List<FileTree>();

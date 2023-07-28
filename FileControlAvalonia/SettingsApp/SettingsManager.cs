@@ -53,12 +53,12 @@ namespace FileControlAvalonia.SettingsApp
                     }
                 }
                 RootPath = settings.RootPath;
-                if (Directory.Exists(settings.RootPath))
-                {
-                    var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
-                    mainVM.MainFileTree = new Models.FileTree(RootPath, true);
-                    mainVM.MainFileTree.Children.Clear();
-                }
+                //if (Directory.Exists(settings.RootPath))
+                //{
+                //    var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
+                //    mainVM.MainFileTreeCollection = new Models.FileTree(RootPath, true);
+                //    mainVM.MainFileTreeCollection.Children.Clear();
+                //}
 
             }
             catch

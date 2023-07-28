@@ -35,7 +35,7 @@ namespace FileControlAvalonia.ViewModels
     {
         #region FIELDS
         public static ObservableCollection<FileTree>? fileTree;
-        private static FileTree _mainFileTree;
+        private static ObservableCollection<FileTree> _mainFileTreeCollection;
         private ObservableCollection<FileTree>? _viewCollewtionFiles;
         private FilterFiles _filter = new FilterFiles();
         public HierarchicalTreeDataGridSource<FileTree> _source;
@@ -66,45 +66,45 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
         #region PROPERTIES
-        public FileTree MainFileTree
+        public ObservableCollection<FileTree> MainFileTreeCollection
         {
-            get => _mainFileTree;
-            set => _mainFileTree = value;
+            get => _mainFileTreeCollection;
+            set => _mainFileTreeCollection = value;
         }
         public ObservableCollection<FileTree> ViewCollectionFiles
         {
             get => _viewCollewtionFiles!;
             set => this.RaiseAndSetIfChanged(ref _viewCollewtionFiles, value);
         }
-        public int FilterIndex
-        {
-            get => _filterIndex;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _filterIndex, value);
-                switch (_filterIndex)
-                {
-                    case 0:
-                        FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTree);
-                        break;
-                    case 1:
-                        FilterFiles.Filter(StatusFile.Checked, _mainFileTree, ViewCollectionFiles);
-                        break;
-                    case 2:
-                        FilterFiles.Filter(StatusFile.PartiallyChecked, _mainFileTree, ViewCollectionFiles);
-                        break;
-                    case 3:
-                        FilterFiles.Filter(StatusFile.FailedChecked, _mainFileTree, ViewCollectionFiles);
-                        break;
-                    case 4:
-                        FilterFiles.Filter(StatusFile.NoAccess, _mainFileTree, ViewCollectionFiles);
-                        break;
-                    case 5:
-                        FilterFiles.Filter(StatusFile.Missing, _mainFileTree, ViewCollectionFiles);
-                        break;
-                }
-            }
-        }
+        //public int FilterIndex
+        //{
+        //    get => _filterIndex;
+        //    set
+        //    {
+        //        this.RaiseAndSetIfChanged(ref _filterIndex, value);
+        //        switch (_filterIndex)
+        //        {
+        //            case 0:
+        //                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTreeCollection);
+        //                break;
+        //            case 1:
+        //                FilterFiles.Filter(StatusFile.Checked, _mainFileTreeCollection, ViewCollectionFiles);
+        //                break;
+        //            case 2:
+        //                FilterFiles.Filter(StatusFile.PartiallyChecked, _mainFileTreeCollection, ViewCollectionFiles);
+        //                break;
+        //            case 3:
+        //                FilterFiles.Filter(StatusFile.FailedChecked, _mainFileTreeCollection, ViewCollectionFiles);
+        //                break;
+        //            case 4:
+        //                FilterFiles.Filter(StatusFile.NoAccess, _mainFileTreeCollection, ViewCollectionFiles);
+        //                break;
+        //            case 5:
+        //                FilterFiles.Filter(StatusFile.Missing, _mainFileTreeCollection, ViewCollectionFiles);
+        //                break;
+        //        }
+        //    }
+        //}
         public HierarchicalTreeDataGridSource<FileTree> Source
         {
             get => _source;
@@ -203,11 +203,7 @@ namespace FileControlAvalonia.ViewModels
         public MainWindowViewModel()
         {
             ViewCollectionFiles = new ObservableCollection<FileTree>();
-            if (Directory.Exists(SettingsManager.RootPath))
-            {
-                _mainFileTree = new FileTree(SettingsManager.RootPath, true);
-                _mainFileTree.Children!.Clear();
-            }
+            MainFileTreeCollection = new ObservableCollection<FileTree>();
 
             Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
             {
@@ -236,11 +232,10 @@ namespace FileControlAvalonia.ViewModels
                 }
             };
 
-            MessageBus.Current.Listen<FileTree>().Subscribe(async transportFileTree =>
+            MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
-                await Task.Run(() => { FilesCollectionManager.AddFiles(MainFileTree, transportFileTree); }); 
-                //Comprasion.SetStatus(MainFileTree);
-                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+                await Task.Run(() => { FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree); }); 
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -259,6 +254,7 @@ namespace FileControlAvalonia.ViewModels
             _progressBarIsVisible = false;
             _progressBarValue = 0;
         }
+
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
         {
@@ -308,29 +304,38 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
-            FileTree etalon = null;
-            Comprasion comparator = new Comprasion();
-            ProgressBarIsVisible = true;
+            //FileTree etalon = null;
+            //Comprasion comparator = new Comprasion();
+            //ProgressBarIsVisible = true;
 
-            ProgressBarMaximum = EtalonManager.CountFilesEtalon;
-            ProgressBarValue = 0;
+            //ProgressBarMaximum = EtalonManager.CountFilesEtalon;
+            //ProgressBarValue = 0;
 
-            await Task.Run(() =>
-            {
-                FilesCollectionManager.MergeFileTrees(MainFileTree, EtalonManager.CurentEtalon);
-                comparator.CompareTrees(MainFileTree, ProgressBarValue);
-            });
+            //await Task.Run(() =>
+            //{
+            //    FilesCollectionManager.MergeFileTrees(MainFileTreeCollection, EtalonManager.CurentEtalon);
+            //    comparator.CompareTrees(MainFileTreeCollection, ProgressBarValue);
+            //});
 
-            Checked = comparator.Checked;
-            UnChecked = comparator.UnChecked;
-            PartialChecked = comparator.PartiallyChecked;
-            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
-            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-            DateLastCheck = DateTime.Now.ToString();
-            ProgressBarText = "Проверка прошла успешно";
+            //Checked = comparator.Checked;
+            //UnChecked = comparator.UnChecked;
+            //PartialChecked = comparator.PartiallyChecked;
+            //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+            //CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            //DateLastCheck = DateTime.Now.ToString();
+            //ProgressBarText = "Проверка прошла успешно";
 
-            await Task.Delay(1000);
-            ProgressBarIsVisible = false;
+            //await Task.Delay(1000);
+            //ProgressBarIsVisible = false;
+
+
+
+            //var etalon = EtalonManager.GetEtalon();
+            //MainFileTreeCollection = etalon;
+            //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+
+
+            EtalonManager.SetActualsFactParametrsValues(MainFileTreeCollection);
         }
 
         async public void CreateEtalonCommand()
@@ -340,10 +345,10 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarText = "Создание эталона";
             await Task.Run(() =>
             {
-                EtalonManager.CreateEtalon(MainFileTree);
+                EtalonManager.CreateEtalon(MainFileTreeCollection);
                 CheksInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
             });
-            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
             ProgressBarMaximum = 0;
             ProgressBarValue = 0;
             ProgressBarText = "Создание эталона завершено";
@@ -389,8 +394,8 @@ namespace FileControlAvalonia.ViewModels
         {
             try
             {
-                MainFileTree = EtalonManager.CurentEtalon;
-                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTree);
+                MainFileTreeCollection = EtalonManager.CurentEtalon;
+                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
             }
             catch
             {
@@ -460,7 +465,7 @@ namespace FileControlAvalonia.ViewModels
 
         public void DeliteFileCommand(FileTree delitedFile)
         {
-            FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, _mainFileTree);
+            FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, _mainFileTreeCollection);
             EtalonManager.DeliteFileInDB(delitedFile);
         }
 

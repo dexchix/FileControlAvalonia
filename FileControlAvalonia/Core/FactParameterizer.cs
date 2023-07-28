@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Core
 {
-    public class HashSumCalculator
+    public class FactParameterizer
     {
         public static string CalculateMD5Hash(string filePath)
         {
