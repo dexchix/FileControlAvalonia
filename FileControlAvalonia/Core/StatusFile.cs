@@ -11,8 +11,8 @@ namespace FileControlAvalonia.Core
         Checked,
         PartiallyChecked,
         FailedChecked,
-        UnChecked,
         NoAccess,
-        Missing
+        NotFound,
+        UnChecked
     }
 }

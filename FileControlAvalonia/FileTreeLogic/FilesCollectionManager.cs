@@ -22,13 +22,6 @@ namespace FileControlAvalonia.FileTreeLogic
                 {
                     var mainParent = FileTreeNavigator.SearchFileInFileTree(file.Parent!.Path, mainFileTree);
                     mainFileTree.Children!.Add(file);
-                    //Добавление в БД
-                    //=======================================================================
-                    addedFilesCollection.Add(file);
-                    file.EVersion = file.FVersion;
-                    file.EHash = file.FHash;
-                    file.ELastUpdate = file.FLastUpdate;
-                    //========================================================================
 
                     file.Parent = mainParent;
                 }
@@ -50,13 +43,6 @@ namespace FileControlAvalonia.FileTreeLogic
                 else if (!mainCollectionFiles.Any(x => x.Path == addFile.Path))
                 {
                     mainCollectionFiles.Add(addFile);
-                    //Добавление в БД
-                    //=======================================================================
-                    //EtalonManager.AddFileInDB(addFile);
-                    addFile.EVersion = addFile.FVersion;
-                    addFile.EHash = addFile.FHash;
-                    addFile.ELastUpdate = addFile.FLastUpdate;
-                    //=======================================================================
                 }
             }
             EtalonManager.CreateEtalon(addedFiles);
@@ -115,25 +101,20 @@ namespace FileControlAvalonia.FileTreeLogic
                 viewCollectionFiles?.Add(file);
             }
         }
-        public static void MergeFileTrees(FileTree mainFileTree, FileTree etalonFileTree)
+        /// <summary>
+        /// Устанавливает эталонные значения в соответствии с фактическими (при добавлении файлов)
+        /// </summary>
+        /// <param name="filesCollection"></param>
+        public static void SetEtalonValues(ObservableCollection<FileTree> filesCollection)
         {
-
-
-            foreach (var file in mainFileTree.Children!.ToList())
+            foreach(var file in filesCollection)
             {
-                var etalonFile = FileTreeNavigator.SearchFileInFileTree(file.Path, etalonFileTree);
-                if (etalonFile != null)
-                {
+                file.EVersion = file.FVersion;
+                file.ELastUpdate = file.FLastUpdate;
+                file.EHash = file.FHash;
 
-                    file.EVersion = etalonFile.EVersion;
-                    file.EHash = etalonFile.EHash;
-                    file.ELastUpdate = etalonFile.ELastUpdate;
-
-                    if (file.IsDirectory)
-                    {
-                        MergeFileTrees(file, etalonFile);
-                    }
-                }
+                if (file.IsDirectory)
+                    SetEtalonValues(file.Children);
             }
         }
     }

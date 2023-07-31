@@ -27,8 +27,6 @@ namespace FileControlAvalonia.Core
                 SetStatus(file);
 
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"{Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue} " +
-                //    $"из {Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum}";
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}";
 
                 if (file.IsDirectory)
@@ -37,23 +35,6 @@ namespace FileControlAvalonia.Core
                 }
             }
         }
-
-        //public void AddFiles(FileTree mainFileTree, FileTree addedFileTree)
-        //{
-        //    foreach (var file in addedFileTree.Children!.ToList())
-        //    {
-        //        if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
-        //        {
-        //            var mainParent = FileTreeNavigator.SearchFileInFileTree(file.Parent!.Path, mainFileTree);
-        //            mainFileTree.Children!.Add(file);
-        //            file.Parent = mainParent;
-        //        }
-        //        else if (mainFileTree.Children!.Any(x => x.Path == file.Path) && file.IsDirectory)
-        //        {
-        //            AddFiles(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
-        //        }
-        //    }
-        //}
         public void SetStatus(FileTree fileTree)
         {
             if (fileTree.EHash == fileTree.FHash &&
@@ -76,9 +57,9 @@ namespace FileControlAvalonia.Core
             }
             else
             {
-                fileTree.Status = StatusFile.UnChecked;
+                fileTree.Status = StatusFile.FailedChecked;
                 ChangeStatusParents(fileTree, fileTree.Status);
-                UnChecked++;
+                FailedChecked++;
                 return;
             }
         }
@@ -90,7 +71,7 @@ namespace FileControlAvalonia.Core
                 {
                     return;
                 }
-                else if (status == StatusFile.UnChecked)
+                else if (status == StatusFile.NotFound)
                 {
                     var parent = fileTree.Parent;
                     parent.Status = status;

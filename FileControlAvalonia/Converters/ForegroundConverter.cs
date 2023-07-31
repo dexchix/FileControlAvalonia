@@ -26,9 +26,9 @@ namespace FileControlAvalonia.Converters
                         return Brushes.White;
                     case StatusFile.FailedChecked:
                         return Brushes.White;
-                    case StatusFile.Missing:
-                        return Brushes.White;
                     case StatusFile.UnChecked:
+                        return Brushes.White;
+                    case StatusFile.NotFound:
                         return Brushes.White;
                 }
             }

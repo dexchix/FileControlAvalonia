@@ -26,9 +26,9 @@ namespace FileControlAvalonia.Converters
                         return new SolidColorBrush(Color.Parse("#f00"));
                     case StatusFile.FailedChecked:
                         return new SolidColorBrush(Color.Parse("#f00"));
-                    case StatusFile.Missing:
-                        return new SolidColorBrush(Color.Parse("#f00"));
                     case StatusFile.UnChecked:
+                        return new SolidColorBrush(Color.Parse("#f00"));
+                    case StatusFile.NotFound:
                         return new SolidColorBrush(Color.Parse("#f00"));
                 }
             }

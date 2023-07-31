@@ -53,13 +53,6 @@ namespace FileControlAvalonia.SettingsApp
                     }
                 }
                 RootPath = settings.RootPath;
-                //if (Directory.Exists(settings.RootPath))
-                //{
-                //    var mainVM = (MainWindowViewModel)Locator.Current.GetService(typeof(MainWindowViewModel));
-                //    mainVM.MainFileTreeCollection = new Models.FileTree(RootPath, true);
-                //    mainVM.MainFileTreeCollection.Children.Clear();
-                //}
-
             }
             catch
             {
@@ -75,7 +68,7 @@ namespace FileControlAvalonia.SettingsApp
                 {
                     var settings = serializer.Deserialize(streamReader) as Settings;
                     AppSettings = settings;
-                    return settings;
+                    return AppSettings;
                 }
             }
             catch (Exception ex)
@@ -89,7 +82,7 @@ namespace FileControlAvalonia.SettingsApp
                 {
                     serializer.Serialize(streamWriter, settings);
                 }
-                return settings;
+                return AppSettings;
             }
         }
     }

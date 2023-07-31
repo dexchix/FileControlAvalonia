@@ -32,8 +32,8 @@ namespace FileControlAvalonia.Core
                 {
                     var insertCommandFilesTable = new SQLiteCommand(connection)
                     {
-                        CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum, ParentPath) " +
-                                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.LastUpdate}', '{file.Version}', '{file.HashSum}', '{file.ParentPath}');"
+                        CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath) " +
+                                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}');"
                     };
 
                     insertCommandFilesTable.ExecuteNonQuery();
@@ -62,7 +62,7 @@ namespace FileControlAvalonia.Core
             {
                 var command = new SQLiteCommand(connection)
                 {
-                    CommandText = "SELECT ID, ParentID, Name, Path, LastUpdate, Version, HashSum, ParentPath FROM FilesTable"
+                    CommandText = "SELECT ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath FROM FilesTable"
                 };
                 etalon = command.ExecuteQuery<FileDB>();
             }

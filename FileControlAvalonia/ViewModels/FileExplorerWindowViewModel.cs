@@ -98,6 +98,8 @@ namespace FileControlAvalonia.ViewModels
             foreach (var children in childrenTFL)
                 children.Parent = null;
             FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
+            FilesCollectionManager.SetEtalonValues(childrenTFL);
+
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
             Dispose();
             window.Close();

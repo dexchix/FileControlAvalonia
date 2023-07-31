@@ -355,9 +355,10 @@ namespace FileControlAvalonia.ViewModels
             {
                 FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
                 new Comprasion().CompareFiles(MainFileTreeCollection, ProgressBarValue);
+                new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
-            CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
+            LastChekInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
             DateLastCheck = DateTime.Now.ToString();
             ProgressBarText = "Проверка прошла успешно";
 
@@ -374,7 +375,7 @@ namespace FileControlAvalonia.ViewModels
             await Task.Run(() =>
             {
                 EtalonManager.CreateEtalon(MainFileTreeCollection);
-                CheksInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
+                LastChekInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
             ProgressBarMaximum = 0;
@@ -493,7 +494,7 @@ namespace FileControlAvalonia.ViewModels
 
         public void DeliteFileCommand(FileTree delitedFile)
         {
-            FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, _mainFileTreeCollection);
+            FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection);
             EtalonManager.DeliteFileInDB(delitedFile);
         }
 

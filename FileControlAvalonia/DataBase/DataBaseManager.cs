@@ -44,9 +44,12 @@ namespace FileControlAvalonia.DataBase
                                                  ParentID INT,
                                                  Name VARCHAR(512),
                                                  Path VARCHAR(512),
-                                                 LastUpdate VARCHAR(512),
-                                                 Version VARCHAR(512),
-                                                 HashSum VARCHAR(512),
+                                                 ELastUpdate VARCHAR(512),
+                                                 EVersion VARCHAR(512),
+                                                 EHashSum VARCHAR(512),
+                                                 FLastUpdate VARCHAR(512),
+                                                 FVersion VARCHAR(512),
+                                                 FHashSum VARCHAR(512),
                                                  ParentPath VARCHAR(512)
                                              );";
 
