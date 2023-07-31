@@ -32,8 +32,8 @@ namespace FileControlAvalonia.Core
                 {
                     var insertCommandFilesTable = new SQLiteCommand(connection)
                     {
-                        CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath) " +
-                                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}');"
+                        CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status) " +
+                                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}');"
                     };
 
                     insertCommandFilesTable.ExecuteNonQuery();
@@ -62,7 +62,7 @@ namespace FileControlAvalonia.Core
             {
                 var command = new SQLiteCommand(connection)
                 {
-                    CommandText = "SELECT ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath FROM FilesTable"
+                    CommandText = "SELECT ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status FROM FilesTable"
                 };
                 etalon = command.ExecuteQuery<FileDB>();
             }
@@ -72,31 +72,7 @@ namespace FileControlAvalonia.Core
             FileTree._counter = -1;
             return etalonInDBContext;
         }
-        //public static void AddFileInDB(FileTree file)
-        //{
-        //    string parentPath = file.Parent == null ? null : file.Parent.Path;
-        //    using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-        //    {
-        //        var insertCommandFilesTable = new SQLiteCommand(connection)
-        //        {
-        //            CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, LastUpdate, Version, HashSum, ParentPath) " +
-        //                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.FLastUpdate}', '{file.FVersion}', '{file.FHash}', '{parentPath}');"
-        //        };
-        //        insertCommandFilesTable.ExecuteNonQuery();
-        //        if (file.Children != null)
-        //            AddChildrenInDB(file);
-        //    }
-        //    file.EHash = file.FHash;
-        //    file.ELastUpdate = file.FLastUpdate;
-        //    file.EVersion = file.EVersion;
-        //}
-        //private static void AddChildrenInDB(FileTree file)
-        //{
-        //    foreach (var child in file.Children)
-        //    {
-        //        AddFileInDB(child);
-        //    }
-        //}
+
         public static void DeliteFileInDB(FileTree file)
         {
             if (file.Children != null)

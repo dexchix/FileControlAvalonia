@@ -134,6 +134,12 @@ namespace FileControlAvalonia.Core
                 CommandText = $"UPDATE FilesTable SET FVersion = '{file.FVersion}' WHERE Path = '{file.Path}';"
             };
             updateFactInfoCommand.ExecuteNonQuery();
+
+            updateFactInfoCommand = new SQLiteCommand(connection)
+            {
+                CommandText = $"UPDATE FilesTable SET Status = '{file.Status}' WHERE Path = '{file.Path}';"
+            };
+            updateFactInfoCommand.ExecuteNonQuery();
         }
     }
 }

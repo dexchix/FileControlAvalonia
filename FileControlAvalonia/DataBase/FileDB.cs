@@ -24,7 +24,7 @@ namespace FileControlAvalonia.DataBase
         public string FVersion { get; set; }
         public string FHashSum { get; set; }
         public string ParentPath { get; set; }
-        public StatusFile StatusFile { get; set; }
+        public StatusFile Status { get; set; }
         public FileDB()
         {
 

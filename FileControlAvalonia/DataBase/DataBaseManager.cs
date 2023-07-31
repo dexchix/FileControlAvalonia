@@ -50,7 +50,8 @@ namespace FileControlAvalonia.DataBase
                                                  FLastUpdate VARCHAR(512),
                                                  FVersion VARCHAR(512),
                                                  FHashSum VARCHAR(512),
-                                                 ParentPath VARCHAR(512)
+                                                 ParentPath VARCHAR(512),
+                                                 Status VARCHAR(512)
                                              );";
 
                 string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (

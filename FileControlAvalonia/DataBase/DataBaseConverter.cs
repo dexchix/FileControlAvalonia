@@ -43,7 +43,9 @@ namespace FileControlAvalonia.DataBase
 
                         FHash = files[fileCounter].FHashSum,
                         FLastUpdate = files[fileCounter].FLastUpdate,
-                        FVersion = files[fileCounter].FVersion
+                        FVersion = files[fileCounter].FVersion,
+
+                        Status = files[fileCounter].Status,
                     };
                     
                     if (addFile.IsDirectory)
@@ -63,7 +65,9 @@ namespace FileControlAvalonia.DataBase
 
                         FHash = files[fileCounter].FHashSum,
                         FLastUpdate = files[fileCounter].FLastUpdate,
-                        FVersion = files[fileCounter].FVersion
+                        FVersion = files[fileCounter].FVersion,
+
+                        Status = files[fileCounter].Status,
                     };
                     if (addFile.IsDirectory)
                     {
