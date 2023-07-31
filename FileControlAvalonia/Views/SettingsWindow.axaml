@@ -64,8 +64,8 @@
 						HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
 				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>
 				<StackPanel Orientation="Horizontal" Spacing="5">
-					<TextBox HorizontalAlignment="Stretch" PasswordChar="*"  Width="222" IsReadOnly="True" Text ="{Binding PasswordVM}, Mode=TwoWay"></TextBox>
-					<Button Classes="h1" Command="{Binding ChangePassword}">
+					<TextBox HorizontalAlignment="Stretch" Name="PasswordBox" PasswordChar="*"  Width="222" IsReadOnly="True" Text ="{Binding PasswordVM}, Mode=TwoWay"></TextBox>
+					<Button Classes="h1" Command="{Binding ChangePassword}" CommandParameter="{Binding ElementName=PasswordBox}">
 						<Canvas Width="20" Height="20" Margin="0 0 5 2">
 							<Image Source="/Assets/changePassword.png" Height="25" HorizontalAlignment="Center" 
 								   VerticalAlignment="Center"/>

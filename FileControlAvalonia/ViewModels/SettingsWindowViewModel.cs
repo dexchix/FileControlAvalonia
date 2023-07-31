@@ -1,7 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Styling;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.ViewModels.Interfaces;
+using Microsoft.CodeAnalysis.CSharp;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -187,10 +191,54 @@ namespace FileControlAvalonia.ViewModels
             SettingsManager.SetSettings(_settings);
             window.Close();
         }
-        public void ChangePassword()
+        public void ChangePassword(TextBox awdawd)
         {
+            //awdawd.PasswordChar = null;
+            //awdawd.BorderBrush = Brushes.Red;
+            //awdawd.BorderThickness = Thickness.Parse("3");
+            awdawd.IsReadOnly = false;
+            awdawd.PasswordChar = '\0';
+            awdawd.Clear();
+            awdawd.Watermark = "Введите новый пароль";
 
+            //var buttonStyle = new Style()
+            //{
+            //    Setters =
+            //    {
+            //        new Setter(Button.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
+            //        new Setter(Button.BorderThicknessProperty, new Thickness(1)),
+            //        new Setter(Button.BackgroundProperty, new SolidColorBrush(Colors.Gray))
+            //    }
+            //};
+
+
+            //var buttonStyle1 = new Style(x => x.OfType<TextBox>().Class(":pointerover"))
+            //{
+            //    Setters = {
+            //    new Setter(Button.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
+            //        new Setter(Button.BorderThicknessProperty, new Thickness(1)),
+            //        new Setter(Button.BackgroundProperty, new SolidColorBrush(Colors.Gray))
+            //    }
+            //};
+
+            //awdawd.Styles.Add(buttonStyle);
+            //awdawd.Styles.Add(buttonStyle1);
         }
         #endregion
+
+        //(x)=>x.Class("TextBlock:pointerover /template/ ContentPresenter")
+        /* 
+         * <TextBox.Styles>
+							<Style Selector="TextBox">
+								<Setter Property="Background" Value="Red"/>
+							</Style>
+							<Style Selector="TextBox:pointerover /template/ Border">
+								<Setter Property="Background" Value="Red"/>
+							</Style>
+							<Style Selector="TextBox:focus /template/ Border">
+								<Setter Property="Background" Value="Red"/>
+							</Style>
+						</TextBox.Styles>
+         */
     }
 }
