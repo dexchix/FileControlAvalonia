@@ -53,6 +53,7 @@ namespace FileControlAvalonia.ViewModels
         private string _dateLastCheck;
         private string _dateCreateEtalon;
         private string _userLevelCreateEtalon;
+        private bool _enabledButtons =true;
 
         #region ProgressBar
         private bool _progressBarIsVisible;
@@ -105,6 +106,13 @@ namespace FileControlAvalonia.ViewModels
         //        }
         //    }
         //}
+
+        public bool EnabledButtons
+        {
+            get => _enabledButtons;
+            set => this.RaiseAndSetIfChanged(ref _enabledButtons, value);
+        }
+
         public HierarchicalTreeDataGridSource<FileTree> Source
         {
             get => _source;
@@ -236,11 +244,12 @@ namespace FileControlAvalonia.ViewModels
             {
                 ProgressBarIsVisible = true;
                 ProgressBarLoopScrol = true;
+                EnabledButtons = false;
                 ProgressBarText = "Добавление файлов";
                 await Task.Run(() =>
                 {
                     FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree);
-             
+
                 });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
@@ -248,6 +257,7 @@ namespace FileControlAvalonia.ViewModels
                 ProgressBarText = "Добавление файлов завершно";
                 await Task.Delay(1000);
                 ProgressBarIsVisible = false;
+                EnabledButtons = true;
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -316,38 +326,9 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
-            //FileTree etalon = null;
-            //Comprasion comparator = new Comprasion();
-            //ProgressBarIsVisible = true;
-
-            //ProgressBarMaximum = EtalonManager.CountFilesEtalon;
-            //ProgressBarValue = 0;
-
-            //await Task.Run(() =>
-            //{
-            //    FilesCollectionManager.MergeFileTrees(MainFileTreeCollection, EtalonManager.CurentEtalon);
-            //    comparator.CompareTrees(MainFileTreeCollection, ProgressBarValue);
-            //});
-
-            //Checked = comparator.Checked;
-            //UnChecked = comparator.UnChecked;
-            //PartialChecked = comparator.PartiallyChecked;
-            //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
-            //CheksInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
-            //DateLastCheck = DateTime.Now.ToString();
-            //ProgressBarText = "Проверка прошла успешно";
-
-            //await Task.Delay(1000);
-            //ProgressBarIsVisible = false;
-
-
-
-            //var etalon = EtalonManager.GetEtalon();
-            //MainFileTreeCollection = etalon;
-            //FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
-
             var etalon = EtalonManager.CurentEtalon;
             ProgressBarIsVisible = true;
+            EnabledButtons = false;
 
             ProgressBarMaximum = EtalonManager.CountFilesEtalon;
             ProgressBarValue = 0;
@@ -364,6 +345,7 @@ namespace FileControlAvalonia.ViewModels
 
             await Task.Delay(1000);
             ProgressBarIsVisible = false;
+            EnabledButtons = true;
 
         }
 
@@ -371,6 +353,7 @@ namespace FileControlAvalonia.ViewModels
         {
             ProgressBarIsVisible = true;
             ProgressBarLoopScrol = true;
+            EnabledButtons = false;
             ProgressBarText = "Создание эталона";
             await Task.Run(() =>
             {
@@ -389,6 +372,7 @@ namespace FileControlAvalonia.ViewModels
 
             UserLevelCreateEtalon = "Admin";
             DateCreateEtalon = DateTime.Now.ToString();
+            EnabledButtons = true;
         }
         public void CloseProgramCommand()
         {
@@ -492,10 +476,21 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public void DeliteFileCommand(FileTree delitedFile)
+        async public void DeliteFileCommand(FileTree delitedFile)
         {
-            FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection);
-            EtalonManager.DeliteFileInDB(delitedFile);
+            EnabledButtons = false;
+            ProgressBarIsVisible = true;
+            ProgressBarLoopScrol = true;
+            ProgressBarText = "Удаление файлов";
+
+            await Task.Run(() =>
+            {
+                FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection);
+                EtalonManager.DeliteFileInDB(delitedFile);
+            });
+            ProgressBarIsVisible = false;
+            ProgressBarLoopScrol = false;
+            EnabledButtons = true;
         }
 
         #endregion

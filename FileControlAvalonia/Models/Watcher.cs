@@ -27,6 +27,9 @@ namespace FileControlAvalonia.Models
             this._fileTreeNavigator = _fileTreeNavigator;
             StartWatch();
         }
+        /// <summary>
+        /// Запускает работу вотчера
+        /// </summary>
         private void StartWatch()
         {
             _watcher = new FileSystemWatcher()
@@ -42,6 +45,16 @@ namespace FileControlAvalonia.Models
             _watcher.Created += CreatedFile;
             _watcher.Deleted += DeleteFile;
             _watcher.Renamed += RenamedFile;
+        }
+        /// <summary>
+        /// Останавливает работу вотчера
+        /// </summary>
+        public void StopWatch()
+        {
+            _watcher.Created -= CreatedFile;
+            _watcher.Deleted -= DeleteFile;
+            _watcher.Renamed -= RenamedFile;
+            _watcher = null;
         }
         /// <summary>
         /// Метод обработчик FSW

@@ -43,7 +43,7 @@ namespace FileControlAvalonia.Core
             {
                 fileTree.Status = StatusFile.Checked;
                 Checked++;
-                ChangeStatusParents(fileTree, fileTree.Status);
+                //ChangeStatusParents(fileTree, fileTree.Status);
                 return;
             }
             else if (fileTree.EHash == fileTree.FHash &&
@@ -65,17 +65,43 @@ namespace FileControlAvalonia.Core
         }
         private void ChangeStatusParents(FileTree fileTree, StatusFile status)
         {
-            if (fileTree.Parent != null)
+            //if (fileTree.Parent != null)
+            //{
+            //    if (status == StatusFile.Checked)
+            //    {
+            //        return;
+            //    }
+            //    else if (status == StatusFile.NotFound)
+            //    {
+            //        var parent = fileTree.Parent;
+            //        parent.Status = status;
+            //        ChangeStatusParents(parent, status);
+            //    }
+            //}
+            if(fileTree.Parent != null)
             {
-                if (status == StatusFile.Checked)
+                if (status == StatusFile.PartiallyChecked && fileTree.Parent.Status == StatusFile.FailedChecked)
                 {
                     return;
                 }
-                else if (status == StatusFile.NotFound)
+                else if (status == StatusFile.PartiallyChecked)
                 {
-                    var parent = fileTree.Parent;
-                    parent.Status = status;
-                    ChangeStatusParents(parent, status);
+                    if (fileTree.Parent != null)
+                    {
+                        fileTree.Parent.Status = status;
+                        ChangeStatusParents(fileTree.Parent, status);
+
+                    }
+                }
+                else if (status == StatusFile.FailedChecked)
+                {
+
+                    if (fileTree.Parent != null)
+                    {
+                        fileTree.Parent.Status = status;
+                        ChangeStatusParents(fileTree.Parent, status);
+
+                    }
                 }
             }
         }

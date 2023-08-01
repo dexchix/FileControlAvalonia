@@ -44,6 +44,11 @@
 			<Setter Property="BorderThickness" Value="1"></Setter>
 			<Setter Property="Background" Value="Gray"></Setter>
 		</Style>
+		<Style Selector="Button:disabled.h1 /template/ ContentPresenter">
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="1"></Setter>
+			<Setter Property="Background" Value="#cccccc"></Setter>
+		</Style>
 		<Style Selector="TextBlock.f1">
 			<Setter Property="FontSize" Value="12"></Setter>
 		</Style>
@@ -65,10 +70,10 @@
 				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left"
 						 >
 				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1" Command="{Binding CheckCommand}"
-						HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding EnabledButtons}">
 				</Button>
 				<Button Width="120" Height="25" Content="Создать эталон" FontSize="11" Classes="h1" Command="{Binding CreateEtalonCommand}"
-						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding EnabledButtons}" >
 				</Button>
 			</StackPanel>
 
@@ -118,13 +123,13 @@
 					</Button.Styles>
 				</Button>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 5 5 0">
-					<Button  Height="27" Width="27" Command="{Binding OpenFileExplorerWindowCommand}" Classes="h1">
+					<Button  Height="27" Width="27" Command="{Binding OpenFileExplorerWindowCommand}" IsEnabled="{Binding EnabledButtons}" Classes="h1">
 						<Canvas Margin="-5 -2 0 0">
 							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/add.png" ></Image>
 						</Canvas>
 					</Button>
-					<Button Height="27" Width="27" Command="{Binding OpenSettingsWindowCommand}" Classes="h1">
+					<Button Height="27" Width="27" Command="{Binding OpenSettingsWindowCommand}" IsEnabled="{Binding EnabledButtons}" Classes="h1">
 						<Canvas Margin="-6 -3 0 0">
 							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
 								   Source="/Assets/setting.png"></Image>
@@ -183,7 +188,7 @@
 								<Label Grid.Row="2" Grid.Column="1" FontSize="12" Content="{Binding FVersion}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 -1"></Label>
 
 								<Button Grid.RowSpan="3" Grid.Column="2" Command="{Binding DataContext.DeliteFileCommand, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}"
-									CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}">
+									CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" IsEnabled="{Binding DataContext.EnabledButtons, RelativeSource={RelativeSource AncestorType=TreeDataGrid}}}">
 									<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
 										<Image Source="/Assets/deliteFile.png" Height="17"></Image>
 										<Label Content="Удалить"></Label>
@@ -205,6 +210,12 @@
 											<Setter Property="BorderBrush" Value="Black"></Setter>
 											<Setter Property="BorderThickness" Value="1"></Setter>
 										</Style>
+										<Style Selector="Button:disabled /template/ ContentPresenter">
+											<Setter Property="Background" Value="#cccccc"></Setter>
+											<Setter Property="BorderBrush" Value="Black"></Setter>
+											<Setter Property="BorderThickness" Value="1"></Setter>
+										</Style>
+										
 									</Button.Styles>
 								</Button>
 

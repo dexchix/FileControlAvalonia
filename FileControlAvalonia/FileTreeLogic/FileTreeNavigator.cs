@@ -19,7 +19,7 @@ namespace FileControlAvalonia.FileTreeLogic
         //public static readonly string pathRootFolder = "C:\\1\\5";
         //public static readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
         public static FileTree? fileTree;
-        public static Watcher? watcher;
+        public Watcher? watcher;
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion 
 

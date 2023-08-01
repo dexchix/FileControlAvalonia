@@ -1,16 +1,19 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Templates;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using Avalonia.Styling;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.ViewModels.Interfaces;
-using Microsoft.CodeAnalysis.CSharp;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -34,6 +37,7 @@ namespace FileControlAvalonia.ViewModels
         private string? _avalibleFileExtensionsVM;
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
+        private bool _isEnabledPasswordTextBox = false;
 
         public string UserVM
         {
@@ -161,6 +165,11 @@ namespace FileControlAvalonia.ViewModels
                 _settings.RootPath = value;
             }
         }
+        public bool IsEnabledPasswordTextBox
+        {
+            get => _isEnabledPasswordTextBox;
+            set => this.RaiseAndSetIfChanged(ref _isEnabledPasswordTextBox, value);
+        }
 
         public SettingsWindowViewModel()
         {
@@ -188,43 +197,77 @@ namespace FileControlAvalonia.ViewModels
         }
         public void Confirm(Window window)
         {
-            SettingsManager.SetSettings(_settings);
-            window.Close();
+            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
+            {
+
+            }
+            else
+            {
+                SettingsManager.SetSettings(_settings);
+                DataBaseManager.ChangePasswordDataBase(PasswordVM);
+                IsEnabledPasswordTextBox = false;
+                window.Close();
+            }
         }
-        public void ChangePassword(TextBox awdawd)
+        public void ChangePassword(TextBox textBox)
         {
             //awdawd.PasswordChar = null;
             //awdawd.BorderBrush = Brushes.Red;
             //awdawd.BorderThickness = Thickness.Parse("3");
-            awdawd.IsReadOnly = false;
-            awdawd.PasswordChar = '\0';
-            awdawd.Clear();
-            awdawd.Watermark = "Введите новый пароль";
+            textBox.IsReadOnly = false;
+            IsEnabledPasswordTextBox = true;
+            textBox.PasswordChar = '\0';
+            textBox.Clear();
+            textBox.Watermark = "Введите новый пароль";
 
-            //var buttonStyle = new Style()
+
+            //var s1 = new Style(x => x.OfType<TextBox>())
+            //{
+            //    Setters = {
+            //    new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
+            //        new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
+            //        new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
+            //    }
+            //};
+
+
+            //var s2 = new Style(x => (x.OfType<TextBox>().Class(":pointerover")).Template().OfType<Border>())
             //{
             //    Setters =
             //    {
-            //        new Setter(Button.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //        new Setter(Button.BorderThicknessProperty, new Thickness(1)),
-            //        new Setter(Button.BackgroundProperty, new SolidColorBrush(Colors.Gray))
+            //         new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
+            //         new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
+            //         new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
             //    }
             //};
 
 
-            //var buttonStyle1 = new Style(x => x.OfType<TextBox>().Class(":pointerover"))
+            //var s3 = new Style(x => (x.OfType<TextBox>().Class(":focus")).Template().OfType<Border>())
             //{
-            //    Setters = {
-            //    new Setter(Button.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //        new Setter(Button.BorderThicknessProperty, new Thickness(1)),
-            //        new Setter(Button.BackgroundProperty, new SolidColorBrush(Colors.Gray))
+            //    Setters =
+            //    {
+            //         new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
+            //         new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
+            //         new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
             //    }
             //};
 
-            //awdawd.Styles.Add(buttonStyle);
-            //awdawd.Styles.Add(buttonStyle1);
+            //textBox.Styles.Clear();
+
+            //textBox.Styles.Add(s1);
+            //textBox.Styles.Add(s2);
+            //textBox.Styles.Add(s3);
+
+
+            //var sdf = textBox.Classes;
         }
         #endregion
+
+
+        //  new Style(x => x.OfType<Button>().Class("large").Class(":focus"));
+        //  new Style(x => x.OfType<Button>().Template().OfType<ContentPresenter>());
+
+
 
         //(x)=>x.Class("TextBlock:pointerover /template/ ContentPresenter")
         /* 

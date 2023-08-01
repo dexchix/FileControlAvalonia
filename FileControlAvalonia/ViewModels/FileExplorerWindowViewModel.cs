@@ -89,18 +89,24 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancelCommand(Window window)
         {
+            Dispose();
             window.Close();
         }
-        public void OkCommand(Window window)
+        async public void OkCommand(Window window)
         {
-            var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
-            var childrenTFL = transformFileTree.Children;
-            foreach (var children in childrenTFL)
-                children.Parent = null;
-            FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
-            FilesCollectionManager.SetEtalonValues(childrenTFL);
+            //await Task.Run(() =>
+            //{
+                var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
+                var childrenTFL = transformFileTree.Children;
+                foreach (var children in childrenTFL)
+                    children.Parent = null;
+                FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
+                FilesCollectionManager.SetEtalonValues(childrenTFL);
 
+            //});
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
+
+
             Dispose();
             window.Close();
         }
@@ -121,8 +127,17 @@ namespace FileControlAvalonia.ViewModels
 
         public void Dispose()
         {
-            _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;
-            _fileTreeNavigator = null;
+            try
+            {
+                _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;
+                _fileTreeNavigator.watcher.StopWatch();
+                _fileTreeNavigator = null;
+            }
+            catch
+            {
+
+            }
+
         }
         #endregion
     }
