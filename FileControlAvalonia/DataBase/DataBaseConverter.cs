@@ -22,7 +22,6 @@ namespace FileControlAvalonia.DataBase
         {
             var filesToDB = new List<FileDB>();
             FillDBListFiles(mainFileTreeCollection, filesToDB);
-            AddParentsInDBFilesList(filesToDB);
             fileCounter = 0;
             return filesToDB;
         }
@@ -36,7 +35,6 @@ namespace FileControlAvalonia.DataBase
                 {
                     var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path))
                     {
-                        ID = files[fileCounter].ID,
                         EHash = files[fileCounter].EHashSum,
                         ELastUpdate = files[fileCounter].ELastUpdate,
                         EVersion = files[fileCounter].EVersion,
@@ -58,7 +56,6 @@ namespace FileControlAvalonia.DataBase
                     var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path),
                                                FileTreeNavigator.SeachFileInFilesCollection(files[fileCounter].ParentPath, etalon))
                     {
-                        ID = files[fileCounter].ID,
                         EHash = files[fileCounter].EHashSum,
                         ELastUpdate = files[fileCounter].ELastUpdate,
                         EVersion = files[fileCounter].EVersion,
@@ -90,37 +87,21 @@ namespace FileControlAvalonia.DataBase
                 {
                     FileDB addedFileDB;
                     if (file.Parent == null)
-                        addedFileDB = new FileDB(fileCounter, file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, null);
+                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, null) { Status = file.Status};
                     else
-                        addedFileDB = new FileDB(fileCounter, file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path);
+                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path) { Status = file.Status };
                     filesDB.Add(addedFileDB);
                     parents.Add(addedFileDB.Path, addedFileDB);
-                    fileCounter++;
                     FillDBListFiles(file.Children, filesDB);
                 }
                 else
                 {
                     FileDB addedFileDB;
                     if (file.Parent == null)
-                        addedFileDB = new FileDB(fileCounter, file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, null);
+                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, null) { Status = file.Status };
                     else
-                        addedFileDB = new FileDB(fileCounter, file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path);
+                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path) { Status = file.Status };
                     filesDB.Add(addedFileDB);
-                    fileCounter++;
-                }
-            }
-        }
-        private void AddParentsInDBFilesList(List<FileDB> filesDB)
-        {
-            foreach (var file in filesDB)
-            {
-                var pathParent = Path.GetDirectoryName(file.Path);
-                foreach (var parent in parents)
-                {
-                    if (pathParent == parent.Key)
-                    {
-                        file.ParentID = parent.Value.ID;
-                    }
                 }
             }
         }

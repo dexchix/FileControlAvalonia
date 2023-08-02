@@ -375,7 +375,7 @@
 				<TextBlock Classes="f1">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="Не соответствует: {0}">
-							<Binding Path="UnChecked"></Binding>
+							<Binding Path="FailedChecked"></Binding>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>

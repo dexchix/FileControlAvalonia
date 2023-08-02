@@ -53,13 +53,13 @@ namespace FileControlAvalonia.ViewModels
         private string _dateLastCheck;
         private string _dateCreateEtalon;
         private string _userLevelCreateEtalon;
-        private bool _enabledButtons =true;
+        private bool _enabledButtons = true;
 
         #region ProgressBar
-        private bool _progressBarIsVisible;
+        private bool _progressBarIsVisible = false;
         private int _progressBarValue = 0;
         private string _progressBarText;
-        private bool _progressBarLoopScrol;
+        private bool _progressBarLoopScrol = false;
         private int _progressBarMaximum;
         #endregion
 
@@ -138,7 +138,7 @@ namespace FileControlAvalonia.ViewModels
             get => _partialChecked;
             set => this.RaiseAndSetIfChanged(ref _partialChecked, value);
         }
-        public int UnChecked
+        public int FailedChecked
         {
             get => _unChecked;
             set => this.RaiseAndSetIfChanged(ref _unChecked, value);
@@ -246,15 +246,19 @@ namespace FileControlAvalonia.ViewModels
                 ProgressBarLoopScrol = true;
                 EnabledButtons = false;
                 ProgressBarText = "Добавление файлов";
+
+                int addFilesCount = 0;
+
                 await Task.Run(() =>
                 {
-                    FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree);
+                    FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree, ref addFilesCount);
 
                 });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
                 ProgressBarLoopScrol = false;
                 ProgressBarText = "Добавление файлов завершно";
+                TotalFiles += addFilesCount;
                 await Task.Delay(1000);
                 ProgressBarIsVisible = false;
                 EnabledButtons = true;
@@ -264,17 +268,6 @@ namespace FileControlAvalonia.ViewModels
             ShowDialogSettingsWindow = new Interaction<SettingsWindowViewModel, SettingsWindowViewModel?>();
             ShowDialogFileExplorerWindow = new Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?>();
 
-            _userLevel = "admin";
-            _totalFiles = 0;
-            _checked = 0;
-            _partialChecked = 0;
-            _unChecked = 0;
-            _noAccess = 0;
-            _notFound = 0;
-            _notChecked = 0;
-
-            _progressBarIsVisible = false;
-            _progressBarValue = 0;
         }
 
         #region CONVERTERS
@@ -326,7 +319,7 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
-            var etalon = EtalonManager.CurentEtalon;
+            var comparator = new Comprasion();
             ProgressBarIsVisible = true;
             EnabledButtons = false;
             ProgressBarLoopScrol = true;
@@ -336,12 +329,25 @@ namespace FileControlAvalonia.ViewModels
             await Task.Run(() =>
             {
                 FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
-                new Comprasion().CompareFiles(MainFileTreeCollection, ProgressBarValue);
+                comparator.CompareFiles(MainFileTreeCollection, ProgressBarValue);
+
+                TotalFiles = comparator.TotalFiles;
+                Checked = comparator.Checked;
+                PartialChecked = comparator.PartiallyChecked;
+                FailedChecked = comparator.FailedChecked;
+                NoAccess = comparator.NoAccess;
+                NotFound = comparator.Missing;
+                NotChecked = comparator.UnChecked;
+
                 new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
-            LastChekInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
             DateLastCheck = DateTime.Now.ToString();
+
+
+            LastChekInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString(), TotalFiles, Checked, PartialChecked,
+               FailedChecked, NoAccess, NotFound, NotChecked);
+
             ProgressBarText = "Проверка прошла успешно";
             ProgressBarLoopScrol = false;
             await Task.Delay(1000);
@@ -356,9 +362,12 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = true;
             EnabledButtons = false;
             ProgressBarText = "Создание эталона";
+
+            int empty = 0;
+
             await Task.Run(() =>
             {
-                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true);
+                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true, ref empty);
                 LastChekInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
@@ -410,6 +419,20 @@ namespace FileControlAvalonia.ViewModels
             {
                 MainFileTreeCollection = EtalonManager.CurentEtalon;
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+
+                DateCreateEtalon = EtalonManager.CheckInfo.Date;
+                DateLastCheck = EtalonManager.CheckInfo.DateLastCheck;
+                UserLevel = EtalonManager.CheckInfo.Creator;
+
+                TotalFiles = EtalonManager.CheckInfo.TotalFiles;
+                Checked = EtalonManager.CheckInfo.Checked;
+                PartialChecked = EtalonManager.CheckInfo.PartialChecked;
+                FailedChecked = EtalonManager.CheckInfo.FailedChecked;
+                NoAccess = EtalonManager.CheckInfo.NoAccess;
+                NotFound = EtalonManager.CheckInfo.NotFound;
+                NotChecked = EtalonManager.CheckInfo.NotChecked;
+
+
             }
             catch
             {
@@ -484,15 +507,42 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = true;
             ProgressBarText = "Удаление файлов";
 
+            int deliteTotalFilesCount = 0;
+            int deliteCheckedCount = 0;
+            int delitePartialCheckedCount = 0;
+            int deliteFailedCheckedCount = 0;
+            int deliteNoAccessCount = 0;
+            int deliteNotFoundCount = 0;
+            int deliteNotCheckedCount = 0;
+
+
             await Task.Run(() =>
             {
                 FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection);
-                EtalonManager.DeliteFileInDB(delitedFile);
+                EtalonManager.DeliteFileInDB(delitedFile, ref deliteTotalFilesCount, ref deliteCheckedCount, ref delitePartialCheckedCount,
+                    ref deliteFailedCheckedCount, ref deliteNoAccessCount, ref deliteNotFoundCount, ref deliteNotCheckedCount);
             });
+
+            if (TotalFiles > 0) TotalFiles -= deliteTotalFilesCount;
+            if (Checked > 0) Checked -= deliteCheckedCount;
+            if (PartialChecked > 0) PartialChecked -= delitePartialCheckedCount;
+            if (FailedChecked > 0) FailedChecked -= deliteFailedCheckedCount;
+            if (NoAccess > 0) NoAccess -= deliteNoAccessCount;
+            if (NotFound > 0) NotFound -= deliteNotFoundCount;
+            if (NotChecked > 0) NotChecked -= deliteNotCheckedCount;
+
             ProgressBarIsVisible = false;
             ProgressBarLoopScrol = false;
             EnabledButtons = true;
         }
+
+        //TotalFiles INTEGER,
+        //Checked INTEGER,
+        //PartialChecked INTEGER
+        //FailedChecked INTEGER,
+        //NoAccess INTEGER,
+        //NotFound INTEGER,
+        //NotChecked INTEGER
 
         #endregion
 

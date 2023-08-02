@@ -18,44 +18,56 @@ namespace FileControlAvalonia.Core
     {
         private static string GetMD5Hash(string filePath)
         {
-            try
+            if (Directory.Exists(filePath) || File.Exists(filePath))
             {
-                using (var md5 = MD5.Create())
+                try
                 {
-
-                    using (var stream = File.OpenRead(filePath))
+                    using (var md5 = MD5.Create())
                     {
-                        byte[] hashBytes = md5.ComputeHash(stream);
-                        string hashString = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
-                        return hashString;
+
+                        using (var stream = File.OpenRead(filePath))
+                        {
+                            byte[] hashBytes = md5.ComputeHash(stream);
+                            string hashString = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+                            return hashString;
+                        }
                     }
                 }
+                catch
+                {
+                    return "-";
+                }
             }
-            catch
-            {
-                return "-";
-            }
+            return "Файл отсутствует";
 
         }
         private static string GetLastUpdate(string filePath)
         {
-            if (Directory.Exists(filePath))
+            if (Directory.Exists(filePath) || File.Exists(filePath))
             {
-                return new DirectoryInfo(filePath).LastWriteTime.ToString();
+                if (Directory.Exists(filePath))
+                {
+                    return new DirectoryInfo(filePath).LastWriteTime.ToString();
+                }
+                else
+                {
+                    return new FileInfo(filePath).LastWriteTime.ToString();
+                }
             }
-            else
-            {
-                return new FileInfo(filePath).LastWriteTime.ToString();
-            }
+            return "Файл отсутствует";
         }
         private static string GetVersion(string filePath)
         {
-            if (File.Exists(filePath))
+            if (Directory.Exists(filePath) || File.Exists(filePath))
             {
-                var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
-                return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
+                if (File.Exists(filePath))
+                {
+                    var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
+                    return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
+                }
+                else return "-";
             }
-            else return "-";
+            return "Файл отсутствует";
         }
         public static void SetFactValues(this FileTree file)
         {

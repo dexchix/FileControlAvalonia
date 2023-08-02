@@ -13,6 +13,6 @@ namespace FileControlAvalonia.Core
         FailedChecked,
         NoAccess,
         NotFound,
-        UnChecked
+        NotChecked
     }
 }

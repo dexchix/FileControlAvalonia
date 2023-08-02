@@ -15,12 +15,15 @@ namespace FileControlAvalonia.Core
     public class EtalonManager
     {
         public static ObservableCollection<FileTree> CurentEtalon = GetEtalon();
+        public static EtalonAndChecksInfoDB CheckInfo = GetInfo();
         public static int CountFilesEtalon { get; set; }
-        public static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
+        public static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon, ref int filesCount)
         {
             FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
+
+            filesCount = etalonFilesCollection.Count;
 
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
@@ -37,8 +40,8 @@ namespace FileControlAvalonia.Core
                 {
                     var insertCommandFilesTable = new SQLiteCommand(connection)
                     {
-                        CommandText = "INSERT INTO FilesTable (ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status) " +
-                                   $"VALUES ({file.ID}, {file.ParentID}, '{file.Name}', '{file.Path}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}');"
+                        CommandText = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status) " +
+                                   $"VALUES ('{file.Name}', '{file.Path}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}');"
                     };
 
                     insertCommandFilesTable.ExecuteNonQuery();
@@ -67,7 +70,7 @@ namespace FileControlAvalonia.Core
             {
                 var command = new SQLiteCommand(connection)
                 {
-                    CommandText = "SELECT ID, ParentID, Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status FROM FilesTable"
+                    CommandText = "SELECT Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status FROM FilesTable"
                 };
                 etalon = command.ExecuteQuery<FileDB>();
             }
@@ -78,11 +81,22 @@ namespace FileControlAvalonia.Core
             return etalonInDBContext;
         }
 
-        public static void DeliteFileInDB(FileTree file)
+        public static void DeliteFileInDB(FileTree file, ref int deliteTotalFilesCount, ref int deliteCheckedCount, ref int delitePartialCheckedCount,
+            ref int deliteFailedCheckedCount, ref int deliteNoAccessCount, ref int deliteNotFoundCount, ref int deliteNotCheckedCount)
         {
             if (file.Children != null)
             {
                 var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() {file});
+
+                deliteTotalFilesCount = listDelitedFiles.Count;
+                deliteCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.Checked).Count();
+                delitePartialCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.PartiallyChecked).Count();
+                deliteFailedCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.FailedChecked).Count();
+                deliteNoAccessCount = listDelitedFiles.Where(x => x.Status == StatusFile.NoAccess).Count();
+                deliteNotFoundCount = listDelitedFiles.Where(x => x.Status == StatusFile.NotFound).Count();
+                deliteNotCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.NotChecked).Count();
+
+
                 using (var connection = new SQLiteConnection(DataBaseOptions.Options))
                 {
                     foreach (var diletedFile in listDelitedFiles)
@@ -97,6 +111,16 @@ namespace FileControlAvalonia.Core
             }
             else
             {
+                var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() { file });
+
+                deliteTotalFilesCount = listDelitedFiles.Count;
+                deliteCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.Checked).Count();
+                delitePartialCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.PartiallyChecked).Count();
+                deliteFailedCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.FailedChecked).Count();
+                deliteNoAccessCount = listDelitedFiles.Where(x => x.Status == StatusFile.NoAccess).Count();
+                deliteNotFoundCount = listDelitedFiles.Where(x => x.Status == StatusFile.NotFound).Count();
+                deliteNotCheckedCount = listDelitedFiles.Where(x => x.Status == StatusFile.NotChecked).Count();
+
                 using (var connection = new SQLiteConnection(DataBaseOptions.Options))
                 {
                     var insertCommandFilesTable = new SQLiteCommand(connection)
@@ -105,6 +129,17 @@ namespace FileControlAvalonia.Core
                     };
                     insertCommandFilesTable.ExecuteNonQuery();
                 }
+            }
+        }
+        public static EtalonAndChecksInfoDB GetInfo()
+        {
+            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            {
+                var insertCommandFilesTable = new SQLiteCommand(connection)
+                {
+                    CommandText = $"SELECT Creator, Date, DateLastCheck, TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked FROM CheksTable"
+                };
+                return insertCommandFilesTable.ExecuteQuery<EtalonAndChecksInfoDB>()[0];
             }
         }
     }

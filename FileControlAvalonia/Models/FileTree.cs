@@ -19,9 +19,6 @@ namespace FileControlAvalonia.Models
     {
         #region FIELDS
         public static int _counter = -1;
-        private int _id;
-        private int _idParent;
-        private bool _loadChildren;
         private string _eHash;
         private string _fHash;
         private string _eLastUpdate;
@@ -55,16 +52,6 @@ namespace FileControlAvalonia.Models
                     });
                 }
             }
-        }
-        public int ID
-        {
-            get => _id;
-            set => this.RaiseAndSetIfChanged(ref _id, value);
-        }
-        public int ParentID
-        {
-            get => _idParent;
-            set => this.RaiseAndSetIfChanged(ref _idParent, value);
         }
         public string EHash
         {
@@ -139,15 +126,11 @@ namespace FileControlAvalonia.Models
         }
         #endregion
 
-        public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false, bool loadChildren = true)
+        public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false)
         {
-            _counter++;
-            _id = _counter;
-            if (parent != null) _idParent = parent.ID;
             _path = path;
             _name = isRoot ? path : System.IO.Path.GetFileName(Path);
             _isExpanded = isRoot;
-            _loadChildren = loadChildren;
             IsDirectory = isDirectory;
             HasChildren = isDirectory;
             _isChecked = false;

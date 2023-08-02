@@ -14,6 +14,7 @@ namespace FileControlAvalonia.Core
 {
     public class Comprasion
     {
+        public int TotalFiles = 0;
         public int Checked = 0;
         public int PartiallyChecked = 0;
         public int FailedChecked = 0;
@@ -26,6 +27,7 @@ namespace FileControlAvalonia.Core
             {
                 SetStatus(file);
 
+                TotalFiles++;
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}";
 

@@ -41,7 +41,6 @@ namespace FileControlAvalonia.DataBase
             {
                 string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 ParentID INT,
                                                  Name VARCHAR(512),
                                                  Path VARCHAR(512),
                                                  ELastUpdate VARCHAR(512),
@@ -59,13 +58,13 @@ namespace FileControlAvalonia.DataBase
                                                  Creator VARCHAR(512),
                                                  Date VARCHAR(512),
                                                  DateLastCheck VARCHAR(512),
-                                                 TotalFiles VARCHAR(512),
-                                                 Checked VARCHAR(512),
-                                                 PartialChecked VARCHAR(512),
-                                                 UnChecked VARCHAR(512),
-                                                 NoAccess VARCHAR(512),
-                                                 NotFound VARCHAR(512),
-                                                 NotChecked VARCHAR(512)
+                                                 TotalFiles INTEGER,
+                                                 Checked INTEGER,
+                                                 PartialChecked INTEGER,
+                                                 FailedChecked INTEGER,
+                                                 NoAccess INTEGER,
+                                                 NotFound INTEGER,
+                                                 NotChecked INTEGER
                                              );";
 
                 var command = new SQLiteCommand(connection);

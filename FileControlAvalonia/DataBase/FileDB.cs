@@ -11,10 +11,6 @@ namespace FileControlAvalonia.DataBase
 {
     public class FileDB
     {
-
-        [PrimaryKey]
-        public int ID { get; set; }
-        public int ParentID { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
         public string ELastUpdate { get; set; }
@@ -30,10 +26,8 @@ namespace FileControlAvalonia.DataBase
 
         }
 
-        public FileDB(int iD, string name, string path, string eLastUpdate, string eVersion, string eHashSum, string fLastUpdate, string fVersion, string fHashSum, string parentPath,  int parentID = 0)
+        public FileDB(string name, string path, string eLastUpdate, string eVersion, string eHashSum, string fLastUpdate, string fVersion, string fHashSum, string parentPath)
         {
-            ID = iD;
-            ParentID = parentID;
             Name = name;
             Path = path;
             ELastUpdate = eLastUpdate;
@@ -50,11 +44,22 @@ namespace FileControlAvalonia.DataBase
             return Path;
         }
     }
-}
+    public class EtalonAndChecksInfoDB
+    {
+        public string Creator { get; set; }
+        public string Date { get; set; }
+        public string DateLastCheck { get; set; }
+        public int TotalFiles { get; set; }
+        public int Checked { get; set; }
+        public int PartialChecked { get; set; }
+        public int FailedChecked { get; set; }
+        public int NoAccess { get; set; }
+        public int NotFound { get; set; }
+        public int NotChecked { get; set; }
 
-//ID INTEGER PRIMARY KEY AUTOINCREMENT,
-//ParentID INT,
-//Name VARCHAR(512),
-//Path VARCHAR(512),
-//LustUpdate VARCHAR(512),
-//HashSum VARCHAR(512)
+        public EtalonAndChecksInfoDB()
+        {
+
+        }
+    }
+}

@@ -28,7 +28,7 @@ namespace FileControlAvalonia.DataBase
             Options = new SQLiteConnectionString(NameDB, false, Password);
         }
 
-
+        #region CRYPT_Password
         private static byte[] key = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
         private static byte[] iv = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
@@ -49,5 +49,6 @@ namespace FileControlAvalonia.DataBase
             byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
             return Encoding.Unicode.GetString(outputBuffer);
         }
+        #endregion
     }
 }

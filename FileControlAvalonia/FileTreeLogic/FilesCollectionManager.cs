@@ -13,39 +13,39 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <summary>
         /// Добавление файлов в существующее дерево 
         /// </summary>
-        private static void AddFilesToExistingFileTree(FileTree mainFileTree, FileTree addedFileTree)
+        private static void AddFilesToExistingFileTree(FileTree mainFileTree, FileTree addedFileTree, ObservableCollection<FileTree> addedFilesCollection)
         {
-            var addedFilesCollection = new ObservableCollection<FileTree>();
             foreach (var file in addedFileTree.Children!.ToList())
             {
                 if (!mainFileTree.Children!.Any(x => x.Path == file.Path))
                 {
                     var mainParent = FileTreeNavigator.SearchFileInFileTree(file.Parent!.Path, mainFileTree);
                     mainFileTree.Children!.Add(file);
-
+                    addedFilesCollection.Add(file);
                     file.Parent = mainParent;
                 }
                 else if (mainFileTree.Children!.Any(x => x.Path == file.Path) && file.IsDirectory)
                 {
-                    AddFilesToExistingFileTree(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
+                    AddFilesToExistingFileTree(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file, addedFilesCollection);
                 }
             }
-            EtalonManager.AddFilesOrCreateEtalon(addedFilesCollection, false);
         }
-        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles)
+        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles,ref int filesCount)
         {
-            foreach(var addFile in addedFiles)
+            var addedBDFilesCollection = new ObservableCollection<FileTree>();
+            foreach (var addFile in addedFiles)
             {
                 if(mainCollectionFiles.Any(x=>x.Path == addFile.Path) && addFile.IsDirectory)
                 {
-                    AddFilesToExistingFileTree(mainCollectionFiles.FirstOrDefault(x=>x.Path == addFile.Path)!, addFile);
+                    AddFilesToExistingFileTree(mainCollectionFiles.FirstOrDefault(x=>x.Path == addFile.Path)!, addFile, addedBDFilesCollection);
                 }
                 else if (!mainCollectionFiles.Any(x => x.Path == addFile.Path))
                 {
                     mainCollectionFiles.Add(addFile);
+                    addedBDFilesCollection.Add(addFile);
                 }
             }
-            EtalonManager.AddFilesOrCreateEtalon(addedFiles, false);
+            EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false, ref filesCount);
         }
 
         /// <summary>
