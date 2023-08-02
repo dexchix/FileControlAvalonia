@@ -329,9 +329,10 @@ namespace FileControlAvalonia.ViewModels
             var etalon = EtalonManager.CurentEtalon;
             ProgressBarIsVisible = true;
             EnabledButtons = false;
-
-            ProgressBarMaximum = EtalonManager.CountFilesEtalon;
-            ProgressBarValue = 0;
+            ProgressBarLoopScrol = true;
+            ProgressBarText = "Осуществляется проверка";
+            //ProgressBarMaximum = EtalonManager.CountFilesEtalon;
+            //ProgressBarValue = 0;
             await Task.Run(() =>
             {
                 FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
@@ -342,7 +343,7 @@ namespace FileControlAvalonia.ViewModels
             LastChekInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString());
             DateLastCheck = DateTime.Now.ToString();
             ProgressBarText = "Проверка прошла успешно";
-
+            ProgressBarLoopScrol = false;
             await Task.Delay(1000);
             ProgressBarIsVisible = false;
             EnabledButtons = true;
@@ -357,7 +358,7 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarText = "Создание эталона";
             await Task.Run(() =>
             {
-                EtalonManager.CreateEtalon(MainFileTreeCollection);
+                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true);
                 LastChekInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);

@@ -30,7 +30,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     AddFilesToExistingFileTree(mainFileTree.Children!.Where(x => x.Path == file.Path).FirstOrDefault()!, file);
                 }
             }
-            EtalonManager.CreateEtalon(addedFilesCollection);
+            EtalonManager.AddFilesOrCreateEtalon(addedFilesCollection, false);
         }
         public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles)
         {
@@ -45,7 +45,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     mainCollectionFiles.Add(addFile);
                 }
             }
-            EtalonManager.CreateEtalon(addedFiles);
+            EtalonManager.AddFilesOrCreateEtalon(addedFiles, false);
         }
 
         /// <summary>
@@ -112,6 +112,8 @@ namespace FileControlAvalonia.FileTreeLogic
                 file.EVersion = file.FVersion;
                 file.ELastUpdate = file.FLastUpdate;
                 file.EHash = file.FHash;
+
+                file.Status = StatusFile.Checked;
 
                 if (file.IsDirectory)
                     SetEtalonValues(file.Children);

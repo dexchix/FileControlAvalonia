@@ -1,4 +1,5 @@
 ﻿using FileControlAvalonia.DataBase;
+using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
 using SQLite;
 using System;
@@ -15,18 +16,22 @@ namespace FileControlAvalonia.Core
     {
         public static ObservableCollection<FileTree> CurentEtalon = GetEtalon();
         public static int CountFilesEtalon { get; set; }
-        public static void CreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection)
+        public static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
+            FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
 
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                var commandClearTableFiles = new SQLiteCommand(connection)
+                if(createEalon == true)
                 {
-                    CommandText = "DELETE FROM FilesTable"
-                };
-                commandClearTableFiles.ExecuteNonQuery();
+                    var commandClearTableFiles = new SQLiteCommand(connection)
+                    {
+                        CommandText = "DELETE FROM FilesTable"
+                    };
+                    commandClearTableFiles.ExecuteNonQuery();
+                }
 
                 foreach (var file in etalonFilesCollection)
                 {

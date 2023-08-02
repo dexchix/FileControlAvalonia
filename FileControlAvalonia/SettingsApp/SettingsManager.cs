@@ -33,6 +33,8 @@ namespace FileControlAvalonia.SettingsApp
         {
             try
             {
+                settings.Password = DataBaseOptions.CryptPassword(settings.Password);
+
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {
@@ -67,6 +69,7 @@ namespace FileControlAvalonia.SettingsApp
                 using (StreamReader streamReader = new StreamReader("Settings.xml"))
                 {
                     var settings = serializer.Deserialize(streamReader) as Settings;
+                    settings.Password = DataBaseOptions.DecryptPassword(settings.Password);
                     AppSettings = settings;
                     return AppSettings;
                 }
@@ -75,13 +78,19 @@ namespace FileControlAvalonia.SettingsApp
             {
                 LogManager.GetCurrentClassLogger().Error(ex);
                 var settings = new Settings();
-                settings.Password = DataBaseOptions.Password;
-                AppSettings = settings;
+
+                var password = DataBaseOptions.Password;
+                var cryptPassword = DataBaseOptions.CryptPassword(DataBaseOptions.Password);
+
+                settings.Password = cryptPassword;
+
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {
                     serializer.Serialize(streamWriter, settings);
                 }
+                settings.Password = password;
+                AppSettings = settings;
                 return AppSettings;
             }
         }

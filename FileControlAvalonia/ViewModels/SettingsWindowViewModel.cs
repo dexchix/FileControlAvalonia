@@ -199,89 +199,24 @@ namespace FileControlAvalonia.ViewModels
         {
             if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
             {
-
+               
             }
             else
             {
-                SettingsManager.SetSettings(_settings);
                 DataBaseManager.ChangePasswordDataBase(PasswordVM);
+                SettingsManager.SetSettings(_settings);
                 IsEnabledPasswordTextBox = false;
                 window.Close();
             }
         }
         public void ChangePassword(TextBox textBox)
         {
-            //awdawd.PasswordChar = null;
-            //awdawd.BorderBrush = Brushes.Red;
-            //awdawd.BorderThickness = Thickness.Parse("3");
             textBox.IsReadOnly = false;
             IsEnabledPasswordTextBox = true;
             textBox.PasswordChar = '\0';
             textBox.Clear();
             textBox.Watermark = "Введите новый пароль";
-
-
-            //var s1 = new Style(x => x.OfType<TextBox>())
-            //{
-            //    Setters = {
-            //    new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //        new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
-            //        new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
-            //    }
-            //};
-
-
-            //var s2 = new Style(x => (x.OfType<TextBox>().Class(":pointerover")).Template().OfType<Border>())
-            //{
-            //    Setters =
-            //    {
-            //         new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //         new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
-            //         new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
-            //    }
-            //};
-
-
-            //var s3 = new Style(x => (x.OfType<TextBox>().Class(":focus")).Template().OfType<Border>())
-            //{
-            //    Setters =
-            //    {
-            //         new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //         new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
-            //         new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
-            //    }
-            //};
-
-            //textBox.Styles.Clear();
-
-            //textBox.Styles.Add(s1);
-            //textBox.Styles.Add(s2);
-            //textBox.Styles.Add(s3);
-
-
-            //var sdf = textBox.Classes;
         }
         #endregion
-
-
-        //  new Style(x => x.OfType<Button>().Class("large").Class(":focus"));
-        //  new Style(x => x.OfType<Button>().Template().OfType<ContentPresenter>());
-
-
-
-        //(x)=>x.Class("TextBlock:pointerover /template/ ContentPresenter")
-        /* 
-         * <TextBox.Styles>
-							<Style Selector="TextBox">
-								<Setter Property="Background" Value="Red"/>
-							</Style>
-							<Style Selector="TextBox:pointerover /template/ Border">
-								<Setter Property="Background" Value="Red"/>
-							</Style>
-							<Style Selector="TextBox:focus /template/ Border">
-								<Setter Property="Background" Value="Red"/>
-							</Style>
-						</TextBox.Styles>
-         */
     }
 }

@@ -14,45 +14,6 @@ namespace FileControlAvalonia.Views
         {
             InitializeComponent();
             //Deactivated += DeactivatedWindow;
-
-            //var s1 = new Style(x => x.OfType<TextBox>())
-            //{
-            //    Setters = {
-            //    new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //        new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
-            //        new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
-            //    }
-            //};
-
-
-            //var s2 = new Style(x => (x.OfType<TextBox>().Class(":pointerover")).Template().OfType<Border>())
-            //{
-            //    Setters =
-            //    {
-            //         new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //         new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
-            //         new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
-            //    }
-            //};
-
-
-            //var s3 = new Style(x => (x.OfType<TextBox>().Class(":focus")).Template().OfType<Border>())
-            //{
-            //    Setters =
-            //    {
-            //         new Setter(TextBox.BorderBrushProperty, new SolidColorBrush(Colors.Red)),
-            //         new Setter(TextBox.BorderThicknessProperty, new Thickness(1)),
-            //         new Setter(TextBox.BackgroundProperty, new SolidColorBrush(Colors.Gray))
-            //    }
-            //};
-
-
-            //var textBox = this.FindControl<TextBox>("PasswordBox");
-            //textBox.Styles.Add(s1);
-            //textBox.Styles.Add(s2);
-            //textBox.Styles.Add(s3);
-
-            
         }
 
         private void DeactivatedWindow(object? sender, EventArgs e)
