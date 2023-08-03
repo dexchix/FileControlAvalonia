@@ -46,7 +46,7 @@ namespace FileControlAvalonia.ViewModels
         private int _totalFiles;
         private int _checked;
         private int _partialChecked;
-        private int _unChecked;
+        private int _failedChecked;
         private int _noAccess;
         private int _notFound;
         private int _notChecked;
@@ -140,8 +140,8 @@ namespace FileControlAvalonia.ViewModels
         }
         public int FailedChecked
         {
-            get => _unChecked;
-            set => this.RaiseAndSetIfChanged(ref _unChecked, value);
+            get => _failedChecked;
+            set => this.RaiseAndSetIfChanged(ref _failedChecked, value);
         }
         public int NoAccess
         {
