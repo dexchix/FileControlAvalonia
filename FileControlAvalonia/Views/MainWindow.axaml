@@ -24,7 +24,7 @@
 		<c:BackGroundConverter x:Key="BackGroundConverter"/>
 	</Window.Resources>
 	<i:Interaction.Behaviors>
-		<ia:EventTriggerBehavior EventName="Activated">
+		<ia:EventTriggerBehavior EventName="Opened">
 			<ia:InvokeCommandAction Command="{Binding ShowEtalon}"/>
 		</ia:EventTriggerBehavior>
 	</i:Interaction.Behaviors>

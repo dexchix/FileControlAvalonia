@@ -20,29 +20,6 @@ namespace FileControlAvalonia.Core
         private List<FileTree> _noAccess = new List<FileTree>();
         private List<FileTree> _notFound = new List<FileTree>();
         private List<FileTree> _notChecked = new List<FileTree>();
-        public static void RecordDataOfLastCheck(string dateLastCheck, int totalFiles, int checkedD, int partialChecked, int unChecked, int noAccess, int notFound, int notChecked)
-        {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            {
-                var insertInfoCommand = new SQLiteCommand(connection)
-                {
-                    CommandText = $"UPDATE CheksTable SET DateLastCheck = '{dateLastCheck}', TotalFiles = '{totalFiles}', Checked = '{checkedD}', " +
-                    $"PartialChecked = '{partialChecked}',FailedChecked = '{unChecked}',NoAccess = '{noAccess}',NotFound = '{notFound}', NotChecked = '{notChecked}'"
-                };
-                insertInfoCommand.ExecuteNonQuery();
-            }
-        }
-        public static void RecordInfoOfCreateEtalon(string userLevel, string dateCreateEtalon)
-        {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            {
-                var insertInfoCommand = new SQLiteCommand(connection)
-                {
-                    CommandText = $"UPDATE CheksTable SET Creator = '{userLevel}', Date = '{dateCreateEtalon}'"
-                };
-                insertInfoCommand.ExecuteNonQuery();
-            }
-        }
         private void SetInfoOfStatusFiles(ObservableCollection<FileTree> mainCollection)
         {
             foreach (var file in mainCollection)

@@ -77,35 +77,35 @@ namespace FileControlAvalonia.ViewModels
             get => _viewCollewtionFiles!;
             set => this.RaiseAndSetIfChanged(ref _viewCollewtionFiles, value);
         }
-        //public int FilterIndex
-        //{
-        //    get => _filterIndex;
-        //    set
-        //    {
-        //        this.RaiseAndSetIfChanged(ref _filterIndex, value);
-        //        switch (_filterIndex)
-        //        {
-        //            case 0:
-        //                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, _mainFileTreeCollection);
-        //                break;
-        //            case 1:
-        //                FilterFiles.Filter(StatusFile.Checked, _mainFileTreeCollection, ViewCollectionFiles);
-        //                break;
-        //            case 2:
-        //                FilterFiles.Filter(StatusFile.PartiallyChecked, _mainFileTreeCollection, ViewCollectionFiles);
-        //                break;
-        //            case 3:
-        //                FilterFiles.Filter(StatusFile.FailedChecked, _mainFileTreeCollection, ViewCollectionFiles);
-        //                break;
-        //            case 4:
-        //                FilterFiles.Filter(StatusFile.NoAccess, _mainFileTreeCollection, ViewCollectionFiles);
-        //                break;
-        //            case 5:
-        //                FilterFiles.Filter(StatusFile.Missing, _mainFileTreeCollection, ViewCollectionFiles);
-        //                break;
-        //        }
-        //    }
-        //}
+        public int FilterIndex
+        {
+            get => _filterIndex;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _filterIndex, value);
+                switch (_filterIndex)
+                {
+                    case 0:
+                        FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+                        break;
+                    case 1:
+                        FilterFiles.Filter(StatusFile.Checked, MainFileTreeCollection, ViewCollectionFiles);
+                        break;
+                    case 2:
+                        FilterFiles.Filter(StatusFile.PartiallyChecked, MainFileTreeCollection, ViewCollectionFiles);
+                        break;
+                    case 3:
+                        FilterFiles.Filter(StatusFile.FailedChecked, MainFileTreeCollection, ViewCollectionFiles);
+                        break;
+                    case 4:
+                        FilterFiles.Filter(StatusFile.NoAccess, MainFileTreeCollection, ViewCollectionFiles);
+                        break;
+                    case 5:
+                        FilterFiles.Filter(StatusFile.NotFound, MainFileTreeCollection, ViewCollectionFiles);
+                        break;
+                }
+            }
+        }
 
         public bool EnabledButtons
         {
@@ -259,6 +259,9 @@ namespace FileControlAvalonia.ViewModels
                 ProgressBarLoopScrol = false;
                 ProgressBarText = "Добавление файлов завершно";
                 TotalFiles += addFilesCount;
+                Checked += addFilesCount;
+
+                RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
                 await Task.Delay(1000);
                 ProgressBarIsVisible = false;
                 EnabledButtons = true;
@@ -345,8 +348,12 @@ namespace FileControlAvalonia.ViewModels
             DateLastCheck = DateTime.Now.ToString();
 
 
-            LastChekInfoManager.RecordDataOfLastCheck(DateTime.Now.ToString(), TotalFiles, Checked, PartialChecked,
-               FailedChecked, NoAccess, NotFound, NotChecked);
+            //============================================================================================
+            //Запись в БД
+
+            RecorderInfoBD.RecordDateOfLastCheck(DateLastCheck);
+            RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
+            //============================================================================================
 
             ProgressBarText = "Проверка прошла успешно";
             ProgressBarLoopScrol = false;
@@ -363,14 +370,29 @@ namespace FileControlAvalonia.ViewModels
             EnabledButtons = false;
             ProgressBarText = "Создание эталона";
 
-            int empty = 0;
+            int countFiles = 0;
 
             await Task.Run(() =>
             {
-                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true, ref empty);
-                LastChekInfoManager.RecordInfoOfCreateEtalon("Admin", DateTime.Now.ToString());
+                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true, ref countFiles);
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+
+            //============================================================================================
+            //Запись в БД
+            TotalFiles = countFiles;
+            Checked = countFiles;
+            PartialChecked = 0;
+            FailedChecked = 0;
+            NoAccess = 0;
+            NotFound = 0;
+            NotChecked = 0;
+            DateCreateEtalon = DateTime.Now.ToString();
+
+            RecorderInfoBD.RecordInfoOfCreateEtalon("Admin", DateCreateEtalon);
+            RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
+            //============================================================================================
+
             ProgressBarMaximum = 0;
             ProgressBarValue = 0;
             ProgressBarText = "Создание эталона завершено";
@@ -530,6 +552,8 @@ namespace FileControlAvalonia.ViewModels
             if (NoAccess > 0) NoAccess -= deliteNoAccessCount;
             if (NotFound > 0) NotFound -= deliteNotFoundCount;
             if (NotChecked > 0) NotChecked -= deliteNotCheckedCount;
+
+            RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
 
             ProgressBarIsVisible = false;
             ProgressBarLoopScrol = false;

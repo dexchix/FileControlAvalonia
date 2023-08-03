@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,15 +21,17 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="status"></param>
         /// <param name="mainFileTree"></param>
         /// <param name="viewFilesCollection"></param>
-        public static void Filter(StatusFile status, FileTree mainFileTree, ObservableCollection<FileTree> viewFilesCollection)
+        public static void Filter(StatusFile status, ObservableCollection<FileTree> mainCollection, ObservableCollection<FileTree> viewFilesCollection)
         {
-            var copy = GetSimpleCopy(mainFileTree);
-            RemoveNotMatchStatusFiles(copy, status);
-            DeliteEmptyFolders(copy);
-            DeliteEmptyFolders(copy);
+            var copy = FilesCollectionManager.GetDeepCopy(mainCollection);
+            //RemoveNotMatchStatusFiles(copy, status);
+            //DeliteEmptyFolders(copy);
+            //DeliteEmptyFolders(copy);
+
+            TEST(copy,status);
 
             viewFilesCollection.Clear();
-            foreach (var file in copy.Children!.ToList())
+            foreach (var file in copy!.ToList())
             {
                 viewFilesCollection.Add(file);
             }
@@ -38,17 +41,17 @@ namespace FileControlAvalonia.FileTreeLogic
         /// </summary>
         /// <param name="fileTree"></param>
         /// <param name="status"></param>
-        private static void RemoveNotMatchStatusFiles(FileTree fileTree, StatusFile status)
+        private static void RemoveNotMatchStatusFiles(ObservableCollection<FileTree> copy, StatusFile status)
         {
-            foreach (var file in fileTree.Children!.ToList())
+            foreach (var file in copy!.ToList())
             {
                 if(!file.IsDirectory && file.Status != status)
                 {
-                    fileTree.Children!.Remove(file);
+                    copy!.Remove(file);
                 }
                 else if (file.IsDirectory)
                 {
-                    RemoveNotMatchStatusFiles(file, status);
+                    RemoveNotMatchStatusFiles(file.Children, status);
                 }
             }
         }
@@ -93,23 +96,33 @@ namespace FileControlAvalonia.FileTreeLogic
         /// Удаляет пустые папки
         /// </summary>
         /// <param name="fileTree"></param>
-        private static void DeliteEmptyFolders(FileTree fileTree)
+        private static void DeliteEmptyFolders(ObservableCollection<FileTree> mainCollection)
         {
-            foreach(var file in fileTree.Children!.ToList())
+            foreach(var file in mainCollection!.ToList())
             {
-                if(file.Path == "C:\\1\\2\\Новая папка")
-                {
-                    object a = null;
-                }
-
                 if (file.IsDirectory && (file.Children == null || file.Children.Count == 0))
                 {
                     file.Parent.Children.Remove(file); 
                 }
                 else if (file.IsDirectory && file.Children.Count >0)
                 {
-                    DeliteEmptyFolders(file);
+                    DeliteEmptyFolders(file.Children);
                 }
+            }
+        }
+
+
+
+        private static void TEST(ObservableCollection<FileTree> copy, StatusFile status)
+        {
+            foreach(var file in copy.ToList())
+            {
+                if (file.Status != status)
+                    copy.Remove(file);
+                else if (file.Status == status && file.IsDirectory)
+                {
+                    TEST(file.Children, status);
+                }   
             }
         }
     }

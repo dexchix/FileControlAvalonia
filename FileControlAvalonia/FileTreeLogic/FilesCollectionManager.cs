@@ -1,8 +1,11 @@
-﻿using FileControlAvalonia.Core;
+﻿using AutoMapper;
+using FileControlAvalonia.Core;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.Models;
+using Newtonsoft.Json;
 using SQLite;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -30,14 +33,14 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
-        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles,ref int filesCount)
+        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles, ref int filesCount)
         {
             var addedBDFilesCollection = new ObservableCollection<FileTree>();
             foreach (var addFile in addedFiles)
             {
-                if(mainCollectionFiles.Any(x=>x.Path == addFile.Path) && addFile.IsDirectory)
+                if (mainCollectionFiles.Any(x => x.Path == addFile.Path) && addFile.IsDirectory)
                 {
-                    AddFilesToExistingFileTree(mainCollectionFiles.FirstOrDefault(x=>x.Path == addFile.Path)!, addFile, addedBDFilesCollection);
+                    AddFilesToExistingFileTree(mainCollectionFiles.FirstOrDefault(x => x.Path == addFile.Path)!, addFile, addedBDFilesCollection);
                 }
                 else if (!mainCollectionFiles.Any(x => x.Path == addFile.Path))
                 {
@@ -59,29 +62,19 @@ namespace FileControlAvalonia.FileTreeLogic
         {
             try
             {
-                foreach (var file in viewCollectionFiles.ToList())
+                var delitedFileMainCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, mainFileTreeCollection);
+                if (delitedFileMainCollection.Parent != null) delitedFileMainCollection.Parent.Children.Remove(delitedFileMainCollection);
+                //else mainFileTreeCollection.Remove(delitedFile);
+                else
                 {
-                    if (file.Path == delitedFile.Path)
-                    {
-                        viewCollectionFiles.Remove(file);
-                        mainFileTreeCollection.Remove(file);
-                        return;
-                    }
+                    mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
+                    var adw = mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
+                    mainFileTreeCollection.Remove(adw);
                 }
-                foreach (var file in viewCollectionFiles.ToList())
-                {
-                    if (delitedFile.Path.StartsWith(file.Path))
-                    {
-                        var delFileInViewCollection = FileTreeNavigator.SearchFileInFileTree(delitedFile.Path, file);
-                        if (delFileInViewCollection != null)
-                        {
-                            delFileInViewCollection.Parent!.Children!.Remove(delFileInViewCollection);
-                            var delitedFileInFileTree = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, mainFileTreeCollection);
-                            delitedFileInFileTree.Parent!.Children!.Remove(delitedFileInFileTree);
-                            return;
-                        }
-                    }
-                }
+
+                var delitedFileViewCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, viewCollectionFiles);
+                if (delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children.Remove(delitedFileViewCollection);
+                else viewCollectionFiles.Remove(delitedFile);
             }
             catch (Exception ex)
             {
@@ -107,7 +100,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="filesCollection"></param>
         public static void SetEtalonValues(ObservableCollection<FileTree> filesCollection)
         {
-            foreach(var file in filesCollection)
+            foreach (var file in filesCollection)
             {
                 file.EVersion = file.FVersion;
                 file.ELastUpdate = file.FLastUpdate;
@@ -118,6 +111,19 @@ namespace FileControlAvalonia.FileTreeLogic
                 if (file.IsDirectory)
                     SetEtalonValues(file.Children);
             }
+        }
+
+        public static ObservableCollection<FileTree> GetDeepCopy(ObservableCollection<FileTree> mainCollection)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FileTree, FileTree>();
+            });
+
+            var mapper = new Mapper(config);
+
+            var clone = mapper.Map<ObservableCollection<FileTree>>(mainCollection);
+            return clone;
         }
     }
 }

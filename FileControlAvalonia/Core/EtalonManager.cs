@@ -1,6 +1,7 @@
 ﻿using FileControlAvalonia.DataBase;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
+using Newtonsoft.Json;
 using SQLite;
 using System;
 using System.Collections.Generic;

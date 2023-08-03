@@ -67,19 +67,6 @@ namespace FileControlAvalonia.Core
         }
         private void ChangeStatusParents(FileTree fileTree, StatusFile status)
         {
-            //if (fileTree.Parent != null)
-            //{
-            //    if (status == StatusFile.Checked)
-            //    {
-            //        return;
-            //    }
-            //    else if (status == StatusFile.NotFound)
-            //    {
-            //        var parent = fileTree.Parent;
-            //        parent.Status = status;
-            //        ChangeStatusParents(parent, status);
-            //    }
-            //}
             if(fileTree.Parent != null)
             {
                 if (status == StatusFile.PartiallyChecked && fileTree.Parent.Status == StatusFile.FailedChecked)
