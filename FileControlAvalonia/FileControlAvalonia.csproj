@@ -44,4 +44,10 @@
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ServiceLib">
+      <HintPath>LIBS\ServiceLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

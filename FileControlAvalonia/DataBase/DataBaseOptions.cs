@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FileControlAvalonia.SettingsApp;
 using SQLite;
 using SQLitePCL;
+using ServiceLib;
 
 namespace FileControlAvalonia.DataBase
 {
@@ -50,5 +51,7 @@ namespace FileControlAvalonia.DataBase
             return Encoding.Unicode.GetString(outputBuffer);
         }
         #endregion
+
+        //result.Add("Database password", ServiceLib.EncryptingFunctions.Encrypt(Password));
     }
 }

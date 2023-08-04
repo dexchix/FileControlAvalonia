@@ -33,7 +33,8 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
-        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles, ref int filesCount)
+
+        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles, FileStats stats)
         {
             var addedBDFilesCollection = new ObservableCollection<FileTree>();
             foreach (var addFile in addedFiles)
@@ -48,7 +49,8 @@ namespace FileControlAvalonia.FileTreeLogic
                     addedBDFilesCollection.Add(addFile);
                 }
             }
-            EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false, ref filesCount);
+            stats.GetFilesStats(addedBDFilesCollection);
+            EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false);
         }
 
         /// <summary>
@@ -58,23 +60,24 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="viewCollectionFiles"></param>
         /// <param name="mainFileTree"></param>
         public static void DeliteFile(FileTree delitedFile, ObservableCollection<FileTree> viewCollectionFiles,
-                                      ObservableCollection<FileTree> mainFileTreeCollection)
+                                      ObservableCollection<FileTree> mainFileTreeCollection, FileStats fileStats)
         {
             try
             {
+                fileStats = fileStats.GetFilesStats(new List<FileTree> { delitedFile});
+
                 var delitedFileMainCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, mainFileTreeCollection);
-                if (delitedFileMainCollection.Parent != null) delitedFileMainCollection.Parent.Children.Remove(delitedFileMainCollection);
-                //else mainFileTreeCollection.Remove(delitedFile);
+                if (delitedFileMainCollection.Parent != null) delitedFileMainCollection.Parent.Children!.Remove(delitedFileMainCollection);
                 else
                 {
-                    mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
-                    var adw = mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
-                    mainFileTreeCollection.Remove(adw);
+                    var delFile = mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
+                    mainFileTreeCollection.Remove(delFile!);
                 }
 
                 var delitedFileViewCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, viewCollectionFiles);
-                if (delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children.Remove(delitedFileViewCollection);
+                if (delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children!.Remove(delitedFileViewCollection);
                 else viewCollectionFiles.Remove(delitedFile);
+
             }
             catch (Exception ex)
             {

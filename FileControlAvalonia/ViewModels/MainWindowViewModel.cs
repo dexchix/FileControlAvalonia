@@ -43,6 +43,8 @@ namespace FileControlAvalonia.ViewModels
         private static ArrowConverter? s_arrowConverter;
         private int _filterIndex = 0;
         private string _userLevel;
+
+        #region Info
         private int _totalFiles;
         private int _checked;
         private int _partialChecked;
@@ -53,6 +55,8 @@ namespace FileControlAvalonia.ViewModels
         private string _dateLastCheck;
         private string _dateCreateEtalon;
         private string _userLevelCreateEtalon;
+        #endregion
+
         private bool _enabledButtons = true;
 
         #region ProgressBar
@@ -247,19 +251,19 @@ namespace FileControlAvalonia.ViewModels
                 EnabledButtons = false;
                 ProgressBarText = "Добавление файлов";
 
-                int addFilesCount = 0;
+                FileStats fileStats = new FileStats();
 
                 await Task.Run(() =>
                 {
-                    FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree, ref addFilesCount);
-
+                    FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree, fileStats);
                 });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
                 ProgressBarLoopScrol = false;
                 ProgressBarText = "Добавление файлов завершно";
-                TotalFiles += addFilesCount;
-                Checked += addFilesCount;
+
+                TotalFiles += fileStats.TotalFiles;
+                Checked += fileStats.Checked;
 
                 RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
                 await Task.Delay(1000);
@@ -339,8 +343,8 @@ namespace FileControlAvalonia.ViewModels
                 PartialChecked = comparator.PartiallyChecked;
                 FailedChecked = comparator.FailedChecked;
                 NoAccess = comparator.NoAccess;
-                NotFound = comparator.Missing;
-                NotChecked = comparator.UnChecked;
+                NotFound = comparator.NotFound;
+                NotChecked = comparator.NotChecked;
 
                 new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
             });
@@ -374,7 +378,7 @@ namespace FileControlAvalonia.ViewModels
 
             await Task.Run(() =>
             {
-                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true, ref countFiles);
+                EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true);
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
@@ -529,29 +533,31 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = true;
             ProgressBarText = "Удаление файлов";
 
-            int deliteTotalFilesCount = 0;
-            int deliteCheckedCount = 0;
-            int delitePartialCheckedCount = 0;
-            int deliteFailedCheckedCount = 0;
-            int deliteNoAccessCount = 0;
-            int deliteNotFoundCount = 0;
-            int deliteNotCheckedCount = 0;
+            //int deliteTotalFilesCount = 0;
+            //int deliteCheckedCount = 0;
+            //int delitePartialCheckedCount = 0;
+            //int deliteFailedCheckedCount = 0;
+            //int deliteNoAccessCount = 0;
+            //int deliteNotFoundCount = 0;
+            //int deliteNotCheckedCount = 0;
 
+            FileStats stats = new FileStats();
+
+            
 
             await Task.Run(() =>
             {
-                FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection);
-                EtalonManager.DeliteFileInDB(delitedFile, ref deliteTotalFilesCount, ref deliteCheckedCount, ref delitePartialCheckedCount,
-                    ref deliteFailedCheckedCount, ref deliteNoAccessCount, ref deliteNotFoundCount, ref deliteNotCheckedCount);
+                FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection, stats);
+                EtalonManager.DeliteFileInDB(delitedFile);
             });
 
-            if (TotalFiles > 0) TotalFiles -= deliteTotalFilesCount;
-            if (Checked > 0) Checked -= deliteCheckedCount;
-            if (PartialChecked > 0) PartialChecked -= delitePartialCheckedCount;
-            if (FailedChecked > 0) FailedChecked -= deliteFailedCheckedCount;
-            if (NoAccess > 0) NoAccess -= deliteNoAccessCount;
-            if (NotFound > 0) NotFound -= deliteNotFoundCount;
-            if (NotChecked > 0) NotChecked -= deliteNotCheckedCount;
+            if (TotalFiles > 0) TotalFiles -= stats.TotalFiles;
+            if (Checked > 0) Checked -= stats.Checked;
+            if (PartialChecked > 0) PartialChecked -= stats.PartialChecked;
+            if (FailedChecked > 0) FailedChecked -= stats.FailedChecked;
+            if (NoAccess > 0) NoAccess -= stats.NoAccess;
+            if (NotFound > 0) NotFound -= stats.NotFound;
+            if (NotChecked > 0) NotChecked -= stats.NotChecked;
 
             RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
 

@@ -2,8 +2,6 @@
 using Avalonia.ReactiveUI;
 using System;
 using NLog;
-using NLog.Config;
-using NLog.Targets;
 using FileControlAvalonia.Services;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.SettingsApp;

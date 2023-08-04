@@ -18,16 +18,16 @@ namespace FileControlAvalonia.Core
         public int Checked = 0;
         public int PartiallyChecked = 0;
         public int FailedChecked = 0;
-        public int UnChecked = 0;
         public int NoAccess = 0;
-        public int Missing = 0;
+        public int NotChecked = 0;
+        public int NotFound = 0;
+
         public void CompareFiles(ObservableCollection<FileTree> mainFileTreeCollection, int count)
         {
             foreach (var file in mainFileTreeCollection.ToList())
             {
                 SetStatus(file);
 
-                TotalFiles++;
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}";
 
@@ -35,62 +35,98 @@ namespace FileControlAvalonia.Core
                 {
                     CompareFiles(file.Children, count);
                 }
+                else
+                    TotalFiles++;
             }
         }
         public void SetStatus(FileTree fileTree)
         {
-            if (fileTree.EHash == fileTree.FHash &&
+            //NoAccess
+            if (fileTree.FHash == "Отказано в доступе" || fileTree.FLastUpdate == "Отказано в доступе" || fileTree.FVersion == "Отказано в доступе")
+            {
+                fileTree.Status = StatusFile.NoAccess;
+                if (!fileTree.IsDirectory)
+                    NoAccess++;
+                ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
+                return;
+
+            }
+            //NotFound
+            else if (fileTree.FHash == "Файл отсутствует" || fileTree.FLastUpdate == "Файл отсутствует" || fileTree.FVersion == "Файл отсутствует")
+            {
+                fileTree.Status = StatusFile.NotFound;
+                if (!fileTree.IsDirectory)
+                    NotFound++;
+                ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
+                return;
+            }
+            //Checked
+            else if (fileTree.EHash == fileTree.FHash &&
                fileTree.ELastUpdate == fileTree.FLastUpdate &&
                fileTree.EVersion == fileTree.FVersion)
             {
                 fileTree.Status = StatusFile.Checked;
-                Checked++;
-                //ChangeStatusParents(fileTree, fileTree.Status);
+                if (!fileTree.IsDirectory)
+                    Checked++;
                 return;
             }
+            //PartialChecked
             else if (fileTree.EHash == fileTree.FHash &&
                fileTree.EVersion == fileTree.FVersion &&
                fileTree.ELastUpdate != fileTree.FLastUpdate)
             {
                 fileTree.Status = StatusFile.PartiallyChecked;
-                PartiallyChecked++;
+                if (!fileTree.IsDirectory)
+                    PartiallyChecked++;
                 ChangeStatusParents(fileTree, fileTree.Status);
                 return;
             }
+
             else
             {
                 fileTree.Status = StatusFile.FailedChecked;
+                if (!fileTree.IsDirectory)
+                    FailedChecked++;
                 ChangeStatusParents(fileTree, fileTree.Status);
-                FailedChecked++;
                 return;
             }
         }
         private void ChangeStatusParents(FileTree fileTree, StatusFile status)
         {
-            if(fileTree.Parent != null)
+            if (fileTree.Parent != null)
             {
-                if (status == StatusFile.PartiallyChecked && fileTree.Parent.Status == StatusFile.FailedChecked)
+                //if (status == StatusFile.PartiallyChecked && fileTree.Parent.Status == StatusFile.FailedChecked)
+                //{
+                //    return;
+                //}
+                //else if (status == StatusFile.PartiallyChecked)
+                //{
+                //    if (fileTree.Parent != null)
+                //    {
+                //        fileTree.Parent.Status = status;
+                //        ChangeStatusParents(fileTree.Parent, status);
+
+                //    }
+                //}
+                //else if (status == StatusFile.FailedChecked)
+                //{
+
+                //    if (fileTree.Parent != null)
+                //    {
+                //        fileTree.Parent.Status = status;
+                //        ChangeStatusParents(fileTree.Parent, status);
+
+                //    }
+                //}
+                if (status == StatusFile.PartiallyChecked && fileTree.Parent.Status != StatusFile.FailedChecked)
                 {
-                    return;
+                    fileTree.Parent.Status = status;
+                    ChangeStatusParents(fileTree.Parent, status);
                 }
-                else if (status == StatusFile.PartiallyChecked)
+                else
                 {
-                    if (fileTree.Parent != null)
-                    {
-                        fileTree.Parent.Status = status;
-                        ChangeStatusParents(fileTree.Parent, status);
-
-                    }
-                }
-                else if (status == StatusFile.FailedChecked)
-                {
-
-                    if (fileTree.Parent != null)
-                    {
-                        fileTree.Parent.Status = status;
-                        ChangeStatusParents(fileTree.Parent, status);
-
-                    }
+                    fileTree.Parent.Status = StatusFile.FailedChecked;
+                    ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
                 }
             }
         }

@@ -18,52 +18,75 @@ namespace FileControlAvalonia.Core
     {
         private static string GetMD5Hash(string filePath)
         {
-            if (Directory.Exists(filePath) || File.Exists(filePath))
+            bool folderExist = Directory.Exists(filePath);
+            bool fileExist = File.Exists(filePath);
+            if (folderExist || fileExist)
             {
-                try
-                {
-                    using (var md5 = MD5.Create())
+                if (folderExist)
+                    return "-";
+                else
+                    try
                     {
-
-                        using (var stream = File.OpenRead(filePath))
+                        using (var md5 = MD5.Create())
                         {
-                            byte[] hashBytes = md5.ComputeHash(stream);
-                            string hashString = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
-                            return hashString;
+
+                            using (var stream = File.OpenRead(filePath))
+                            {
+                                byte[] hashBytes = md5.ComputeHash(stream);
+                                string hashString = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+                                return hashString;
+                            }
                         }
                     }
-                }
-                catch
-                {
-                    return "-";
-                }
+                    catch
+                    {
+                        return "Отказано в доступе";
+                    }
             }
             return "Файл отсутствует";
 
         }
         private static string GetLastUpdate(string filePath)
         {
-            if (Directory.Exists(filePath) || File.Exists(filePath))
-            {
-                if (Directory.Exists(filePath))
-                {
+            bool folderExist = Directory.Exists(filePath);
+            bool fileExist = File.Exists(filePath);
+            if (folderExist || fileExist)
+            {  
+                if (folderExist)
                     return new DirectoryInfo(filePath).LastWriteTime.ToString();
-                }
                 else
                 {
-                    return new FileInfo(filePath).LastWriteTime.ToString();
+                    try
+                    {
+                        return new FileInfo(filePath).LastWriteTime.ToString();
+
+                    }
+                    catch
+                    {
+                        return "Отказано в доступе";
+                    }
                 }
             }
             return "Файл отсутствует";
         }
         private static string GetVersion(string filePath)
         {
-            if (Directory.Exists(filePath) || File.Exists(filePath))
+            bool folderExist = Directory.Exists(filePath);
+            bool fileExist = File.Exists(filePath);
+            if (folderExist || fileExist)
             {
-                if (File.Exists(filePath))
+                if (fileExist)
                 {
-                    var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
-                    return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
+                    try
+                    {
+                        var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
+                        return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
+                    }
+                    catch
+                    {
+                        return "Отказано в доступе";
+                    }
+
                 }
                 else return "-";
             }
@@ -88,4 +111,9 @@ namespace FileControlAvalonia.Core
             }
         }
     }
+
+    //public class FactParameterizer
+    //{
+
+    //}
 }
