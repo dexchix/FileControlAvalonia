@@ -91,7 +91,7 @@ namespace FileControlAvalonia.DataBase
                 {
 
                 }
-                DataBaseOptions.ChangeDataBaseOptions();
+                DataBaseOptions.SetOptions();
             }
         }
     }

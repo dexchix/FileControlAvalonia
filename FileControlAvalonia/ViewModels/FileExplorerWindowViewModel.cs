@@ -108,6 +108,7 @@ namespace FileControlAvalonia.ViewModels
 
 
             Dispose();
+            GC.Collect();
             window.Close();
         }
         public void UpCommand()

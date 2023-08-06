@@ -47,7 +47,7 @@ namespace FileControlAvalonia.Core
                 fileTree.Status = StatusFile.NoAccess;
                 if (!fileTree.IsDirectory)
                     NoAccess++;
-                ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
+                ChangeStatusParents(fileTree, StatusFile.FailedChecked);
                 return;
 
             }
@@ -93,7 +93,7 @@ namespace FileControlAvalonia.Core
         }
         private void ChangeStatusParents(FileTree fileTree, StatusFile status)
         {
-            if (fileTree.Parent != null)
+            if (fileTree != null && fileTree.Parent != null)
             {
                 //if (status == StatusFile.PartiallyChecked && fileTree.Parent.Status == StatusFile.FailedChecked)
                 //{

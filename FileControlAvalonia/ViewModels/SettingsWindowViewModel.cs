@@ -37,6 +37,7 @@ namespace FileControlAvalonia.ViewModels
         private string? _avalibleFileExtensionsVM;
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
+        private string _pastPassword;
         private bool _isEnabledPasswordTextBox = false;
 
         public string UserVM
@@ -176,6 +177,7 @@ namespace FileControlAvalonia.ViewModels
             _settings = _settings ?? new Settings();
             _userVM = _settings.User;
             _passwordVM = _settings.Password;
+            _pastPassword = _settings.Password;
             _nameTableVM = _settings.NameTable;
             _pathOPCServerVM = _settings.PathOPCServer;
             _tagTotalStatusVM = _settings.TagTotalStatus;
@@ -199,11 +201,12 @@ namespace FileControlAvalonia.ViewModels
         {
             if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
             {
-               
+
             }
             else
             {
-                DataBaseManager.ChangePasswordDataBase(PasswordVM);
+                if (PasswordVM != _pastPassword)
+                    DataBaseManager.ChangePasswordDataBase(PasswordVM);
                 SettingsManager.SetSettings(_settings);
                 IsEnabledPasswordTextBox = false;
                 window.Close();

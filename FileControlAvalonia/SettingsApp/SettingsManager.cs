@@ -25,8 +25,24 @@ namespace FileControlAvalonia.SettingsApp
 
         public static void SetStartupSettings()
         {
-            var settings = GetSettings();
-            SetSettings(settings);
+
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Settings.xml")))
+            {
+                GetSettings();
+            }
+            else
+            {
+                var settings = new Settings();
+                settings.Password = DataBaseOptions.CryptPassword(DataBaseOptions.Password);
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
+                {
+                    serializer.Serialize(streamWriter, settings);
+                }
+                settings.Password = DataBaseOptions.Password;
+                AppSettings = settings;
+                RootPath = settings.RootPath;
+            }
         }
 
         public static void SetSettings(Settings settings)
@@ -71,6 +87,7 @@ namespace FileControlAvalonia.SettingsApp
                     var settings = serializer.Deserialize(streamReader) as Settings;
                     settings.Password = DataBaseOptions.DecryptPassword(settings.Password);
                     AppSettings = settings;
+                    RootPath = settings.RootPath;
                     return AppSettings;
                 }
             }
