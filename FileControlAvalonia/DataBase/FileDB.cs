@@ -21,12 +21,13 @@ namespace FileControlAvalonia.DataBase
         public string FHashSum { get; set; }
         public string ParentPath { get; set; }
         public StatusFile Status { get; set; }
+        public bool IsDirectory { get; set; } 
         public FileDB()
         {
 
         }
 
-        public FileDB(string name, string path, string eLastUpdate, string eVersion, string eHashSum, string fLastUpdate, string fVersion, string fHashSum, string parentPath)
+        public FileDB(string name, string path, string eLastUpdate, string eVersion, string eHashSum, string fLastUpdate, string fVersion, string fHashSum, string parentPath, bool isDirectory)
         {
             Name = name;
             Path = path;
@@ -38,6 +39,7 @@ namespace FileControlAvalonia.DataBase
             FHashSum = fHashSum;
 
             ParentPath = parentPath;
+            IsDirectory = isDirectory;
         }
         public override string ToString()
         {
