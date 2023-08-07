@@ -16,7 +16,7 @@ namespace FileControlAvalonia.Core
     {
         public int TotalFiles = 0;
         public int Checked = 0;
-        public int PartiallyChecked = 0;
+        public int PartialChecked = 0;
         public int FailedChecked = 0;
         public int NoAccess = 0;
         public int NotChecked = 0;
@@ -77,7 +77,7 @@ namespace FileControlAvalonia.Core
             {
                 fileTree.Status = StatusFile.PartiallyChecked;
                 if (!fileTree.IsDirectory)
-                    PartiallyChecked++;
+                    PartialChecked++;
                 ChangeStatusParents(fileTree, fileTree.Status);
                 return;
             }

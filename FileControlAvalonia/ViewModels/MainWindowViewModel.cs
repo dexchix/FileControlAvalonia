@@ -340,7 +340,7 @@ namespace FileControlAvalonia.ViewModels
 
                 TotalFiles = comparator.TotalFiles;
                 Checked = comparator.Checked;
-                PartialChecked = comparator.PartiallyChecked;
+                PartialChecked = comparator.PartialChecked;
                 FailedChecked = comparator.FailedChecked;
                 NoAccess = comparator.NoAccess;
                 NotFound = comparator.NotFound;
@@ -394,7 +394,7 @@ namespace FileControlAvalonia.ViewModels
             DateCreateEtalon = DateTime.Now.ToString();
 
             RecorderInfoBD.RecordInfoOfCreateEtalon("Admin", DateCreateEtalon);
-            RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
+            //RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
             //============================================================================================
 
             ProgressBarMaximum = 0;
@@ -441,29 +441,53 @@ namespace FileControlAvalonia.ViewModels
         }
         async public void ShowEtalon()
         {
-            try
+            var comparator = new Comprasion();
+            ProgressBarIsVisible = true;
+            ProgressBarLoopScrol = true;
+            await Task.Delay(2000);
+            await Task.Run(() =>
             {
-                MainFileTreeCollection = EtalonManager.CurentEtalon;
-                FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+                try
+                {
+                    MainFileTreeCollection = EtalonManager.GetEtalon();
 
-                DateCreateEtalon = EtalonManager.CheckInfo.Date;
-                DateLastCheck = EtalonManager.CheckInfo.DateLastCheck;
-                UserLevel = EtalonManager.CheckInfo.Creator;
+                    comparator.CompareFiles(MainFileTreeCollection, ProgressBarValue);
 
-                TotalFiles = EtalonManager.CheckInfo.TotalFiles;
-                Checked = EtalonManager.CheckInfo.Checked;
-                PartialChecked = EtalonManager.CheckInfo.PartialChecked;
-                FailedChecked = EtalonManager.CheckInfo.FailedChecked;
-                NoAccess = EtalonManager.CheckInfo.NoAccess;
-                NotFound = EtalonManager.CheckInfo.NotFound;
-                NotChecked = EtalonManager.CheckInfo.NotChecked;
+                    //var statats = new FileStats().GetFilesStats(MainFileTreeCollection);
+                    //TotalFiles = statats.TotalFiles;
+                    //Checked = statats.Checked;
+                    //PartialChecked = statats.PartialChecked;
+                    //FailedChecked = statats.FailedChecked;
+                    //NoAccess = statats.NoAccess;
+                    //NotFound = statats.NotFound;
+                    //NotChecked = statats.NotChecked;
+
+                }
+                catch
+                {
+
+                }
+            });
+
+            FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+
+            ProgressBarLoopScrol = false;
+            ProgressBarIsVisible = false;
+
+            var info = EtalonManager.GetInfo();
 
 
-            }
-            catch
-            {
+            DateCreateEtalon = info.Date;
+            DateLastCheck = info.DateLastCheck;
+            UserLevel = info.Creator;
 
-            }
+            TotalFiles = comparator.TotalFiles;
+            Checked = comparator.Checked;
+            PartialChecked = comparator.PartialChecked;
+            FailedChecked = comparator.FailedChecked;
+            NoAccess = comparator.NoAccess;
+            NotFound = comparator.NotFound;
+            NotChecked = comparator.NotChecked;
         }
 
         public void ExpandAllNodesCommand()
@@ -543,7 +567,7 @@ namespace FileControlAvalonia.ViewModels
 
             FileStats stats = new FileStats();
 
-            
+
 
             await Task.Run(() =>
             {

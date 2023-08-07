@@ -13,11 +13,18 @@ using Tmds.DBus;
 
 namespace FileControlAvalonia.Core
 {
-    public class EtalonManager
+    public static class EtalonManager
     {
-        public static ObservableCollection<FileTree> CurentEtalon = GetEtalon();
-        public static EtalonAndChecksInfoDB CheckInfo = GetInfo();
-        public static int CountFilesEtalon { get; set; }
+        //public static ObservableCollection<FileTree> CurentEtalon = GetEtalon();
+        //public static EtalonAndChecksInfoDB CheckInfo = GetInfo();
+
+
+
+        /// <summary>
+        /// Добавляет файлы в эталон или создает новый.
+        /// </summary>
+        /// <param name="mainFileTreeCollection"></param>
+        /// <param name="createEalon">Если true - создает эталон, если false - добавляет файлы</param>
         public static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
             FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
@@ -26,7 +33,7 @@ namespace FileControlAvalonia.Core
 
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                if(createEalon == true)
+                if (createEalon == true)
                 {
                     var commandClearTableFiles = new SQLiteCommand(connection)
                     {
@@ -46,18 +53,21 @@ namespace FileControlAvalonia.Core
                     insertCommandFilesTable.ExecuteNonQuery();
                 }
 
-                var commandClearTableCheks = new SQLiteCommand(connection)
-                {
-                    CommandText = "DELETE FROM CheksTable"
-                };
-                commandClearTableCheks.ExecuteNonQuery();
+                //var commandClearTableCheks = new SQLiteCommand(connection)
+                //{
+                //    CommandText = "DELETE FROM CheksTable"
+                //};
+                //commandClearTableCheks.ExecuteNonQuery();
 
-                var insertCommandChecksTable = new SQLiteCommand(connection)
-                {
-                    CommandText = "INSERT INTO CheksTable (ID, Creator, Date) " +
-                                   $"VALUES ({1}, 'Admin' , '{DateTime.Now.ToString()}');"
-                };
-                insertCommandChecksTable.ExecuteNonQuery();
+                //if (createEalon == true)
+                //{
+                //    var insertCommandChecksTable = new SQLiteCommand(connection)
+                //    {
+                //        CommandText = "INSERT INTO CheksTable (ID, Creator, Date) " +
+                //                   $"VALUES ({1}, 'Admin' , '{DateTime.Now.ToString()}');"
+                //    };
+                //    insertCommandChecksTable.ExecuteNonQuery();
+                //}
             }
         }
 
@@ -75,7 +85,6 @@ namespace FileControlAvalonia.Core
             }
             var converter = new DataBaseConverter();
             var etalonInDBContext = converter.ConvertFormatDBToFileTreeCollection(etalon);
-            CountFilesEtalon = etalon.Count;
             FileTree._counter = -1;
             return etalonInDBContext;
         }
@@ -84,7 +93,7 @@ namespace FileControlAvalonia.Core
         {
             if (file.Children != null)
             {
-                var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() {file});
+                var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() { file });
                 using (var connection = new SQLiteConnection(DataBaseOptions.Options))
                 {
                     foreach (var diletedFile in listDelitedFiles)
@@ -114,11 +123,12 @@ namespace FileControlAvalonia.Core
         {
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                var insertCommandFilesTable = new SQLiteCommand(connection)
+                var getInfoCommand = new SQLiteCommand(connection)
                 {
                     CommandText = $"SELECT Creator, Date, DateLastCheck, TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked FROM CheksTable"
                 };
-                return insertCommandFilesTable.ExecuteQuery<EtalonAndChecksInfoDB>()[0];
+                var info = getInfoCommand.ExecuteQuery<EtalonAndChecksInfoDB>()[0];
+                return info;
             }
         }
     }

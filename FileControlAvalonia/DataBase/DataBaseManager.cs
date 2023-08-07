@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileControlAvalonia.Core;
 using Splat;
 using SQLite;
 using SQLitePCL;
@@ -67,11 +68,18 @@ namespace FileControlAvalonia.DataBase
                                                  NotChecked INTEGER
                                              );";
 
+
+                string insertValuesInfo = "INSERT INTO CheksTable (Creator, Date, DateLastCheck, TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked) " +
+                               $"VALUES ('', '', '', '0', '0', '0', '0', '0', '0', '0');";
+
+
                 var command = new SQLiteCommand(connection);
 
                 command.CommandText = createFilesTableQuery;
                 command.ExecuteNonQuery();
                 command.CommandText = createCheksTableQuery;
+                command.ExecuteNonQuery();
+                command.CommandText = insertValuesInfo;
                 command.ExecuteNonQuery();
             }
         }

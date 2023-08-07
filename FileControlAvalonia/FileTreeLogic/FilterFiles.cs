@@ -24,12 +24,9 @@ namespace FileControlAvalonia.FileTreeLogic
         public static void Filter(StatusFile status, ObservableCollection<FileTree> mainCollection, ObservableCollection<FileTree> viewFilesCollection)
         {
             var copy = FilesCollectionManager.GetDeepCopy(mainCollection);
-            //RemoveNotMatchStatusFiles(copy, status);
-            //DeliteEmptyFolders(copy);
-            //DeliteEmptyFolders(copy);
             ObservableCollection<FileTree> filterCollection = new ObservableCollection<FileTree>();
 
-            TEST(copy, filterCollection, status);
+            FillFilteredCollection(copy, filterCollection, status);
 
             viewFilesCollection.Clear();
             foreach (var file in filterCollection!.ToList())
@@ -55,17 +52,6 @@ namespace FileControlAvalonia.FileTreeLogic
                     RemoveNotMatchStatusFiles(file.Children, status);
                 }
             }
-        }
-        /// <summary>
-        /// Создает простую копию файлового дерева
-        /// </summary>
-        /// <param name="mainFileTree"></param>
-        /// <returns></returns>
-        public static FileTree GetSimpleCopy(FileTree mainFileTree)
-        {
-            var copyFileTree = new FileTree(SettingsManager.RootPath, true);
-            RemoveNotExistentElementsAndCopyState(mainFileTree.Children!, copyFileTree.Children!);
-            return copyFileTree;
         }
         /// <summary>
         /// Удаляет файлы которые отсутствуют в главном дереве и переприсваевает статусы файлов в новом дереве
@@ -113,8 +99,13 @@ namespace FileControlAvalonia.FileTreeLogic
         }
 
 
-
-        private static void TEST(ObservableCollection<FileTree> copy, ObservableCollection<FileTree> filteredCollection, StatusFile status)
+        /// <summary>
+        /// Заполняет коллекцию для фильтрации
+        /// </summary>
+        /// <param name="copy"></param>
+        /// <param name="filteredCollection"></param>
+        /// <param name="status"></param>
+        private static void FillFilteredCollection(ObservableCollection<FileTree> copy, ObservableCollection<FileTree> filteredCollection, StatusFile status)
         {
             foreach (var file in copy.ToList())
             {
@@ -126,10 +117,15 @@ namespace FileControlAvalonia.FileTreeLogic
        
                 else if (file.Status != status && file.IsDirectory)
                 {
-                    TEST(file.Children, filteredCollection, status);
+                    FillFilteredCollection(file.Children, filteredCollection, status);
                 }
             }
         }
+        /// <summary>
+        /// Удаляет файлы в дереве, статус которых не соответствует требуемому
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="status"></param>
         private static void ClearUnEqualFiles(FileTree file, StatusFile status)
         {
             foreach (var filee in file.Children.ToList())
