@@ -57,7 +57,7 @@ namespace FileControlAvalonia.Core
                 fileTree.Status = StatusFile.NotFound;
                 if (!fileTree.IsDirectory)
                     NotFound++;
-                ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
+                ChangeStatusParents(fileTree, StatusFile.FailedChecked);
                 return;
             }
             //Checked

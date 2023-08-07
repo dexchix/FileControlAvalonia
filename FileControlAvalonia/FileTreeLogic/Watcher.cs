@@ -1,5 +1,5 @@
 ﻿using Avalonia.Threading;
-using FileControlAvalonia.FileTreeLogic;
+using FileControlAvalonia.Models;
 using NLog;
 using ReactiveUI;
 using System;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileControlAvalonia.Models
+namespace FileControlAvalonia.FileTreeLogic
 {
-    public class Watcher: ReactiveObject
+    public class Watcher : ReactiveObject
     {
         public FileSystemWatcher? _watcher;
         private static string? _rootFolderPath;
