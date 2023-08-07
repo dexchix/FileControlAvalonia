@@ -450,18 +450,7 @@ namespace FileControlAvalonia.ViewModels
                 try
                 {
                     MainFileTreeCollection = EtalonManager.GetEtalon();
-
                     comparator.CompareFiles(MainFileTreeCollection, ProgressBarValue);
-
-                    //var statats = new FileStats().GetFilesStats(MainFileTreeCollection);
-                    //TotalFiles = statats.TotalFiles;
-                    //Checked = statats.Checked;
-                    //PartialChecked = statats.PartialChecked;
-                    //FailedChecked = statats.FailedChecked;
-                    //NoAccess = statats.NoAccess;
-                    //NotFound = statats.NotFound;
-                    //NotChecked = statats.NotChecked;
-
                 }
                 catch
                 {
