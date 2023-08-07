@@ -29,7 +29,6 @@ namespace FileControlAvalonia.Core
                     {
                         using (var md5 = MD5.Create())
                         {
-
                             using (var stream = File.OpenRead(filePath))
                             {
                                 byte[] hashBytes = md5.ComputeHash(stream);

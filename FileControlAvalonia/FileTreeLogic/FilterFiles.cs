@@ -27,11 +27,12 @@ namespace FileControlAvalonia.FileTreeLogic
             //RemoveNotMatchStatusFiles(copy, status);
             //DeliteEmptyFolders(copy);
             //DeliteEmptyFolders(copy);
+            ObservableCollection<FileTree> filterCollection = new ObservableCollection<FileTree>();
 
-            TEST(copy,status);
+            TEST(copy, filterCollection, status);
 
             viewFilesCollection.Clear();
-            foreach (var file in copy!.ToList())
+            foreach (var file in filterCollection!.ToList())
             {
                 viewFilesCollection.Add(file);
             }
@@ -45,7 +46,7 @@ namespace FileControlAvalonia.FileTreeLogic
         {
             foreach (var file in copy!.ToList())
             {
-                if(!file.IsDirectory && file.Status != status)
+                if (!file.IsDirectory && file.Status != status)
                 {
                     copy!.Remove(file);
                 }
@@ -73,9 +74,9 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="copy"></param>
         private static void RemoveNotExistentElementsAndCopyState(ObservableCollection<FileTree> main, ObservableCollection<FileTree> copy)
         {
-            foreach(var file in copy.ToList())
+            foreach (var file in copy.ToList())
             {
-                if(!main.Any(x=> x.Path == file.Path))
+                if (!main.Any(x => x.Path == file.Path))
                 {
                     copy.Remove(file);
                 }
@@ -98,13 +99,13 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="fileTree"></param>
         private static void DeliteEmptyFolders(ObservableCollection<FileTree> mainCollection)
         {
-            foreach(var file in mainCollection!.ToList())
+            foreach (var file in mainCollection!.ToList())
             {
                 if (file.IsDirectory && (file.Children == null || file.Children.Count == 0))
                 {
-                    file.Parent.Children.Remove(file); 
+                    file.Parent.Children.Remove(file);
                 }
-                else if (file.IsDirectory && file.Children.Count >0)
+                else if (file.IsDirectory && file.Children.Count > 0)
                 {
                     DeliteEmptyFolders(file.Children);
                 }
@@ -113,16 +114,30 @@ namespace FileControlAvalonia.FileTreeLogic
 
 
 
-        private static void TEST(ObservableCollection<FileTree> copy, StatusFile status)
+        private static void TEST(ObservableCollection<FileTree> copy, ObservableCollection<FileTree> filteredCollection, StatusFile status)
         {
-            foreach(var file in copy.ToList())
+            foreach (var file in copy.ToList())
             {
-                if (file.Status != status)
-                    copy.Remove(file);
-                else if (file.Status == status && file.IsDirectory)
+                if (file.Status == status)
                 {
-                    TEST(file.Children, status);
-                }   
+                    filteredCollection.Add(file);
+                    if(file.IsDirectory) { ClearUnEqualFiles(file, status); }
+                }
+       
+                else if (file.Status != status && file.IsDirectory)
+                {
+                    TEST(file.Children, filteredCollection, status);
+                }
+            }
+        }
+        private static void ClearUnEqualFiles(FileTree file, StatusFile status)
+        {
+            foreach (var filee in file.Children.ToList())
+            {
+                if(filee.Status != status)
+                {
+                    file.Children.Remove(filee);    
+                }
             }
         }
     }
