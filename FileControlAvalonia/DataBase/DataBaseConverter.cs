@@ -33,7 +33,7 @@ namespace FileControlAvalonia.DataBase
             {
                 if (files[fileCounter].ParentPath == "")
                 {
-                    var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path))
+                    var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory)
                     {
                         EHash = files[fileCounter].EHashSum,
                         ELastUpdate = files[fileCounter].ELastUpdate,
@@ -53,7 +53,7 @@ namespace FileControlAvalonia.DataBase
                 }
                 else
                 {
-                    var addFile = new FileTree(files[fileCounter].Path, Directory.Exists(files[fileCounter].Path),
+                    var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory,
                                                FileTreeNavigator.SeachFileInFilesCollection(files[fileCounter].ParentPath, etalon))
                     {
                         EHash = files[fileCounter].EHashSum,

@@ -140,42 +140,50 @@ namespace FileControlAvalonia.Models
 
         private ObservableCollection<FileTree>? LoadChildren()
         {
-            var extensions = SettingsManager.ModifyExtensions;
+            try
+            {
+                var extensions = SettingsManager.ModifyExtensions;
 
-            if (!IsDirectory)
-            {
-                return null;
-            }
-            var options = new EnumerationOptions()
-            {
-                IgnoreInaccessible = true,
-                AttributesToSkip = default
-            };
-            var result = new ObservableCollection<FileTree>();
-
-            foreach (var directory in Directory.EnumerateDirectories(Path, "*", options))
-            {
-                result.Add(new FileTree(directory, true, this));
-            }
-
-            foreach (var file in Directory.EnumerateFiles(Path, "*", options))
-            {
-                if (extensions == null || extensions.Count == 0 || extensions[0] == "")
+                if (!IsDirectory)
                 {
-                    var children = new FileTree(file, false, this);
-                    result.Add(children);
+                    return null;
                 }
-                else if (extensions.Contains(System.IO.Path.GetExtension(file)))
+                var options = new EnumerationOptions()
                 {
-                    var children = new FileTree(file, false, this);
-                    result.Add(children);
+                    IgnoreInaccessible = true,
+                    AttributesToSkip = default
+                };
+                var result = new ObservableCollection<FileTree>();
+
+                foreach (var directory in Directory.EnumerateDirectories(Path, "*", options))
+                {
+                    result.Add(new FileTree(directory, true, this));
                 }
+
+                foreach (var file in Directory.EnumerateFiles(Path, "*", options))
+                {
+                    if (extensions == null || extensions.Count == 0 || extensions[0] == "")
+                    {
+                        var children = new FileTree(file, false, this);
+                        result.Add(children);
+                    }
+                    else if (extensions.Contains(System.IO.Path.GetExtension(file)))
+                    {
+                        var children = new FileTree(file, false, this);
+                        result.Add(children);
+                    }
+                }
+
+                if (result.Count == 0)
+                    HasChildren = false;
+
+                return result;
             }
-
-            if (result.Count == 0)
-                HasChildren = false;
-
-            return result;
+            catch
+            {
+                return new ObservableCollection<FileTree>();
+            }
+            
         }
 
         public object Clone()
