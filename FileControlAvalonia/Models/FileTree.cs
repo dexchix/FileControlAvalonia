@@ -135,7 +135,7 @@ namespace FileControlAvalonia.Models
             HasChildren = isDirectory;
             _isChecked = false;
             Parent = parent;
-            _children = LoadChildren();
+            //_children = LoadChildren();
         }
 
         private ObservableCollection<FileTree>? LoadChildren()

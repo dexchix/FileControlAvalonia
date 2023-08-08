@@ -246,10 +246,10 @@ namespace FileControlAvalonia.ViewModels
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
-                ProgressBarIsVisible = true;
-                ProgressBarLoopScrol = true;
-                EnabledButtons = false;
-                ProgressBarText = "Добавление файлов";
+                //ProgressBarIsVisible = true;
+                //ProgressBarLoopScrol = true;
+                //EnabledButtons = false;
+                //ProgressBarText = "Добавление файлов";
 
                 FileStats fileStats = new FileStats();
 

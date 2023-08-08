@@ -52,22 +52,6 @@ namespace FileControlAvalonia.Core
 
                     insertCommandFilesTable.ExecuteNonQuery();
                 }
-
-                //var commandClearTableCheks = new SQLiteCommand(connection)
-                //{
-                //    CommandText = "DELETE FROM CheksTable"
-                //};
-                //commandClearTableCheks.ExecuteNonQuery();
-
-                //if (createEalon == true)
-                //{
-                //    var insertCommandChecksTable = new SQLiteCommand(connection)
-                //    {
-                //        CommandText = "INSERT INTO CheksTable (ID, Creator, Date) " +
-                //                   $"VALUES ({1}, 'Admin' , '{DateTime.Now.ToString()}');"
-                //    };
-                //    insertCommandChecksTable.ExecuteNonQuery();
-                //}
             }
         }
 

@@ -19,6 +19,7 @@ using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
+using Splat;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -27,7 +28,7 @@ namespace FileControlAvalonia.ViewModels
         #region FIELDS
         private int _itemIndex = 0;
         private static IconConverter? s_iconConverter;
-        private static FileTreeNavigator _fileTreeNavigator; 
+        private static FileTreeNavigator _fileTreeNavigator;
         private static FileTree? _fileTree;
         #endregion
 
@@ -92,23 +93,26 @@ namespace FileControlAvalonia.ViewModels
             Dispose();
             window.Close();
         }
-        async public void OkCommand(Window window)
+        public void OkCommand(Window window)
         {
-            //await Task.Run(() =>
-            //{
-                var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
-                var childrenTFL = transformFileTree.Children;
-                foreach (var children in childrenTFL)
-                    children.Parent = null;
-                FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
-                FilesCollectionManager.SetEtalonValues(childrenTFL);
+            //var mVM = Locator.Current.GetService(typeof(MainWindowViewModel)) as MainWindowViewModel;
+            //mVM.ProgressBarIsVisible = true;
+            //mVM.ProgressBarLoopScrol = true;
+            //mVM.EnabledButtons = false;
 
-            //});
-            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+            Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
 
 
-            Dispose();
-            GC.Collect();
+
+            //Locator.Current.GetService(typeof(MainWindowViewModel)).
+
+            TransitFiles();
+
+            //Dispose();
+            //GC.Collect();
             window.Close();
         }
         public void UpCommand()
@@ -124,6 +128,22 @@ namespace FileControlAvalonia.ViewModels
                 ItemIndex++;
             else if (ItemIndex == FileTree.Children?.Count - 1)
                 ItemIndex = 0;
+        }
+
+        async private void TransitFiles()
+        {
+            var childrenTFL = new ObservableCollection<FileTree>();
+            await Task.Run(() =>
+            {
+                var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
+                childrenTFL = transformFileTree.Children;
+                foreach (var children in childrenTFL.ToList())
+                    children.Parent = null;
+                FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
+                FilesCollectionManager.SetEtalonValues(childrenTFL);
+            });
+            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
+
         }
 
         public void Dispose()
