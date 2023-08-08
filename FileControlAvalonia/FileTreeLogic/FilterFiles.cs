@@ -34,69 +34,71 @@ namespace FileControlAvalonia.FileTreeLogic
                 viewFilesCollection.Add(file);
             }
         }
-        /// <summary>
-        /// Удаляет файлы статусы которых не соответствуют требуемым 
-        /// </summary>
-        /// <param name="fileTree"></param>
-        /// <param name="status"></param>
-        private static void RemoveNotMatchStatusFiles(ObservableCollection<FileTree> copy, StatusFile status)
-        {
-            foreach (var file in copy!.ToList())
-            {
-                if (!file.IsDirectory && file.Status != status)
-                {
-                    copy!.Remove(file);
-                }
-                else if (file.IsDirectory)
-                {
-                    RemoveNotMatchStatusFiles(file.Children, status);
-                }
-            }
-        }
-        /// <summary>
-        /// Удаляет файлы которые отсутствуют в главном дереве и переприсваевает статусы файлов в новом дереве
-        /// </summary>
-        /// <param name="main"></param>
-        /// <param name="copy"></param>
-        private static void RemoveNotExistentElementsAndCopyState(ObservableCollection<FileTree> main, ObservableCollection<FileTree> copy)
-        {
-            foreach (var file in copy.ToList())
-            {
-                if (!main.Any(x => x.Path == file.Path))
-                {
-                    copy.Remove(file);
-                }
-                else
-                {
-                    file.Status = main.Single(x => x.Path == file.Path).Status;
-                }
-            }
-            foreach (var file in copy.ToList())
-            {
-                if (file.IsDirectory)
-                {
-                    RemoveNotExistentElementsAndCopyState(main.Single(x => x.Path == file.Path).Children!, file.Children);
-                }
-            }
-        }
-        /// <summary>
-        /// Удаляет пустые папки
-        /// </summary>
-        /// <param name="fileTree"></param>
-        private static void DeliteEmptyFolders(ObservableCollection<FileTree> mainCollection)
-        {
-            foreach (var file in mainCollection!.ToList())
-            {
-                if (file.IsDirectory && (file.Children == null || file.Children.Count == 0))
-                {
-                    file.Parent.Children.Remove(file);
-                }
-                else if (file.IsDirectory && file.Children.Count > 0)
-                {
-                    DeliteEmptyFolders(file.Children);
-                }
-            }
-        }
+        ///// <summary>
+        ///// Удаляет файлы статусы которых не соответствуют требуемым 
+        ///// </summary>
+        ///// <param name="fileTree"></param>
+        ///// <param name="status"></param>
+        //private static void RemoveNotMatchStatusFiles(ObservableCollection<FileTree> copy, StatusFile status)
+        //{
+        //    foreach (var file in copy!.ToList())
+        //    {
+        //        if (!file.IsDirectory && file.Status != status)
+        //        {
+        //            copy!.Remove(file);
+        //        }
+        //        else if (file.IsDirectory)
+        //        {
+        //            RemoveNotMatchStatusFiles(file.Children, status);
+        //        }
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Удаляет файлы которые отсутствуют в главном дереве и переприсваевает статусы файлов в новом дереве
+        ///// </summary>
+        ///// <param name="main"></param>
+        ///// <param name="copy"></param>
+        //private static void RemoveNotExistentElementsAndCopyState(ObservableCollection<FileTree> main, ObservableCollection<FileTree> copy)
+        //{
+        //    foreach (var file in copy.ToList())
+        //    {
+        //        if (!main.Any(x => x.Path == file.Path))
+        //        {
+        //            copy.Remove(file);
+        //        }
+        //        else
+        //        {
+        //            file.Status = main.Single(x => x.Path == file.Path).Status;
+        //        }
+        //    }
+        //    foreach (var file in copy.ToList())
+        //    {
+        //        if (file.IsDirectory)
+        //        {
+        //            RemoveNotExistentElementsAndCopyState(main.Single(x => x.Path == file.Path).Children!, file.Children);
+        //        }
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Удаляет пустые папки
+        ///// </summary>
+        ///// <param name="fileTree"></param>
+        //private static void DeliteEmptyFolders(ObservableCollection<FileTree> mainCollection)
+        //{
+        //    foreach (var file in mainCollection!.ToList())
+        //    {
+        //        if (file.IsDirectory && (file.Children == null || file.Children.Count == 0))
+        //        {
+        //            file.Parent.Children.Remove(file);
+        //        }
+        //        else if (file.IsDirectory && file.Children.Count > 0)
+        //        {
+        //            DeliteEmptyFolders(file.Children);
+        //        }
+        //    }
+        //}
 
 
         /// <summary>
@@ -111,6 +113,7 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 if (file.Status == status)
                 {
+                    file.Parent = null;
                     filteredCollection.Add(file);
                     if(file.IsDirectory) { ClearUnEqualFiles(file, status); }
                 }

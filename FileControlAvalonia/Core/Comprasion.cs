@@ -100,6 +100,10 @@ namespace FileControlAvalonia.Core
                     fileTree.Parent.Status = status;
                     ChangeStatusParents(fileTree.Parent, status);
                 }
+                else if(fileTree.Parent.Status == StatusFile.NotFound)
+                {
+                    ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
+                }
                 else
                 {
                     fileTree.Parent.Status = StatusFile.FailedChecked;

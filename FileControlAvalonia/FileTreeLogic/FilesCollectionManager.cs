@@ -64,19 +64,26 @@ namespace FileControlAvalonia.FileTreeLogic
         {
             try
             {
-                fileStats = fileStats.GetFilesStats(new List<FileTree> { delitedFile});
+                fileStats = fileStats.GetFilesStats(new List<FileTree> { delitedFile });
 
                 var delitedFileMainCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, mainFileTreeCollection);
-                if (delitedFileMainCollection.Parent != null) delitedFileMainCollection.Parent.Children!.Remove(delitedFileMainCollection);
+                var delitedFileViewCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, viewCollectionFiles);
+
+
+                if (delitedFileMainCollection != null && delitedFileMainCollection.Parent != null) delitedFileMainCollection.Parent.Children!.Remove(delitedFileMainCollection);
                 else
                 {
                     var delFile = mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
                     mainFileTreeCollection.Remove(delFile!);
                 }
 
-                var delitedFileViewCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, viewCollectionFiles);
-                if (delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children!.Remove(delitedFileViewCollection);
-                else viewCollectionFiles.Remove(delitedFile);
+                
+                if (delitedFileViewCollection != null && delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children!.Remove(delitedFileViewCollection);
+                else
+                {
+                    var delFile = viewCollectionFiles.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
+                    viewCollectionFiles.Remove(delFile!);
+                }
 
             }
             catch (Exception ex)
