@@ -123,7 +123,7 @@ namespace FileControlAvalonia.FileTreeLogic
             }
         }
 
-        public static ObservableCollection<FileTree> GetDeepCopy(ObservableCollection<FileTree> mainCollection)
+        public static ObservableCollection<FileTree> GetDeepCopyFilesCollection(ObservableCollection<FileTree> mainCollection)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -134,6 +134,50 @@ namespace FileControlAvalonia.FileTreeLogic
 
             var clone = mapper.Map<ObservableCollection<FileTree>>(mainCollection);
             return clone;
+        }
+
+
+        public static FileTree GetDeepCopyFileTree(FileTree fileTree)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FileTree, FileTree>();
+            });
+
+            var mapper = new Mapper(config);
+
+            var clone = mapper.Map<FileTree>(fileTree);
+            return clone;
+        }
+        public static void FileTreeDestroction(FileTree fileTree)
+        {
+            var listDestroctionFiles = new List<FileTree>();
+            listDestroctionFiles.Add(fileTree);
+
+
+
+
+            void FillList(FileTree fileTree)
+            {
+                foreach(var file in fileTree.Children)
+                {
+                    listDestroctionFiles.Add(file);
+                    if (file.IsDirectory) FillList(file);
+                }
+            }
+
+            FillList(fileTree);
+
+
+            foreach (var file in listDestroctionFiles)
+            {
+
+                if (file.Parent != null) file.Parent = null;
+                if (file.Children != null)
+                {
+                    file.Children.Clear();
+                }
+            }
         }
     }
 }

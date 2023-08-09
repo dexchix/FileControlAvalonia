@@ -29,7 +29,7 @@ namespace FileControlAvalonia.ViewModels
         private int _itemIndex = 0;
         private static IconConverter? s_iconConverter;
         private static FileTreeNavigator _fileTreeNavigator;
-        private static FileTree? _fileTree;
+        private FileTree? _fileTree;
         #endregion
 
         #region PROPERTIES
@@ -93,13 +93,8 @@ namespace FileControlAvalonia.ViewModels
             Dispose();
             window.Close();
         }
-        public void OkCommand(Window window)
+        async public void OkCommand(Window window)
         {
-            //var mVM = Locator.Current.GetService(typeof(MainWindowViewModel)) as MainWindowViewModel;
-            //mVM.ProgressBarIsVisible = true;
-            //mVM.ProgressBarLoopScrol = true;
-            //mVM.EnabledButtons = false;
-
             Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
             Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
             Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
@@ -108,12 +103,11 @@ namespace FileControlAvalonia.ViewModels
 
 
             //Locator.Current.GetService(typeof(MainWindowViewModel)).
-
-            TransitFiles();
-
-            //Dispose();
-            //GC.Collect();
             window.Close();
+
+            await TransitFiles();
+
+            Dispose();
         }
         public void UpCommand()
         {
@@ -130,13 +124,16 @@ namespace FileControlAvalonia.ViewModels
                 ItemIndex = 0;
         }
 
-        async private void TransitFiles()
+        async private Task TransitFiles()
         {
             var childrenTFL = new ObservableCollection<FileTree>();
             await Task.Run(() =>
             {
                 var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
-                childrenTFL = transformFileTree.Children;
+
+                var newFileTree = FilesCollectionManager.GetDeepCopyFileTree(transformFileTree);
+
+                childrenTFL = newFileTree.Children;
                 foreach (var children in childrenTFL.ToList())
                     children.Parent = null;
                 FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
@@ -150,9 +147,28 @@ namespace FileControlAvalonia.ViewModels
         {
             try
             {
+
+
+
+                var rootParent = FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree);
+                FilesCollectionManager.FileTreeDestroction(rootParent);
+
+
                 _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;
+                _fileTreeNavigator.FileTree = null;
+                FileTree = null;
                 _fileTreeNavigator.watcher.StopWatch();
                 _fileTreeNavigator = null;
+
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+
+
+                var awdwa = FileTree.sadas;
+
+
             }
             catch
             {
@@ -161,5 +177,11 @@ namespace FileControlAvalonia.ViewModels
 
         }
         #endregion
+
+
+
+        ~FileExplorerWindowViewModel()
+        {
+        }
     }
 }

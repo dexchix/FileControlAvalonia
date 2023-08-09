@@ -194,5 +194,13 @@ namespace FileControlAvalonia.Models
         {
             return Path;
         }
+
+
+        ~FileTree()
+        {
+            sadas++;
+        }
+        public static int sadas = 0;
     }
+ 
 }

@@ -27,7 +27,7 @@ namespace FileControlAvalonia.FileTreeLogic
             ObservableCollection<FileTree> filterCollection = new ObservableCollection<FileTree>();
             await Task.Run(() =>
             {
-                var copy = FilesCollectionManager.GetDeepCopy(mainCollection);
+                var copy = FilesCollectionManager.GetDeepCopyFilesCollection(mainCollection);
                 FillFilteredCollection(copy, filterCollection, status);
                 viewFilesCollection.Clear();
             });

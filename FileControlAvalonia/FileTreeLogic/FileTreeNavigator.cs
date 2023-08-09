@@ -18,7 +18,7 @@ namespace FileControlAvalonia.FileTreeLogic
         #region FIELDS
         //public static readonly string pathRootFolder = "C:\\1\\5";
         //public static readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
-        public static FileTree? fileTree;
+        public FileTree? fileTree;
         public Watcher? watcher;
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion 
@@ -38,7 +38,7 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 fileTree = new FileTree(SettingsManager.RootPath, true);
                 watcher = new Watcher(SettingsManager.RootPath, this);
-                CheckChangeRootPath();
+                //CheckChangeRootPath();
             }
         }
 
@@ -185,6 +185,18 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             });
         }
+
+
+        public static void DisposeFileTree(FileTree fileTree)
+        {
+
+        }
         #endregion
+
+
+        ~FileTreeNavigator()
+        {
+
+        }
     }
 }
