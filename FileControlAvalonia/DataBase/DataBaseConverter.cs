@@ -33,7 +33,7 @@ namespace FileControlAvalonia.DataBase
             {
                 if (files[fileCounter].ParentPath == "")
                 {
-                    var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory)
+                    var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false)
                     {
                         EHash = files[fileCounter].EHashSum,
                         ELastUpdate = files[fileCounter].ELastUpdate,
@@ -46,14 +46,15 @@ namespace FileControlAvalonia.DataBase
                         Status = files[fileCounter].Status,
                     };
                     
-                    if (addFile.IsDirectory)
-                        addFile.Children!.Clear();
+                    //if (addFile.IsDirectory)
+                    //    addFile.Children!.Clear();
+
                     etalon.Add(addFile);
                     fileCounter++;
                 }
                 else
                 {
-                    var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory,
+                    var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false, 
                                                FileTreeNavigator.SeachFileInFilesCollection(files[fileCounter].ParentPath, etalon))
                     {
                         EHash = files[fileCounter].EHashSum,

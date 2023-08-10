@@ -69,7 +69,7 @@ namespace FileControlAvalonia.FileTreeLogic
                 {
                     var parent = FileTreeNavigator.SearchFileInFileTree(Path.GetDirectoryName(e.FullPath)!, FileTreeNavigator.FileTree);
                     if (parent.Children?.Where(x => x.Path == e.FullPath).FirstOrDefault() != null) return;
-                    var addFile = new FileTree(e.FullPath, Directory.Exists(e.FullPath), parent);
+                    var addFile = new FileTree(e.FullPath, Directory.Exists(e.FullPath), true, parent);
                     addFile.IsChecked = addFile.Parent != null && addFile.Parent.IsChecked != false;
                     addFile.HasChildren = addFile.IsDirectory && addFile.Children?.Count != 0 || addFile.Children != null;
                     addFile.Parent!.HasChildren = true;

@@ -36,7 +36,7 @@ namespace FileControlAvalonia.FileTreeLogic
         {
             if (Directory.Exists(SettingsManager.RootPath))
             {
-                fileTree = new FileTree(SettingsManager.RootPath, true);
+                fileTree = new FileTree(SettingsManager.RootPath, true, true);
                 watcher = new Watcher(SettingsManager.RootPath, this);
                 //CheckChangeRootPath();
             }

@@ -32,6 +32,7 @@ namespace FileControlAvalonia.Models
         private bool _isExpanded;
         private bool _isChecked;
         private StatusFile _status = StatusFile.Checked;
+        private bool _loadChildren;
         #endregion
 
         #region PROPERTIES
@@ -113,20 +114,18 @@ namespace FileControlAvalonia.Models
         public FileTree? Parent { get; set; }
         public ObservableCollection<FileTree>? Children
         {
-            get => _children ??= LoadChildren();
+            get
+            {
+                if (_loadChildren)
+                    return _children ??= LoadChildren();
+                else
+                    return _children ??= new ObservableCollection<FileTree>();
+            }
             set => this.RaiseAndSetIfChanged(ref _children, value);
-            //get
-            //{
-            //    if (_loadChildren == true)
-            //        return _children ??= LoadChildren();
-            //    else
-            //        return new ObservableCollection<FileTree>();
-            //}
-            //set => this.RaiseAndSetIfChanged(ref _children, value);
         }
         #endregion
 
-        public FileTree(string path, bool isDirectory, FileTree? parent = null, bool isRoot = false)
+        public FileTree(string path, bool isDirectory, bool loadChildren, FileTree? parent = null, bool isRoot = false)
         {
             _path = path;
             _name = isRoot ? path : System.IO.Path.GetFileName(Path);
@@ -135,6 +134,7 @@ namespace FileControlAvalonia.Models
             HasChildren = isDirectory;
             _isChecked = false;
             Parent = parent;
+            _loadChildren = loadChildren;
             //_children = LoadChildren();
         }
 
@@ -157,19 +157,19 @@ namespace FileControlAvalonia.Models
 
                 foreach (var directory in Directory.EnumerateDirectories(Path, "*", options))
                 {
-                    result.Add(new FileTree(directory, true, this));
+                    result.Add(new FileTree(directory, true, _loadChildren, this));
                 }
 
                 foreach (var file in Directory.EnumerateFiles(Path, "*", options))
                 {
                     if (extensions == null || extensions.Count == 0 || extensions[0] == "")
                     {
-                        var children = new FileTree(file, false, this);
+                        var children = new FileTree(file, false, _loadChildren, this);
                         result.Add(children);
                     }
                     else if (extensions.Contains(System.IO.Path.GetExtension(file)))
                     {
-                        var children = new FileTree(file, false, this);
+                        var children = new FileTree(file, false, _loadChildren, this);
                         result.Add(children);
                     }
                 }
@@ -183,7 +183,7 @@ namespace FileControlAvalonia.Models
             {
                 return new ObservableCollection<FileTree>();
             }
-            
+
         }
 
         public object Clone()
@@ -202,5 +202,5 @@ namespace FileControlAvalonia.Models
         }
         public static int sadas = 0;
     }
- 
+
 }
