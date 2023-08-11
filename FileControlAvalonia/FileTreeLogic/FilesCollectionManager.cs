@@ -2,7 +2,9 @@
 using FileControlAvalonia.Core;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.ViewModels;
 using Newtonsoft.Json;
+using Splat;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -50,6 +52,9 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
             stats.GetFilesStats(addedBDFilesCollection);
+
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = false;
+
             EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false);
         }
 

@@ -1,7 +1,9 @@
 ﻿using FileControlAvalonia.DataBase;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.ViewModels;
 using Newtonsoft.Json;
+using Splat;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,8 @@ namespace FileControlAvalonia.Core
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
 
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
+
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
                 if (createEalon == true)
@@ -51,6 +55,13 @@ namespace FileControlAvalonia.Core
                     };
 
                     insertCommandFilesTable.ExecuteNonQuery();
+
+                    if (!createEalon)
+                    {
+                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
+                    }
+
                 }
             }
         }
@@ -78,15 +89,19 @@ namespace FileControlAvalonia.Core
             if (file.Children != null)
             {
                 var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() { file });
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = listDelitedFiles.Count;
+
                 using (var connection = new SQLiteConnection(DataBaseOptions.Options))
                 {
-                    foreach (var diletedFile in listDelitedFiles)
+                    foreach (var deletedFile in listDelitedFiles)
                     {
                         var insertCommandFilesTable = new SQLiteCommand(connection)
                         {
-                            CommandText = $"DELETE FROM FilesTable WHERE Path = '{diletedFile.Path}';"
+                            CommandText = $"DELETE FROM FilesTable WHERE Path = '{deletedFile.Path}';"
                         };
                         insertCommandFilesTable.ExecuteNonQuery();
+                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Удаляется {deletedFile.Path}";
                     }
                 }
             }

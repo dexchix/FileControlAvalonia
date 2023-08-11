@@ -246,10 +246,12 @@ namespace FileControlAvalonia.ViewModels
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
-                //ProgressBarIsVisible = true;
-                //ProgressBarLoopScrol = true;
-                //EnabledButtons = false;
-                //ProgressBarText = "Добавление файлов";
+                ProgressBarIsVisible = true;
+                ProgressBarLoopScrol = true;
+                ProgressBarText = "Добавление файлов";
+                ProgressBarValue = 0;
+                EnabledButtons = false;
+
 
                 FileStats fileStats = new FileStats();
 
@@ -259,14 +261,16 @@ namespace FileControlAvalonia.ViewModels
                 });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
-                ProgressBarLoopScrol = false;
-                ProgressBarText = "Добавление файлов завершно";
+            
 
                 TotalFiles += fileStats.TotalFiles;
                 Checked += fileStats.Checked;
 
+                ProgressBarText = $"Добавление завершено. Добавлено {fileStats.TotalFiles} файлов.";
+
+
                 RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
-                await Task.Delay(1000);
+                await Task.Delay(1500);
                 ProgressBarIsVisible = false;
                 EnabledButtons = true;
             });
@@ -274,7 +278,6 @@ namespace FileControlAvalonia.ViewModels
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
             ShowDialogSettingsWindow = new Interaction<SettingsWindowViewModel, SettingsWindowViewModel?>();
             ShowDialogFileExplorerWindow = new Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?>();
-
         }
 
         #region CONVERTERS
@@ -331,8 +334,8 @@ namespace FileControlAvalonia.ViewModels
             EnabledButtons = false;
             ProgressBarLoopScrol = true;
             ProgressBarText = "Осуществляется проверка";
-            //ProgressBarMaximum = EtalonManager.CountFilesEtalon;
-            //ProgressBarValue = 0;
+            ProgressBarValue = 0;
+
             await Task.Run(() =>
             {
                 FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
@@ -546,21 +549,14 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = true;
             ProgressBarText = "Удаление файлов";
 
-            //int deliteTotalFilesCount = 0;
-            //int deliteCheckedCount = 0;
-            //int delitePartialCheckedCount = 0;
-            //int deliteFailedCheckedCount = 0;
-            //int deliteNoAccessCount = 0;
-            //int deliteNotFoundCount = 0;
-            //int deliteNotCheckedCount = 0;
-
             FileStats stats = new FileStats();
-
-
 
             await Task.Run(() =>
             {
                 FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection, stats);
+                ProgressBarLoopScrol = false;
+                ProgressBarValue = 0;
+
                 EtalonManager.DeliteFileInDB(delitedFile);
             });
 
@@ -574,19 +570,12 @@ namespace FileControlAvalonia.ViewModels
 
             RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
 
+            ProgressBarText = $"Удаление завершено. Удалено {stats.TotalFiles} файлов";
+            await Task.Delay(1500);
             ProgressBarIsVisible = false;
             ProgressBarLoopScrol = false;
             EnabledButtons = true;
         }
-
-        //TotalFiles INTEGER,
-        //Checked INTEGER,
-        //PartialChecked INTEGER
-        //FailedChecked INTEGER,
-        //NoAccess INTEGER,
-        //NotFound INTEGER,
-        //NotChecked INTEGER
-
         #endregion
 
         #region METHODS

@@ -43,17 +43,14 @@ namespace FileControlAvalonia.Models
             set
             {
                 this.RaiseAndSetIfChanged(ref _isChecked, value);
-                if(Parent.Path == SettingsManager.RootPath) { FileTransferBroker.FillListAddedFiles(this, value); }
+                if (Parent.Path == SettingsManager.RootPath) { FileTransferBroker.FillListAddedFiles(this, value); }
                 if (HasChildren)
                 {
-                    //Task.Run(() =>
-                    //{
-                        foreach (var child in Children!)
-                        {
-                            FileTransferBroker.FillListAddedFiles(child, value);
-                            child.IsChecked = value;
-                        }
-                    //});
+                    foreach (var child in Children!)
+                    {
+                        FileTransferBroker.FillListAddedFiles(child, value);
+                        child.IsChecked = value;
+                    }
                 }
             }
         }
@@ -128,7 +125,7 @@ namespace FileControlAvalonia.Models
         }
         #endregion
 
-        public FileTree(string path, bool isDirectory, bool loadChildren, FileTree? parent = null, bool isRoot = false)
+        public FileTree(string path, bool isDirectory, bool loadChildren = false, FileTree? parent = null, bool isRoot = false)
         {
             _path = path;
             _name = isRoot ? path : System.IO.Path.GetFileName(Path);

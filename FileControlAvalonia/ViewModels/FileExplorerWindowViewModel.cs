@@ -98,6 +98,7 @@ namespace FileControlAvalonia.ViewModels
         }
         async public void OkCommand(Window window)
         {
+            window.Close();
             Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
             Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
             Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
@@ -109,13 +110,17 @@ namespace FileControlAvalonia.ViewModels
             //window.Close();
 
             //await TransitFiles();
-
-            var awdwa = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
-            FactParameterizer.SetFactValuesInFilesCollection(awdwa);
-            FilesCollectionManager.SetEtalonValues(awdwa);
-            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(awdwa!);
+            ObservableCollection<FileTree> test = null;
+            await Task.Run(async () =>
+            {
+                var awdwa = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
+                FactParameterizer.SetFactValuesInFilesCollection(awdwa);
+                FilesCollectionManager.SetEtalonValues(awdwa);
+                test = awdwa;
+            });
+            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(test!);
             Dispose();
-            window.Close();
+    
         }
         public void UpCommand()
         {
@@ -155,13 +160,8 @@ namespace FileControlAvalonia.ViewModels
         {
             try
             {
-
-
-
                 var rootParent = FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree);
-
                 //FilesCollectionManager.FileTreeDestroction(rootParent);
-
                 rootParent = null;
 
 
@@ -180,8 +180,6 @@ namespace FileControlAvalonia.ViewModels
 
 
                 var awdwa = FileTree.sadas;
-
-
             }
             catch
             {
@@ -190,11 +188,5 @@ namespace FileControlAvalonia.ViewModels
 
         }
         #endregion
-
-
-
-        ~FileExplorerWindowViewModel()
-        {
-        }
     }
 }
