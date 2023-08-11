@@ -20,6 +20,7 @@ using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
 using Splat;
+using FileControlAvalonia.DataBase;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -90,6 +91,8 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancelCommand(Window window)
         {
+            var dsfsd = FileTransferBroker.AddedFiles;
+
             Dispose();
             window.Close();
         }
@@ -102,12 +105,17 @@ namespace FileControlAvalonia.ViewModels
 
 
 
-            //Locator.Current.GetService(typeof(MainWindowViewModel)).
-            window.Close();
+            ////Locator.Current.GetService(typeof(MainWindowViewModel)).
+            //window.Close();
 
-            await TransitFiles();
+            //await TransitFiles();
 
+            var awdwa = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
+            FactParameterizer.SetFactValuesInFilesCollection(awdwa);
+            FilesCollectionManager.SetEtalonValues(awdwa);
+            MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(awdwa!);
             Dispose();
+            window.Close();
         }
         public void UpCommand()
         {
@@ -151,7 +159,12 @@ namespace FileControlAvalonia.ViewModels
 
 
                 var rootParent = FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree);
-                FilesCollectionManager.FileTreeDestroction(rootParent);
+
+                //FilesCollectionManager.FileTreeDestroction(rootParent);
+
+                rootParent = null;
+
+
 
 
                 _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;

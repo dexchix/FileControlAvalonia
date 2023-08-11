@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.OpenGL;
 using FileControlAvalonia.Core;
+using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using ReactiveUI;
 using System;
@@ -42,15 +43,17 @@ namespace FileControlAvalonia.Models
             set
             {
                 this.RaiseAndSetIfChanged(ref _isChecked, value);
+                if(Parent.Path == SettingsManager.RootPath) { FileTransferBroker.FillListAddedFiles(this, value); }
                 if (HasChildren)
                 {
-                    Task.Run(() =>
-                    {
+                    //Task.Run(() =>
+                    //{
                         foreach (var child in Children!)
                         {
+                            FileTransferBroker.FillListAddedFiles(child, value);
                             child.IsChecked = value;
                         }
-                    });
+                    //});
                 }
             }
         }
