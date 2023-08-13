@@ -67,10 +67,10 @@ namespace FileControlAvalonia.DataBase
 
                         Status = files[fileCounter].Status,
                     };
-                    if (addFile.IsDirectory)
-                    {
-                        addFile.Children.Clear();
-                    }
+                    //if (addFile.IsDirectory)
+                    //{
+                    //    addFile.Children.Clear();
+                    //}
                     var parent = FileTreeNavigator.SeachFileInFilesCollection(Path.GetDirectoryName(addFile.Path)!, etalon);
                     parent.Children!.Add(addFile);
                     fileCounter++;

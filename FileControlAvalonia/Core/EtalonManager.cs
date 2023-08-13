@@ -51,16 +51,22 @@ namespace FileControlAvalonia.Core
                     var insertCommandFilesTable = new SQLiteCommand(connection)
                     {
                         CommandText = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) " +
-                                   $"VALUES ('{file.Name}', '{file.Path}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}', {file.IsDirectory});"
+                                      $"VALUES ('{file.Name.ToString()}', '{file.Path.ToString()}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}', {file.IsDirectory});"
                     };
-
-                    insertCommandFilesTable.ExecuteNonQuery();
-
-                    if (!createEalon)
+                    try
                     {
-                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
+                        insertCommandFilesTable.ExecuteNonQuery();
+                        if (!createEalon)
+                        {
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
+                        }
                     }
+                    catch(Exception ex)
+                    {
+                        Logger.logger.Error($" Ошибка записи файла {file.Path} в базу данных - {ex.Message}");
+                    }
+
 
                 }
             }
@@ -99,9 +105,17 @@ namespace FileControlAvalonia.Core
                         {
                             CommandText = $"DELETE FROM FilesTable WHERE Path = '{deletedFile.Path}';"
                         };
-                        insertCommandFilesTable.ExecuteNonQuery();
-                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Удаляется {deletedFile.Path}";
+                        try
+                        {
+                            insertCommandFilesTable.ExecuteNonQuery();
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Удаляется {deletedFile.Path}";
+                        }
+                        catch(Exception ex)
+                        {
+                            Logger.logger.Error($"Ошибка удаления файла {deletedFile.Path} из базы данных - {ex.Message}");
+                        }
+
                     }
                 }
             }

@@ -42,16 +42,16 @@ namespace FileControlAvalonia.DataBase
             {
                 string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                 Name VARCHAR(512),
-                                                 Path VARCHAR(512),
-                                                 ELastUpdate VARCHAR(512),
-                                                 EVersion VARCHAR(512),
-                                                 EHashSum VARCHAR(512),
-                                                 FLastUpdate VARCHAR(512),
-                                                 FVersion VARCHAR(512),
-                                                 FHashSum VARCHAR(512),
-                                                 ParentPath VARCHAR(512),
-                                                 Status VARCHAR(512),
+                                                 Name TEXT,
+                                                 Path TEXT,
+                                                 ELastUpdate TEXT,
+                                                 EVersion TEXT,
+                                                 EHashSum TEXT,
+                                                 FLastUpdate TEXT,
+                                                 FVersion TEXT,
+                                                 FHashSum TEXT,
+                                                 ParentPath TEXT,
+                                                 Status TEXT,
                                                  IsDirectory BOOLEAN
                                              );";
 
