@@ -19,7 +19,7 @@ namespace FileControlAvalonia.Models
     public class FileTree : ReactiveObject
     {
         #region FIELDS
-        public static int _counter = -1;
+        public static int _counter { get; set; } = -1;
         private string _eHash;
         private string _fHash;
         private string _eLastUpdate;
@@ -135,7 +135,6 @@ namespace FileControlAvalonia.Models
             _isChecked = false;
             Parent = parent;
             _loadChildren = loadChildren;
-            //_children = LoadChildren();
         }
 
         private ObservableCollection<FileTree>? LoadChildren()

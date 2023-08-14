@@ -91,8 +91,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancelCommand(Window window)
         {
-            var dsfsd = FileTransferBroker.AddedFiles;
-
+            FileTransferBroker.AddedFiles.Clear();
             Dispose();
             window.Close();
         }
@@ -104,12 +103,6 @@ namespace FileControlAvalonia.ViewModels
             Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
             Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
 
-
-
-            ////Locator.Current.GetService(typeof(MainWindowViewModel)).
-            //window.Close();
-
-            //await TransitFiles();
             ObservableCollection<FileTree> test = null;
             await Task.Run(async () =>
             {
@@ -119,6 +112,8 @@ namespace FileControlAvalonia.ViewModels
                 test = awdwa;
             });
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(test!);
+
+            FileTransferBroker.AddedFiles.Clear();
             Dispose();
     
         }

@@ -22,21 +22,25 @@ namespace FileControlAvalonia.Core
         public int NotChecked = 0;
         public int NotFound = 0;
 
-        public void CompareFiles(ObservableCollection<FileTree> mainFileTreeCollection, int count)
+        async public void CompareFiles(ObservableCollection<FileTree> mainFileTreeCollection)
         {
             foreach (var file in mainFileTreeCollection.ToList())
             {
                 SetStatus(file);
 
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}";
-
                 if (file.IsDirectory)
                 {
-                    CompareFiles(file.Children, count);
+                    CompareFiles(file.Children);
                 }
                 else
+                {
+
+                    //await Task.Delay(500);
                     TotalFiles++;
+                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = TotalFiles;
+                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}"
+                };
+
             }
         }
         public void SetStatus(FileTree fileTree)
@@ -100,7 +104,7 @@ namespace FileControlAvalonia.Core
                     fileTree.Parent.Status = status;
                     ChangeStatusParents(fileTree.Parent, status);
                 }
-                else if(fileTree.Parent.Status == StatusFile.NotFound)
+                else if (fileTree.Parent.Status == StatusFile.NotFound)
                 {
                     ChangeStatusParents(fileTree.Parent, StatusFile.FailedChecked);
                 }

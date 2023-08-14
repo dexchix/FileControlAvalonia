@@ -1,15 +1,9 @@
-﻿using Avalonia.OpenGL;
-using FileControlAvalonia.FileTreeLogic;
+﻿using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileControlAvalonia.DataBase
 {
@@ -17,7 +11,6 @@ namespace FileControlAvalonia.DataBase
     {
 
         private int fileCounter = 0;
-        private Dictionary<string, FileDB> parents = new Dictionary<string, FileDB>();
         public List<FileDB> ConvertFormatFileTreeToDB(ObservableCollection<FileTree> mainFileTreeCollection)
         {
             var filesToDB = new List<FileDB>();
@@ -45,9 +38,6 @@ namespace FileControlAvalonia.DataBase
 
                         Status = files[fileCounter].Status,
                     };
-                    
-                    //if (addFile.IsDirectory)
-                    //    addFile.Children!.Clear();
 
                     etalon.Add(addFile);
                     fileCounter++;
@@ -67,10 +57,7 @@ namespace FileControlAvalonia.DataBase
 
                         Status = files[fileCounter].Status,
                     };
-                    //if (addFile.IsDirectory)
-                    //{
-                    //    addFile.Children.Clear();
-                    //}
+
                     var parent = FileTreeNavigator.SeachFileInFilesCollection(Path.GetDirectoryName(addFile.Path)!, etalon);
                     parent.Children!.Add(addFile);
                     fileCounter++;
@@ -92,7 +79,7 @@ namespace FileControlAvalonia.DataBase
                     else
                         addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path, file.IsDirectory) { Status = file.Status };
                     filesDB.Add(addedFileDB);
-                    parents.Add(addedFileDB.Path, addedFileDB);
+
                     FillDBListFiles(file.Children, filesDB);
                 }
                 else

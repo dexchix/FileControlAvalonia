@@ -29,8 +29,8 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 var copy = FilesCollectionManager.GetDeepCopyFilesCollection(mainCollection);
                 FillFilteredCollection(copy, filterCollection, status);
-                viewFilesCollection.Clear();
             });
+            viewFilesCollection.Clear();
             foreach (var file in filterCollection!.ToList())
             {
                 viewFilesCollection.Add(file);
@@ -69,10 +69,18 @@ namespace FileControlAvalonia.FileTreeLogic
         {
             foreach (var filee in file.Children.ToList())
             {
-                if(filee.Status != status)
+                if (filee.Status != status)
                 {
-                    file.Children.Remove(filee);    
+                    //file.Children.Remove(filee);    
+                    var delitedFile = file.Children.FirstOrDefault(filee => filee.Status != status);
+                    file.Children.Remove(delitedFile);
+                    
                 }
+                else
+                {
+                    if (file.IsDirectory) ClearUnEqualFiles(filee, status);
+                }
+
             }
         }
     }

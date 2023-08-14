@@ -61,6 +61,8 @@ namespace FileControlAvalonia.Core
                             Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
                             Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
                         }
+                        else
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
                     }
                     catch(Exception ex)
                     {

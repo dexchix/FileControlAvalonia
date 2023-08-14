@@ -261,7 +261,7 @@ namespace FileControlAvalonia.ViewModels
                 });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
-            
+
 
                 TotalFiles += fileStats.TotalFiles;
                 Checked += fileStats.Checked;
@@ -270,7 +270,7 @@ namespace FileControlAvalonia.ViewModels
 
 
                 RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
-                await Task.Delay(1500);
+                await Task.Delay(3000);
                 ProgressBarIsVisible = false;
                 EnabledButtons = true;
             });
@@ -334,12 +334,13 @@ namespace FileControlAvalonia.ViewModels
             EnabledButtons = false;
             ProgressBarLoopScrol = true;
             ProgressBarText = "Осуществляется проверка";
-            ProgressBarValue = 0;
+            //ProgressBarValue = 0;
+            //ProgressBarMaximum = TotalFiles;
 
             await Task.Run(() =>
             {
                 FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
-                comparator.CompareFiles(MainFileTreeCollection, ProgressBarValue);
+                comparator.CompareFiles(MainFileTreeCollection);
 
                 TotalFiles = comparator.TotalFiles;
                 Checked = comparator.Checked;
@@ -355,16 +356,18 @@ namespace FileControlAvalonia.ViewModels
             DateLastCheck = DateTime.Now.ToString();
 
 
-            //============================================================================================
-            //Запись в БД
-
-            RecorderInfoBD.RecordDateOfLastCheck(DateLastCheck);
-            RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
-            //============================================================================================
-
-            ProgressBarText = "Проверка прошла успешно";
-            ProgressBarLoopScrol = false;
             await Task.Delay(1000);
+
+            ProgressBarText = "Запись отчета в БД.";
+            await Task.Run(() =>
+            {
+                //============================================================================================
+                //Запись в БД
+
+                RecorderInfoBD.RecordDateOfLastCheck(DateLastCheck);
+                RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
+                //============================================================================================
+            });
             ProgressBarIsVisible = false;
             EnabledButtons = true;
 
@@ -373,10 +376,10 @@ namespace FileControlAvalonia.ViewModels
         async public void CreateEtalonCommand()
         {
             ProgressBarIsVisible = true;
-            ProgressBarLoopScrol = true;
+            //ProgressBarLoopScrol = true;
             EnabledButtons = false;
             ProgressBarText = "Создание эталона";
-
+            ProgressBarValue = 0;
             int countFiles = 0;
 
             await Task.Run(() =>
@@ -387,30 +390,23 @@ namespace FileControlAvalonia.ViewModels
 
             //============================================================================================
             //Запись в БД
-            TotalFiles = countFiles;
-            Checked = countFiles;
+            DateCreateEtalon = DateTime.Now.ToString();
+            RecorderInfoBD.RecordInfoOfCreateEtalon("Admin", DateCreateEtalon);
+            //============================================================================================
+
+            ProgressBarText = "Создание эталона завершено";
+
+            await Task.Delay(2000);
+
+            UserLevelCreateEtalon = "Admin";
+            DateCreateEtalon = DateTime.Now.ToString();
+            Checked = TotalFiles;
             PartialChecked = 0;
             FailedChecked = 0;
             NoAccess = 0;
             NotFound = 0;
             NotChecked = 0;
-            DateCreateEtalon = DateTime.Now.ToString();
-
-            RecorderInfoBD.RecordInfoOfCreateEtalon("Admin", DateCreateEtalon);
-            //RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
-            //============================================================================================
-
-            ProgressBarMaximum = 0;
-            ProgressBarValue = 0;
-            ProgressBarText = "Создание эталона завершено";
-
-            await Task.Delay(1000);
-
             ProgressBarIsVisible = false;
-
-
-            UserLevelCreateEtalon = "Admin";
-            DateCreateEtalon = DateTime.Now.ToString();
             EnabledButtons = true;
         }
         public void CloseProgramCommand()
@@ -453,7 +449,7 @@ namespace FileControlAvalonia.ViewModels
                 try
                 {
                     MainFileTreeCollection = EtalonManager.GetEtalon();
-                    comparator.CompareFiles(MainFileTreeCollection, ProgressBarValue);
+                    comparator.CompareFiles(MainFileTreeCollection);
                 }
                 catch
                 {
@@ -553,11 +549,13 @@ namespace FileControlAvalonia.ViewModels
 
             await Task.Run(() =>
             {
-                FilesCollectionManager.DeliteFile(delitedFile, ViewCollectionFiles, MainFileTreeCollection, stats);
+                var deliteFileMain = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, MainFileTreeCollection);
+                FilesCollectionManager.DeliteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
                 ProgressBarLoopScrol = false;
                 ProgressBarValue = 0;
 
-                EtalonManager.DeliteFileInDB(delitedFile);
+
+                EtalonManager.DeliteFileInDB(deliteFileMain);
             });
 
             if (TotalFiles > 0) TotalFiles -= stats.TotalFiles;
