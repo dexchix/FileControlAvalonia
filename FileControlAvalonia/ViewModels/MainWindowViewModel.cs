@@ -542,7 +542,6 @@ namespace FileControlAvalonia.ViewModels
         {
             EnabledButtons = false;
             ProgressBarIsVisible = true;
-            //ProgressBarLoopScrol = true;
             ProgressBarText = "Удаление файлов";
 
             FileStats stats = new FileStats();
@@ -573,7 +572,6 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarText = $"Удаление завершено. Удалено {stats.TotalFiles} файлов";
             await Task.Delay(1500);
             ProgressBarIsVisible = false;
-            //ProgressBarLoopScrol = false;
             EnabledButtons = true;
         }
         #endregion
