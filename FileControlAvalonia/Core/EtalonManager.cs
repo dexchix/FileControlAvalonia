@@ -97,6 +97,8 @@ namespace FileControlAvalonia.Core
             if (file.Children != null)
             {
                 var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() { file });
+                listDelitedFiles.Reverse();
+
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = listDelitedFiles.Count;
 
                 using (var connection = new SQLiteConnection(DataBaseOptions.Options))

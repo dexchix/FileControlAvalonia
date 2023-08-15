@@ -542,7 +542,7 @@ namespace FileControlAvalonia.ViewModels
         {
             EnabledButtons = false;
             ProgressBarIsVisible = true;
-            ProgressBarLoopScrol = true;
+            //ProgressBarLoopScrol = true;
             ProgressBarText = "Удаление файлов";
 
             FileStats stats = new FileStats();
@@ -550,12 +550,14 @@ namespace FileControlAvalonia.ViewModels
             await Task.Run(() =>
             {
                 var deliteFileMain = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, MainFileTreeCollection);
+                EtalonManager.DeliteFileInDB(deliteFileMain);
+
                 FilesCollectionManager.DeliteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
                 ProgressBarLoopScrol = false;
                 ProgressBarValue = 0;
 
 
-                EtalonManager.DeliteFileInDB(deliteFileMain);
+ 
             });
 
             if (TotalFiles > 0) TotalFiles -= stats.TotalFiles;
@@ -571,7 +573,7 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarText = $"Удаление завершено. Удалено {stats.TotalFiles} файлов";
             await Task.Delay(1500);
             ProgressBarIsVisible = false;
-            ProgressBarLoopScrol = false;
+            //ProgressBarLoopScrol = false;
             EnabledButtons = true;
         }
         #endregion
