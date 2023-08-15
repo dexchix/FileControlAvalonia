@@ -368,6 +368,7 @@ namespace FileControlAvalonia.ViewModels
                 RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
                 //============================================================================================
             });
+            ProgressBarLoopScrol = false;
             ProgressBarIsVisible = false;
             EnabledButtons = true;
 
@@ -553,9 +554,6 @@ namespace FileControlAvalonia.ViewModels
 
                 FilesCollectionManager.DeliteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
                 ProgressBarLoopScrol = false;
-                ProgressBarValue = 0;
-
-
  
             });
 
@@ -573,6 +571,7 @@ namespace FileControlAvalonia.ViewModels
             await Task.Delay(1500);
             ProgressBarIsVisible = false;
             EnabledButtons = true;
+            ProgressBarValue = 0;
         }
         #endregion
 
