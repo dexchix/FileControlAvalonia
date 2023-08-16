@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\CopyModelDifferences_32x32.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AssemblyName>FileControlAvalonia</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +16,10 @@
     <None Remove="Assets\AddFile.ico" />
     <None Remove="Assets\close1.png" />
     <None Remove="Assets\Обычный лого.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\CopyModelDifferences_32x32.ico" />
   </ItemGroup>
 
   <ItemGroup>

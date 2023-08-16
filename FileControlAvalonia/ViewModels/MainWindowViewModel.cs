@@ -544,6 +544,7 @@ namespace FileControlAvalonia.ViewModels
             EnabledButtons = false;
             ProgressBarIsVisible = true;
             ProgressBarText = "Удаление файлов";
+            ProgressBarValue = 0;
 
             FileStats stats = new FileStats();
 
