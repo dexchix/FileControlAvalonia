@@ -1,39 +1,24 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Templates;
-using Avalonia.Markup.Xaml.Templates;
-using Avalonia.Media;
-using Avalonia.Styling;
+﻿using Avalonia.Controls;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.SettingsApp;
-using FileControlAvalonia.ViewModels.Interfaces;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class SettingsWindowViewModel : ReactiveObject, ISettingsWindowViewModel
+    public class SettingsWindowViewModel : ReactiveObject
     {
         private Settings _settings = SettingsManager.GetSettings()!;
         private string? _userVM;
         private string? _passwordVM;
         private string? _nameTableVM;
-        private string? _pathOPCServerVM;
-        private string? _tagTotalStatusVM;
-        private string? _tagTotalNumberofFilesVM;
-        private string? _tagNumberOfMatchesVM;
-        private string? _tagNumberMissmatchesVM;
-        private string? _tagPartiallyMatchedVM;
-        private string? _tagNumberOfUnaccessedVM;
-        private string? _tagNotFoundVM;
+        private string? _opcConnectionStringVM;
+        private string? _opcCommonTagVM;
+        private string? _OpcCountTagVM;
+        private string? _opcPassedTagVM;
+        private string? _opcFailedTagVM;
+        private string? _opcSemiPassedTagVM;
+        private string? _opcNoAccessTagVM;
+        private string? _opcNotFoundTagVM;
         private string? _avalibleFileExtensionsVM;
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
@@ -67,76 +52,76 @@ namespace FileControlAvalonia.ViewModels
                 _settings.NameTable = value;
             }
         }
-        public string PathOPCServerVM
+        public string OpcConnectionStringVM
         {
-            get => _pathOPCServerVM!;
+            get => _opcConnectionStringVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _pathOPCServerVM, value);
-                _settings.PathOPCServer = value;
+                this.RaiseAndSetIfChanged(ref _opcConnectionStringVM, value);
+                _settings.OpcConnectionString = value;
             }
         }
-        public string TagTotalStatusVM
+        public string OpcCommonTagVM
         {
-            get => _tagTotalStatusVM!;
+            get => _opcCommonTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagTotalStatusVM, value);
-                _settings.TagTotalStatus = value;
+                this.RaiseAndSetIfChanged(ref _opcCommonTagVM, value);
+                _settings.OpcCommonTag = value;
             }
         }
-        public string TagTotalNumberofFilesVM
+        public string OpcCountTagVM
         {
-            get => _tagTotalNumberofFilesVM!;
+            get => _OpcCountTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagTotalNumberofFilesVM, value);
-                _settings.TagTotalNumberofFiles = value;
+                this.RaiseAndSetIfChanged(ref _OpcCountTagVM, value);
+                _settings.OpcCountTag = value;
             }
         }
-        public string TagNumberOfMatchesVM
+        public string OpcPassedTagVM
         {
-            get => _tagNumberOfMatchesVM!;
+            get => _opcPassedTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagNumberOfMatchesVM, value);
-                _settings.TagNumberOfMatches = value;
+                this.RaiseAndSetIfChanged(ref _opcPassedTagVM, value);
+                _settings.OpcPassedTag = value;
             }
         }
-        public string TagNumberMissmatchesVM
+        public string OpcFailedTagVM
         {
-            get => _tagNumberMissmatchesVM!;
+            get => _opcFailedTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagNumberMissmatchesVM, value);
-                _settings.TagNumberMissmatches = value;
+                this.RaiseAndSetIfChanged(ref _opcFailedTagVM, value);
+                _settings.OpcFailedTag = value;
             }
         }
-        public string TagPartiallyMatchedVM
+        public string OpcSemiPassedTagVM
         {
-            get => _tagPartiallyMatchedVM!;
+            get => _opcSemiPassedTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagPartiallyMatchedVM, value);
-                _settings.TagPartiallyMatched = value;
+                this.RaiseAndSetIfChanged(ref _opcSemiPassedTagVM, value);
+                _settings.OpcSemiPassedTag = value;
             }
         }
-        public string TagNumberOfUnaccessedVM
+        public string OpcNoAccessTagVM
         {
-            get => _tagNumberOfUnaccessedVM!;
+            get => _opcNoAccessTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagNumberOfUnaccessedVM, value);
-                _settings.TagNumberOfUnaccessed = value;
+                this.RaiseAndSetIfChanged(ref _opcNoAccessTagVM, value);
+                _settings.OpcNoAccessTag = value;
             }
         }
-        public string TagNotFoundVM
+        public string OpcNotFoundTagVM
         {
-            get => _tagNotFoundVM!;
+            get => _opcNotFoundTagVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _tagNotFoundVM, value);
-                _settings.TagNotFound = value;
+                this.RaiseAndSetIfChanged(ref _opcNotFoundTagVM, value);
+                _settings.OpcNotFoundTag = value;
             }
         }
         public string AvalibleFileExtensionsVM
@@ -179,14 +164,14 @@ namespace FileControlAvalonia.ViewModels
             _passwordVM = _settings.Password;
             _pastPassword = _settings.Password;
             _nameTableVM = _settings.NameTable;
-            _pathOPCServerVM = _settings.PathOPCServer;
-            _tagTotalStatusVM = _settings.TagTotalStatus;
-            _tagTotalNumberofFilesVM = _settings.TagTotalNumberofFiles;
-            _tagNumberOfMatchesVM = _settings.TagNumberOfMatches;
-            _tagNumberMissmatchesVM = _settings.TagNumberMissmatches;
-            _tagPartiallyMatchedVM = _settings.TagPartiallyMatched;
-            _tagNumberOfUnaccessedVM = _settings.TagNumberOfUnaccessed;
-            _tagNotFoundVM = _settings.TagNotFound;
+            _opcConnectionStringVM = _settings.OpcConnectionString;
+            _opcCommonTagVM = _settings.OpcCommonTag;
+            _OpcCountTagVM = _settings.OpcCountTag;
+            _opcPassedTagVM = _settings.OpcPassedTag;
+            _opcFailedTagVM = _settings.OpcFailedTag;
+            _opcSemiPassedTagVM = _settings.OpcSemiPassedTag;
+            _opcNoAccessTagVM = _settings.OpcNoAccessTag;
+            _opcNotFoundTagVM = _settings.OpcNotFoundTag;
             _avalibleFileExtensionsVM = _settings.AvalibleFileExtensions;
             _accessParametrForCheckButtonVM = _settings.AccessParametrForCheckButton;
             _rootPath = _settings.RootPath;

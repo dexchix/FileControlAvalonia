@@ -4,16 +4,11 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
-using Avalonia.Utilities;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
+using FileControlAvalonia.DataBase;
 using FileControlAvalonia.FileTreeLogic;
-using FileControlAvalonia.Helper;
 using FileControlAvalonia.Models;
-using FileControlAvalonia.Services;
-using FileControlAvalonia.SettingsApp;
-using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
 using ReactiveUI;
 using Splat;
@@ -21,17 +16,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Security.Permissions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
         #region FIELDS
         public static ObservableCollection<FileTree>? fileTree;
@@ -368,6 +359,11 @@ namespace FileControlAvalonia.ViewModels
                 RecorderInfoBD.RecordInfoCountFiles(TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked);
                 //============================================================================================
             });
+
+            var state = TotalFiles == Checked ? 1 : 0;
+            await OpcClass.WriteToOpcAsync(state, comparator);
+
+
             ProgressBarLoopScrol = false;
             ProgressBarIsVisible = false;
             EnabledButtons = true;
@@ -392,14 +388,14 @@ namespace FileControlAvalonia.ViewModels
             //============================================================================================
             //Запись в БД
             DateCreateEtalon = DateTime.Now.ToString();
-            RecorderInfoBD.RecordInfoOfCreateEtalon("Admin", DateCreateEtalon);
+            RecorderInfoBD.RecordInfoOfCreateEtalon(UserLevel, DateCreateEtalon);
             //============================================================================================
 
             ProgressBarText = "Создание эталона завершено";
 
             await Task.Delay(2000);
 
-            UserLevelCreateEtalon = "Admin";
+            UserLevelCreateEtalon = UserLevel;
             DateCreateEtalon = DateTime.Now.ToString();
             Checked = TotalFiles;
             PartialChecked = 0;
@@ -407,6 +403,7 @@ namespace FileControlAvalonia.ViewModels
             NoAccess = 0;
             NotFound = 0;
             NotChecked = 0;
+
             ProgressBarIsVisible = false;
             EnabledButtons = true;
         }
@@ -468,7 +465,9 @@ namespace FileControlAvalonia.ViewModels
 
             DateCreateEtalon = info.Date;
             DateLastCheck = info.DateLastCheck;
-            UserLevel = info.Creator;
+            UserLevelCreateEtalon = info.Creator;
+
+            UserLevel = Environment.UserName;
 
             TotalFiles = comparator.TotalFiles;
             Checked = comparator.Checked;
@@ -555,7 +554,7 @@ namespace FileControlAvalonia.ViewModels
 
                 FilesCollectionManager.DeliteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
                 ProgressBarLoopScrol = false;
- 
+
             });
 
             if (TotalFiles > 0) TotalFiles -= stats.TotalFiles;

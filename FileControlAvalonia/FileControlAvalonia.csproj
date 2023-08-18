@@ -53,6 +53,33 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="OpcComRcw">
+      <HintPath>LIBS\OpcComRcw.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcNetApi">
+      <HintPath>LIBS\OpcNetApi.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcNetApi.Com">
+      <HintPath>LIBS\OpcNetApi.Com.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcNetApi.Xml">
+      <HintPath>LIBS\OpcNetApi.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcRcw.Ae">
+      <HintPath>LIBS\OpcRcw.Ae.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcRcw.Comn">
+      <HintPath>LIBS\OpcRcw.Comn.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcRcw.Da">
+      <HintPath>LIBS\OpcRcw.Da.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcRcw.Dx">
+      <HintPath>LIBS\OpcRcw.Dx.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcRcw.Hda">
+      <HintPath>LIBS\OpcRcw.Hda.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceLib">
       <HintPath>LIBS\ServiceLib.dll</HintPath>
     </Reference>

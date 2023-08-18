@@ -71,6 +71,7 @@ namespace FileControlAvalonia.SettingsApp
                     }
                 }
                 RootPath = settings.RootPath;
+                AppSettings = settings;
             }
             catch
             {

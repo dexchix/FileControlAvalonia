@@ -6,7 +6,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using FileControlAvalonia.Core;
 using FileControlAvalonia.ViewModels;
-using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.Views;
 using ReactiveUI;
 using Splat;

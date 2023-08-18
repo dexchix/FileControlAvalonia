@@ -4,18 +4,14 @@ using Avalonia.Platform;
 using Avalonia;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.Converters;
-using NLog.LayoutRenderers.Wrappers;
 using FileControlAvalonia.Helper;
 using System.Collections.ObjectModel;
-using FileControlAvalonia.ViewModels.Interfaces;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
@@ -24,7 +20,7 @@ using FileControlAvalonia.DataBase;
 
 namespace FileControlAvalonia.ViewModels
 {
-    public class FileExplorerWindowViewModel : ReactiveObject, IFileExplorerWindowViewModel, IDisposable
+    public class FileExplorerWindowViewModel : ReactiveObject, IDisposable
     {
         #region FIELDS
         private int _itemIndex = 0;

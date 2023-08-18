@@ -1,14 +1,6 @@
-﻿using Avalonia.Threading;
-using FileControlAvalonia.FileTreeLogic;
-using FileControlAvalonia.Models;
-using FileControlAvalonia.ViewModels;
-using Splat;
-using System;
-using System.Collections.Generic;
+﻿using FileControlAvalonia.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Core
 {
