@@ -220,13 +220,6 @@
 										
 									</Button.Styles>
 								</Button>
-
-								<ToolTip.Tip>
-									<StackPanel>
-										<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
-										<TextBlock Text="{Binding Path=DataContext.Path, RelativeSource={RelativeSource Self}}"></TextBlock>
-									</StackPanel>
-								</ToolTip.Tip>
 							</Grid>
 						</DataTemplate>
 						<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
@@ -296,7 +289,7 @@
 														</Image>
 														<TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" VerticalAlignment="Center"></TextBlock>
 														<ToolTip.Tip>
-															<TextBlock Text="{Binding Path=DataContext.Name, RelativeSource={RelativeSource Self}}"></TextBlock>
+															<TextBlock Text="{Binding Path=DataContext.Path, RelativeSource={RelativeSource Self}}"></TextBlock>
 														</ToolTip.Tip>
 													</StackPanel>
 												</Border>

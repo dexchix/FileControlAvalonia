@@ -23,32 +23,14 @@ namespace FileControlAvalonia.SettingsApp
         public static string? SettingsString { get; set; }
         public static Settings AppSettings { get; set; }
 
-        public static void SetStartupSettings()
-        {
+        public static void SetStartupSettings() => GetSettings();
 
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Settings.xml")))
-            {
-                GetSettings();
-            }
-            else
-            {
-                var settings = new Settings();
-                settings.Password = DataBaseOptions.CryptPassword(DataBaseOptions.Password);
-                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-                using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
-                {
-                    serializer.Serialize(streamWriter, settings);
-                }
-                settings.Password = DataBaseOptions.Password;
-                AppSettings = settings;
-                RootPath = settings.RootPath;
-            }
-        }
 
         public static void SetSettings(Settings settings)
         {
             try
             {
+                var decryptPassword = settings.Password;
                 settings.Password = DataBaseOptions.CryptPassword(settings.Password);
 
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
@@ -56,28 +38,36 @@ namespace FileControlAvalonia.SettingsApp
                 {
                     serializer.Serialize(streamWriter, settings);
                 }
-                SettingsString = settings.AvalibleFileExtensions;
-                extensions.Clear();
-                ModifyExtensions.Clear();
-                if (settings.AvalibleFileExtensions != null)
-                {
-                    extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
-                    if (extensions.Count > 0 && extensions[0] != "")
-                    {
-                        foreach (string extension in extensions)
-                        {
-                            ModifyExtensions.Add("." + extension);
-                        }
-                    }
-                }
+
+                settings.Password = decryptPassword;
                 RootPath = settings.RootPath;
                 AppSettings = settings;
+                SetExtensions(AppSettings);
             }
             catch
             {
                 LogManager.GetCurrentClassLogger().Error("Отсутствует файл Settings.xml");
             }
         }
+
+        private static void SetExtensions(Settings settings)
+        {
+            SettingsString = settings.AvalibleFileExtensions;
+            extensions.Clear();
+            ModifyExtensions.Clear();
+            if (settings.AvalibleFileExtensions != null)
+            {
+                extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
+                if (extensions.Count > 0 && extensions[0] != "")
+                {
+                    foreach (string extension in extensions)
+                    {
+                        ModifyExtensions.Add("." + extension);
+                    }
+                }
+            }
+        }
+
         public static Settings? GetSettings()
         {
             try
@@ -88,6 +78,7 @@ namespace FileControlAvalonia.SettingsApp
                     var settings = serializer.Deserialize(streamReader) as Settings;
                     settings.Password = DataBaseOptions.DecryptPassword(settings.Password);
                     AppSettings = settings;
+                    SetExtensions(AppSettings);
                     RootPath = settings.RootPath;
                     return AppSettings;
                 }
@@ -109,6 +100,7 @@ namespace FileControlAvalonia.SettingsApp
                 }
                 settings.Password = password;
                 AppSettings = settings;
+                SetExtensions(AppSettings);
                 return AppSettings;
             }
         }
