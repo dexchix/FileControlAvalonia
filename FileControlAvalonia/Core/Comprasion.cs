@@ -71,13 +71,19 @@ namespace FileControlAvalonia.Core
                fileTree.EVersion == fileTree.FVersion &&
                fileTree.ELastUpdate != fileTree.FLastUpdate)
             {
-                fileTree.Status = StatusFile.PartiallyChecked;
                 if (!fileTree.IsDirectory)
+                {
+                    fileTree.Status = StatusFile.PartiallyChecked;
                     PartialChecked++;
-                ChangeStatusParents(fileTree, fileTree.Status);
+                    ChangeStatusParents(fileTree, fileTree.Status);
+                }
+                else
+                    fileTree.Status = StatusFile.Checked;
+
+                
                 return;
             }
-
+            //FailedChecked
             else
             {
                 fileTree.Status = StatusFile.FailedChecked;
