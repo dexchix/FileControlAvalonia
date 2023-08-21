@@ -23,6 +23,11 @@ namespace FileControlAvalonia.ViewModels
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
         private string _pastPassword;
+        private int _windowHeightVM;
+        private int _windowWidthVM;
+        private int _xLocationVM;
+        private int _yLocationVM;
+        private bool _dragAndDropWindowVM;
         private bool _isEnabledPasswordTextBox = false;
 
         public string UserVM
@@ -149,6 +154,53 @@ namespace FileControlAvalonia.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _rootPath, value);
                 _settings.RootPath = value;
+            }
+        }
+
+        public int WindowHeightVM
+        {
+            get => _windowHeightVM!;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _windowHeightVM, value);
+                _settings.WindowHeight = value;
+            }
+        }
+        public int WindowWidthVM
+        {
+            get => _windowWidthVM!;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _windowWidthVM, value);
+                _settings.WindowWidth = value;
+            }
+        }
+        public int XLocationVM
+        {
+            get => _xLocationVM!;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _xLocationVM, value);
+                _settings.XLocation = value;
+            }
+        }
+
+        public int YLocationVM
+        {
+            get => _yLocationVM!;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _yLocationVM, value);
+                _settings.YLocation = value;
+            }
+        }
+        public bool DragAndDropWindowVM
+        {
+            get => _dragAndDropWindowVM!;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _dragAndDropWindowVM, value);
+                _settings.DragAndDropWindow = value;
             }
         }
 

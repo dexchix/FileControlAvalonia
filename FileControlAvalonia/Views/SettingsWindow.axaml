@@ -127,18 +127,18 @@
 				<TabItem Header="Параметры окна" FontSize="15">
 					<Grid ColumnDefinitions="*, *">
 						<StackPanel Orientation="Vertical" Grid.Column="0" Spacing="11.5">
-							<Label Content = "Длина окна"></Label>
+							<Label Content = "Высота окна"></Label>
 							<Label Content = "Ширина окна"></Label>
 							<Label Content = "Расположение (Х)"></Label>
 							<Label Content = "Расположение (Y)"></Label>
 							<Label Content = "Возможность перетаскивания окон"></Label>
 						</StackPanel>
 						<StackPanel Orientation="Vertical" Grid.Column="1" Spacing="2" Margin="30 0 0 0" Width="270">
-							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcConnectionStringVM}, Mode=TwoWay"></TextBox>
-							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCommonTagVM}, Mode=TwoWay"></TextBox>
-							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCountTagVM}, Mode=TwoWay"></TextBox>
-							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcPassedTagVM}, Mode=TwoWay"></TextBox>
-							<CheckBox Margin="135 0 0 0"></CheckBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding WindowHeightVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding WindowWidthVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding XLocationVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding YLocationVM}, Mode=TwoWay"></TextBox>
+							<CheckBox Margin="135 0 0 0" IsChecked="{Binding DragAndDropWindowVM}, Mode=TwoWay" ></CheckBox>
 						</StackPanel>
 					</Grid>
 				</TabItem>
