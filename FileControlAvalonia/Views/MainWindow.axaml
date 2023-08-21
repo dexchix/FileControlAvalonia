@@ -229,7 +229,6 @@
 					<TreeDataGrid.Styles>
 						<Style Selector="TreeDataGridCellsPresenter">
 							<Setter Property="Background" Value="{Binding Path=Status, Converter={StaticResource BackGroundConverter}}"></Setter>
-
 						</Style>
 
 						<Style Selector="TreeDataGridRow">
@@ -242,8 +241,6 @@
 							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
 							<Setter Property="Height" Value="70"></Setter>
 						</Style>
-
-
 
 						<Style Selector="TreeDataGridExpanderCell">
 							<Setter Property="Template">

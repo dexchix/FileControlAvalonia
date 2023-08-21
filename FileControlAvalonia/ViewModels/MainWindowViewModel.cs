@@ -441,6 +441,7 @@ namespace FileControlAvalonia.ViewModels
             var comparator = new Comprasion();
             ProgressBarIsVisible = true;
             ProgressBarLoopScrol = true;
+            ProgressBarText = "Получение данных из БД";
             await Task.Delay(2000);
             await Task.Run(() =>
             {
@@ -454,6 +455,7 @@ namespace FileControlAvalonia.ViewModels
 
                 }
             });
+            ProgressBarText = null;
 
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 

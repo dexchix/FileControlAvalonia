@@ -3,10 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:FileControlAvalonia.ViewModels"
+		xmlns:i ="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+		xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         mc:Ignorable="d"
         x:Class="FileControlAvalonia.Views.SettingsWindow"
         Title="Настройки" Icon="/Assets/setting.png"
-		Width="600" Height="555"
+		Width="615" Height="330"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
@@ -24,90 +26,125 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="1">
-		<Grid RowDefinitions="30 * 30" ColumnDefinitions="auto auto">
-			<StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
-				<Canvas Margin=" -3 5 0 0">
-					<Image Source="/Assets/setting.png" Height="17" VerticalAlignment="Center" Margin="10 0 0 0"></Image>
-				</Canvas>
-				<Label Content="Настройки" Margin="25 1 0 0"></Label>
-			</StackPanel>
-			<Button Grid.Row="0" Grid.Column="1" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-					Margin="0 0 0 5" Command="{Binding CloseWindow}"
-					CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
-				<Image Source="/Assets/close1.png" Width="10" Height="10"/>
-				<Button.Styles>
-					<Style Selector="Button">
-						<Setter Property="Background" Value="Transparent"/>
-					</Style>
-					<Style Selector="Button:pointerover /template/ ContentPresenter">
-					</Style>
-				</Button.Styles>
-			</Button>
-			
-			<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="11.5" Margin="5 0 0 0">
-				<Label Content = "Пользователь"></Label>
-				<Label Content = "Пароль"></Label>
-				<Label Content = "Имя таблицы"></Label>
-				<Label Content = "Адрес ОРС сервера"></Label>
-				<Label Content = "Тег общего состояния"></Label>
-				<Label Content = "Тег общего количества файлов"></Label>
-				<Label Content = "Тег количества совпадений"></Label>
-				<Label Content = "Тег количества несовпадений"></Label>
-				<Label Content = "Тег частично совпавших"></Label>
-				<Label Content = "Тег количества без доступа"></Label>
-				<Label Content = "Тег не найденых"></Label>
-				<Label Content = "Доступные расширения файлов"></Label>
-				<Label Content = "Параметр доступа для кнопки «Проверить»"></Label>
-				<Label Content = "Корневой путь"></Label>
-			</StackPanel>
-			<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2"
-						HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>
+		<Grid RowDefinitions="auto auto 40">
+			<StackPanel Grid.Row="0">
 				<StackPanel Orientation="Horizontal" Spacing="5">
-					<TextBox HorizontalAlignment="Stretch" Name="PasswordBox" PasswordChar="*"  Width="222" IsReadOnly="True"
-							 Text ="{Binding PasswordVM}, Mode=TwoWay" IsEnabled="{Binding IsEnabledPasswordTextBox}" >
-						<TextBox.Styles>
-							<Style Selector="TextBox">
-								<Setter Property="BorderBrush" Value="Red"></Setter>
-								<Setter Property="BorderThickness" Value="1"></Setter>
-							</Style>
-							<Style Selector="TextBox:pointerover /template/ Border">
-								<Setter Property="BorderBrush" Value="Red"></Setter>
-								<Setter Property="BorderThickness" Value="1"></Setter>
-							</Style>
-							<Style Selector="TextBox:focus /template/ Border">
-								<Setter Property="BorderBrush" Value="Red"></Setter>
-								<Setter Property="BorderThickness" Value="1"></Setter>
-							</Style>
-							<Style Selector="TextBox:disabled /template/ Border">
-								<Setter Property="BorderBrush" Value="Black"></Setter>
-							
-								<Setter Property="Background" Value="Transparent"></Setter>
-							</Style>
-						</TextBox.Styles>
-					</TextBox>
-					<Button Classes="h1" Command="{Binding ChangePassword}" CommandParameter="{Binding ElementName=PasswordBox}">
-						<Canvas Width="20" Height="20" Margin="0 0 5 2">
-							<Image Source="/Assets/changePassword.png" Height="25" HorizontalAlignment="Center" 
-								   VerticalAlignment="Center"/>
-						</Canvas>
-					</Button>
+					<Canvas Margin=" 0 5 0 0">
+						<Image Source="/Assets/setting.png" Height="17" VerticalAlignment="Center" Margin="10 0 0 0"></Image>
+					</Canvas>
+					<Label Content="Настройки" Margin="25 1 0 0"></Label>
 				</StackPanel>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcConnectionStringVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCommonTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCountTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcPassedTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcFailedTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcSemiPassedTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcNoAccessTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcNotFoundTagVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay" Watermark="exe/stu/xlsx/png/zef/xef"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}, Mode=TwoWay"></TextBox>
-				<TextBox HorizontalAlignment="Stretch" Text ="{Binding RootPath}, Mode=TwoWay"></TextBox>
+				<Canvas HorizontalAlignment="Right" Margin="0 -20 30 0">
+					<Button Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+								 Command="{Binding CloseWindow}" Margin="0 0 0 0"
+								CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+						<Image Source="/Assets/close1.png" Width="10" Height="10"/>
+						<Button.Styles>
+							<Style Selector="Button">
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+							<Style Selector="Button:pointerover /template/ ContentPresenter">
+							</Style>
+						</Button.Styles>
+					</Button>
+				</Canvas>
 			</StackPanel>
-			<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" 
-						VerticalAlignment="Bottom" Margin="5 -8 0 5" Spacing="10">
+			<TabControl Name="SettingsTabControl" Grid.Row="1" Margin="0 0 0 0">
+				<TabItem Header="Основные" FontSize="15">
+					<Grid RowDefinitions="auto auto auto" ColumnDefinitions="auto auto" Margin="0 0 0 0" VerticalAlignment="Bottom">
+						<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="11.5" Margin="5 0 0 0">
+							<Label Content = "Пользователь"></Label>
+							<Label Content = "Пароль"></Label>
+							<Label Content = "Имя таблицы"></Label>
+							<Label Content = "Доступные расширения файлов"></Label>
+							<Label Content = "Параметр доступа для кнопки «Проверить»"></Label>
+							<Label Content = "Корневой путь"></Label>
+						</StackPanel>
+						<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2"
+									HorizontalAlignment="Stretch" Width="270" Margin= "5 0 0 0">
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding UserVM}, Mode=TwoWay"></TextBox>
+							<StackPanel Orientation="Horizontal" Spacing="5">
+								<TextBox HorizontalAlignment="Stretch" Name="PasswordBox" PasswordChar="*"  Width="222" IsReadOnly="True"
+										 Text ="{Binding PasswordVM}, Mode=TwoWay" IsEnabled="{Binding IsEnabledPasswordTextBox}" >
+									<TextBox.Styles>
+										<Style Selector="TextBox">
+											<Setter Property="BorderBrush" Value="Red"></Setter>
+											<Setter Property="BorderThickness" Value="1"></Setter>
+										</Style>
+										<Style Selector="TextBox:pointerover /template/ Border">
+											<Setter Property="BorderBrush" Value="Red"></Setter>
+											<Setter Property="BorderThickness" Value="1"></Setter>
+										</Style>
+										<Style Selector="TextBox:focus /template/ Border">
+											<Setter Property="BorderBrush" Value="Red"></Setter>
+											<Setter Property="BorderThickness" Value="1"></Setter>
+										</Style>
+										<Style Selector="TextBox:disabled /template/ Border">
+											<Setter Property="BorderBrush" Value="Black"></Setter>
+
+											<Setter Property="Background" Value="Transparent"></Setter>
+										</Style>
+									</TextBox.Styles>
+								</TextBox>
+								<Button Classes="h1" Command="{Binding ChangePassword}" CommandParameter="{Binding ElementName=PasswordBox}">
+									<Canvas Width="20" Height="20" Margin="0 0 5 2">
+										<Image Source="/Assets/changePassword.png" Height="25" HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+									</Canvas>
+								</Button>
+							</StackPanel>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay" Watermark="exe/stu/xlsx/png/zef/xef"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding RootPath}, Mode=TwoWay"></TextBox>
+						</StackPanel>
+					</Grid>
+				</TabItem>
+				<TabItem Header="OPC Сервер" FontSize="15">
+					<Grid ColumnDefinitions="*, *">
+						<StackPanel Orientation="Vertical" Grid.Column="0" Spacing="11.5">
+							<Label Content = "Адрес ОРС сервера"></Label>
+							<Label Content = "Тег общего состояния"></Label>
+							<Label Content = "Тег общего количества файлов"></Label>
+							<Label Content = "Тег количества совпадений"></Label>
+							<Label Content = "Тег количества несовпадений"></Label>
+							<Label Content = "Тег частично совпавших"></Label>
+							<Label Content = "Тег количества без доступа"></Label>
+							<Label Content = "Тег не найденых"></Label>
+						</StackPanel>
+						<StackPanel Orientation="Vertical" Grid.Column="1" Spacing="2" Margin="30 0 0 0" Width="270">
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcConnectionStringVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCommonTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCountTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcPassedTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcFailedTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcSemiPassedTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcNoAccessTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcNotFoundTagVM}, Mode=TwoWay"></TextBox>
+						</StackPanel>
+					</Grid>
+				</TabItem>
+				<TabItem Header="Параметры окна" FontSize="15">
+					<Grid ColumnDefinitions="*, *">
+						<StackPanel Orientation="Vertical" Grid.Column="0" Spacing="11.5">
+							<Label Content = "Длина окна"></Label>
+							<Label Content = "Ширина окна"></Label>
+							<Label Content = "Расположение (Х)"></Label>
+							<Label Content = "Расположение (Y)"></Label>
+							<Label Content = "Возможность перетаскивания окон"></Label>
+						</StackPanel>
+						<StackPanel Orientation="Vertical" Grid.Column="1" Spacing="2" Margin="30 0 0 0" Width="270">
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcConnectionStringVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCommonTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcCountTagVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding OpcPassedTagVM}, Mode=TwoWay"></TextBox>
+							<CheckBox Margin="135 0 0 0"></CheckBox>
+						</StackPanel>
+					</Grid>
+				</TabItem>
+			</TabControl>
+			<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
+									VerticalAlignment="Bottom" Margin="0 10 10 0" Spacing="10">
 				<Button Content="Подтвердить" Width="150" HorizontalContentAlignment="Center" Command="{Binding Confirm}" Classes="h1"
 						CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}}"></Button>
 				<Button Content="Отмена" Command="{Binding CloseWindow}" Width="150" HorizontalContentAlignment="Center" Classes="h1"
@@ -116,3 +153,6 @@
 		</Grid>
 	</Border>
 </Window>
+
+
+

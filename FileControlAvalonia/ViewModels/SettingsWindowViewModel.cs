@@ -151,6 +151,7 @@ namespace FileControlAvalonia.ViewModels
                 _settings.RootPath = value;
             }
         }
+
         public bool IsEnabledPasswordTextBox
         {
             get => _isEnabledPasswordTextBox;

@@ -13,7 +13,7 @@ namespace FileControlAvalonia.Views
         public SettingsWindow()
         {
             InitializeComponent();
-            //Deactivated += DeactivatedWindow;
+            this.FindControl<TabControl>("SettingsTabControl").SelectionChanged += ResizeWindow;
         }
 
         private void DeactivatedWindow(object? sender, EventArgs e)
@@ -52,6 +52,30 @@ namespace FileControlAvalonia.Views
             base.OnOpened(e);
             Position = new PixelPoint(WindowAssistant.X_Coordinate + 350, WindowAssistant.Y_Coordinate + 10);
             CanResize = false;
+        }
+        private void ResizeWindow(object? sender, SelectionChangedEventArgs e)
+        {
+            var tabControl = sender as TabControl;
+            int index = tabControl.SelectedIndex;
+            switch (index)
+            {
+                case 0:
+                    {
+                        this.Height = 330;
+                        break;
+                    }
+                case 1:
+                    {
+                        this.Height = 400;
+                        break;
+                    }
+                case 2:
+                    {
+                        this.Height = 295;
+                        break;
+                    }
+            }
+
         }
     }
 }
