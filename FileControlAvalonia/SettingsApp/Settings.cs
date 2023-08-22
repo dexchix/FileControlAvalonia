@@ -23,6 +23,6 @@ namespace FileControlAvalonia.SettingsApp
         public int? WindowWidth { get; set; }
         public int? XLocation { get; set; }
         public int? YLocation { get; set; }
-        public bool? DragAndDropWindow { get; set; }
+        public bool DragAndDropWindow { get; set; }
     }
 }

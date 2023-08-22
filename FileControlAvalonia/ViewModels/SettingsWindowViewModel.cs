@@ -3,6 +3,9 @@ using FileControlAvalonia.DataBase;
 using FileControlAvalonia.SettingsApp;
 using ReactiveUI;
 
+
+using System;
+
 namespace FileControlAvalonia.ViewModels
 {
     public class SettingsWindowViewModel : ReactiveObject
@@ -23,10 +26,10 @@ namespace FileControlAvalonia.ViewModels
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
         private string _pastPassword;
-        private int _windowHeightVM;
-        private int _windowWidthVM;
-        private int _xLocationVM;
-        private int _yLocationVM;
+        private string _windowHeightVM;
+        private string _windowWidthVM;
+        private string _xLocationVM;
+        private string _yLocationVM;
         private bool _dragAndDropWindowVM;
         private bool _isEnabledPasswordTextBox = false;
 
@@ -157,41 +160,42 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public int WindowHeightVM
+        public string WindowHeightVM
         {
             get => _windowHeightVM!;
             set
             {
+
                 this.RaiseAndSetIfChanged(ref _windowHeightVM, value);
-                _settings.WindowHeight = value;
+                //_settings.WindowHeight = Convert.ToInt32(value);
             }
         }
-        public int WindowWidthVM
+        public string WindowWidthVM
         {
             get => _windowWidthVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _windowWidthVM, value);
-                _settings.WindowWidth = value;
+                //_settings.WindowWidth = Convert.ToInt32(value);
             }
         }
-        public int XLocationVM
+        public string XLocationVM
         {
             get => _xLocationVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _xLocationVM, value);
-                _settings.XLocation = value;
+                //_settings.XLocation = Convert.ToInt32(value);
             }
         }
 
-        public int YLocationVM
+        public string YLocationVM
         {
             get => _yLocationVM!;
             set
             {
                 this.RaiseAndSetIfChanged(ref _yLocationVM, value);
-                _settings.YLocation = value;
+                //_settings.YLocation = Convert.ToInt32(value);
             }
         }
         public bool DragAndDropWindowVM
@@ -228,12 +232,25 @@ namespace FileControlAvalonia.ViewModels
             _avalibleFileExtensionsVM = _settings.AvalibleFileExtensions;
             _accessParametrForCheckButtonVM = _settings.AccessParametrForCheckButton;
             _rootPath = _settings.RootPath;
+
+            _windowHeightVM = _settings.WindowHeight == null ? "600" : _settings.WindowHeight.ToString();
+            _windowWidthVM = _settings.WindowWidth == null ? "1200" : _settings.WindowWidth.ToString();
+            _xLocationVM = _settings.XLocation == null ? "0" : _settings.XLocation.ToString();
+            _yLocationVM = _settings.YLocation == null ? "0" : _settings.YLocation.ToString();
+            _dragAndDropWindowVM = _settings.DragAndDropWindow == null? false: _settings.DragAndDropWindow;
         }
 
         #region COMMANDS
         public void CloseWindow(Window window)
         {
-            window.Close();
+            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
+            {
+                //MessageBox.Show();
+            }
+            else
+            {
+                window.Close();
+            }
         }
         public void Confirm(Window window)
         {
@@ -245,6 +262,13 @@ namespace FileControlAvalonia.ViewModels
             {
                 if (PasswordVM != _pastPassword)
                     DataBaseManager.ChangePasswordDataBase(PasswordVM);
+
+
+                _settings.WindowHeight = Convert.ToInt32(WindowHeightVM);
+                _settings.WindowWidth = Convert.ToInt32(WindowWidthVM);
+                _settings.XLocation= Convert.ToInt32(XLocationVM);
+                _settings.YLocation = Convert.ToInt32(YLocationVM);
+
                 SettingsManager.SetSettings(_settings);
                 IsEnabledPasswordTextBox = false;
                 window.Close();
@@ -259,5 +283,17 @@ namespace FileControlAvalonia.ViewModels
             textBox.Watermark = "Введите новый пароль";
         }
         #endregion
+
+        private bool IsNumeric(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!char.IsDigit(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
