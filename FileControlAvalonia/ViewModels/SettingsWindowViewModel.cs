@@ -2,9 +2,15 @@
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.SettingsApp;
 using ReactiveUI;
+using MessageBox;
 
 
 using System;
+using MessageBox.Avalonia.Enums;
+using MessageBox.Avalonia;
+using Splat;
+using FileControlAvalonia.Views;
+using Newtonsoft.Json.Linq;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -245,7 +251,8 @@ namespace FileControlAvalonia.ViewModels
         {
             if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
             {
-                //MessageBox.Show();
+                var mBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", "Введите новый пароль", ButtonEnum.OkCancel);
+                mBox.Show();
             }
             else
             {
@@ -256,7 +263,8 @@ namespace FileControlAvalonia.ViewModels
         {
             if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
             {
-
+                var mBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", "Введите новый пароль", ButtonEnum.OkCancel);
+                mBox.Show();
             }
             else
             {
@@ -269,8 +277,22 @@ namespace FileControlAvalonia.ViewModels
                 _settings.XLocation= Convert.ToInt32(XLocationVM);
                 _settings.YLocation = Convert.ToInt32(YLocationVM);
 
+
+                var mainwWindow = Locator.Current.GetService<MainWindow>();
+                if (DragAndDropWindowVM)
+                    mainwWindow.title.PointerPressed += mainwWindow.DragMoveWindow;
+                else
+                    mainwWindow.title.PointerPressed -= mainwWindow.DragMoveWindow;
+
                 SettingsManager.SetSettings(_settings);
                 IsEnabledPasswordTextBox = false;
+
+
+                if(SettingsManager.AppSettings.WindowHeight != _settings.WindowHeight && SettingsManager.AppSettings.WindowWidth != _settings.WindowWidth)
+                {
+                    mainwWindow.ResizeWindow(mainwWindow, (double)_settings.WindowHeight, (double)_settings.WindowHeight);
+                }
+
                 window.Close();
             }
         }

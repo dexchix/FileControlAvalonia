@@ -9,6 +9,7 @@ using FileControlAvalonia.Core;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Views;
 using ReactiveUI;
 using Splat;
@@ -219,7 +220,9 @@ namespace FileControlAvalonia.ViewModels
                             new GridLength(1, GridUnitType.Star),
                             new ColumnOptions<FileTree>
                             {
-                                MaxWidth = GridLength.Parse("350")
+                                //MaxWidth = GridLength.Parse("350")
+                                            MaxWidth = GridLength.Parse((SettingsManager.AppSettings.WindowWidth /3).ToString())
+                                //MaxWidth = GridLength.Star
                             }),
                         x => x.Children,
                         x => x.HasChildren,

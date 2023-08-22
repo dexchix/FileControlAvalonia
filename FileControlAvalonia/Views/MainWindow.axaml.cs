@@ -12,26 +12,51 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using System.Security.Policy;
+using FileControlAvalonia.SettingsApp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FileControlAvalonia.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         public static bool IsChildWindowOpen { get; set; } = false;
+        public Grid title;
+
         public MainWindow()
         {
             InitializeComponent();
-            //Deactivated += DeactivatedWindow;
+
+            title = this.FindControl<Grid>("Title");
+            if (SettingsManager.AppSettings.DragAndDropWindow)
+                title.PointerPressed += DragMoveWindow;
+
+            this.Opened += SetSizeWindow;
 
             this.WhenActivated(d => d(ViewModel!.ShowDialogInfoWindow.RegisterHandler(InfoWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogSettingsWindow.RegisterHandler(SettingsWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogFileExplorerWindow.RegisterHandler(FileExplorerWindowShodDialog)));
         }
 
+        private void SetSizeWindow(object? sender, EventArgs e)
+        {
+            this.Width = (double)SettingsManager.AppSettings.WindowWidth;
+            this.Height = (double)SettingsManager.AppSettings.WindowHeight;
+        }
+        public void ResizeWindow(MainWindow mainWindow, double width, double height)
+        {
+            mainWindow.Width = width;
+            mainWindow.Height = height;
+        }
+        public void DragMoveWindow(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        {
+            this.BeginMoveDrag(e);
+        }
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
         }
+
         #region ShowDialogs
         private async Task InfoWindowShowDialog(InteractionContext<InfoWindowViewModel, InfoWindowViewModel?> interaction)
         {
@@ -89,8 +114,6 @@ namespace FileControlAvalonia.Views
                     window[0].WindowState = WindowState.Minimized;
                 }
             }
-
-
         }
 
 

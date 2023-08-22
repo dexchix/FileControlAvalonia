@@ -1,3 +1,10 @@
+<!--MaxWidth="1197" MaxHeight="600"
+ExtendClientAreaToDecorationsHint="True"
+ExtendClientAreaChromeHints="NoChrome"
+ExtendClientAreaTitleBarHeightHint="-1"
+SystemDecorations="BorderOnly"-->
+
+
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:FileControlAvalonia.ViewModels"
@@ -11,12 +18,12 @@
         x:Class="FileControlAvalonia.Views.MainWindow"
         Icon="/Assets/CopyModelDifferences_32x32.ico"
         Title="Контроль целостности ПО ВУ"
-		MaxWidth="1197" MaxHeight="600"
-		ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-        SystemDecorations="BorderOnly"
-		xmlns:avalonia="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.TreeDataGrid">
+		
+		Width="1600" Height="900"
+        SystemDecorations="BorderOnly">
 
 	<Window.Resources>
 		<c:IndentConverter x:Key="IndentConverter"/>
@@ -59,18 +66,31 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="1">
-		<Grid RowDefinitions="30 35 35 * auto 35" ColumnDefinitions="275 640 275" Margin="5 5 5 5">
-			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0 -30 0 0"
-						HorizontalAlignment="Left" VerticalAlignment="Bottom">
-				<Canvas Margin="0 10 7 0">
-					<Image Source="/Assets/CopyModelDifferences_32x32.ico"  Height="23" Margin="5 -10 0 0"></Image>
-				</Canvas>
-
-				<Label FontSize="13" Content="Контроль целостности ПО ВУ" Margin="20 0 0 0"></Label>
-			</StackPanel>
+		<Grid RowDefinitions="30 35 35 * auto 35" ColumnDefinitions="275 * 275" Margin="5 5 5 5">
+			<Grid Name="Title" Grid.Row="0" Grid.ColumnSpan="3" ColumnDefinitions="*,*"  Margin="0 -30 0 0"
+						HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="Transparent">
+				<StackPanel Orientation="Horizontal" Grid.Column="0">
+					<Canvas Margin="0 10 7 0">
+						<Image Source="/Assets/CopyModelDifferences_32x32.ico"  Height="23" Margin="5 -10 0 0"></Image>
+					</Canvas>
+					<Label Name="TitleName" FontSize="13" Content="Контроль целостности ПО ВУ" Margin="20 0 0 0"></Label>
+				</StackPanel>
+			    <Button Grid.Column="1" Command="{Binding CloseProgramCommand}" VerticalAlignment="Top"
+			    	HorizontalAlignment="Right" Margin="0 0 1 0">
+			    	<Image Source="/Assets/close1.png" Width="10" Height="10"/>
+			    	<Button.Styles>
+			    		<Style Selector="Button">
+			    			<Setter Property="Background" Value="Transparent"/>
+			    		</Style>
+			    		<Style Selector="Button:pointerover /template/ ContentPresenter">
+			    		</Style>
+			    	</Button.Styles>
+			    </Button>
+				
+			</Grid>
 			<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
-				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left"
-						 >
+				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left">
+
 				<Button Width="120" Height="25" Content="Проверить" FontSize="11" Classes="h1" Command="{Binding CheckCommand}"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding EnabledButtons}">
 				</Button>
@@ -91,7 +111,7 @@
 
 				</Button>
 			</StackPanel>
-			
+
 			<Grid  Grid.Row="1" Grid.Column="1" ColumnDefinitions="365 *">
 				<TextBlock Grid.Column="0" TextWrapping="NoWrap">
 					<TextBlock.Text>
@@ -112,19 +132,8 @@
 			</Grid>
 
 
-			<StackPanel Grid.RowSpan="3" Grid.Column="3" Orientation="Vertical">
-				<Button Command="{Binding CloseProgramCommand}" VerticalAlignment="Top"
-					HorizontalAlignment="Right" Margin="0 0 1 0">
-					<Image Source="/Assets/close1.png" Width="10" Height="10"/>
-					<Button.Styles>
-						<Style Selector="Button">
-							<Setter Property="Background" Value="Transparent"/>
-						</Style>
-						<Style Selector="Button:pointerover /template/ ContentPresenter">
-						</Style>
-					</Button.Styles>
-				</Button>
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 5 5 0">
+			<StackPanel Grid.Row="1" Grid.Column="3" Orientation="Vertical" Margin="0 -8 0 0">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5" Margin="0 5 0 0">
 					<Button  Height="27" Width="27" Command="{Binding OpenFileExplorerWindowCommand}" IsEnabled="{Binding EnabledButtons}" Classes="h1">
 						<Canvas Margin="-5 -2 0 0">
 							<Image Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -144,7 +153,7 @@
 						</Canvas>
 					</Button>
 				</StackPanel>
-				<ComboBox Margin=" 20 5 0 0" HorizontalContentAlignment="Left" Height="30" Items="{Binding Filters}"
+				<ComboBox Margin=" 25 5 0 0" HorizontalContentAlignment="Left" Height="30" Items="{Binding Filters}"
 						  Width="250" FontSize="11" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
 				</ComboBox>
 			</StackPanel>
@@ -156,9 +165,9 @@
 					</MultiBinding>
 				</TextBlock.Text>
 			</TextBlock>
-			
+
 			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*">
-				<Border Width="1185" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
+				<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
 					<StackPanel Orientation="Horizontal">
 						<Canvas Margin="0 1 0 0">
 							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="353" Margin="0 0 0 0">Файл</Label>
@@ -175,11 +184,11 @@
 					</StackPanel>
 				</Border>
 				<TreeDataGrid Name="fileViewer"  VerticalAlignment="Stretch" Grid.Row="1"
-						  Width="1185" HorizontalAlignment="Center" Margin= "0 -5 5 0" ShowColumnHeaders="False"
+						   HorizontalAlignment="Stretch" Margin= "0 -5 0 0" ShowColumnHeaders="False"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
 					<TreeDataGrid.Resources>
 						<DataTemplate x:Key="FileCell" DataType="m:FileTree">
-							<Grid Name="EtalonGrid" RowDefinitions="* * *" ColumnDefinitions="335 335 *">
+							<Grid Name="EtalonGrid" RowDefinitions="* * *" ColumnDefinitions="* * 170">
 
 								<Label Grid.Row="0" Grid.Column="0" FontSize="12" Content="{Binding EHash}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 -1 0 0"></Label>
 								<Label Grid.Row="1" Grid.Column="0" FontSize="12" Content="{Binding ELastUpdate}" Foreground="{Binding Path=Status, Converter={StaticResource ForegroundConverter}}" BorderBrush="#b9b9b9" BorderThickness="1" Margin="0 0 0 0"></Label>
@@ -217,7 +226,7 @@
 											<Setter Property="BorderBrush" Value="Black"></Setter>
 											<Setter Property="BorderThickness" Value="1"></Setter>
 										</Style>
-										
+
 									</Button.Styles>
 								</Button>
 							</Grid>
@@ -348,8 +357,8 @@
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>
-				
-				
+
+
 				<TextBlock Classes="f1">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="Соответствует: {0}">
