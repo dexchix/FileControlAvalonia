@@ -4,6 +4,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
 using FileControlAvalonia.DataBase;
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -57,6 +59,7 @@ namespace FileControlAvalonia.ViewModels
         private string _progressBarText;
         private bool _progressBarLoopScrol = false;
         private int _progressBarMaximum;
+        private int _mainColumn = 400;
         #endregion
 
         new public event PropertyChangedEventHandler? PropertyChanged;
@@ -197,6 +200,12 @@ namespace FileControlAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _progressBarMaximum, value);
         }
         #endregion
+        public int MainColumn
+        {
+            get => _mainColumn;
+            set => this.RaiseAndSetIfChanged(ref _mainColumn, value);
+        }
+
 
         public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
@@ -209,6 +218,7 @@ namespace FileControlAvalonia.ViewModels
             ViewCollectionFiles = new ObservableCollection<FileTree>();
             MainFileTreeCollection = new ObservableCollection<FileTree>();
 
+            int witdhHierarhicalColumn = (int)(SettingsManager.AppSettings.WindowWidth! / 3.2432);
             Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
             {
                 Columns =
@@ -220,9 +230,7 @@ namespace FileControlAvalonia.ViewModels
                             new GridLength(1, GridUnitType.Star),
                             new ColumnOptions<FileTree>
                             {
-                                //MaxWidth = GridLength.Parse("350")
-                                            MaxWidth = GridLength.Parse((SettingsManager.AppSettings.WindowWidth /3).ToString())
-                                //MaxWidth = GridLength.Star
+                                MaxWidth = GridLength.Parse(witdhHierarhicalColumn.ToString())
                             }),
                         x => x.Children,
                         x => x.HasChildren,
@@ -597,6 +605,76 @@ namespace FileControlAvalonia.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        async public void ResizeWindow(double a, double b)
+        {
+            int newWitdhHierarhicalColumn = (int)(SettingsManager.AppSettings.WindowWidth! / 3.2432);
+            await Task.Run(async () =>
+            { 
+                Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
+                {
+                    Columns =
+                                {
+                                    new HierarchicalExpanderColumn<FileTree>(
+                                        new TemplateColumn<FileTree>(
+                                            "Имя файла",
+                                            "FileNameCell",
+                                            new GridLength(1, GridUnitType.Star),
+                                            new ColumnOptions<FileTree>
+                                            {
+                                                 MaxWidth = GridLength.Parse(newWitdhHierarhicalColumn.ToString())
+                                            }),
+                                        x => x.Children,
+                                        x => x.HasChildren,
+                                        x => x.IsExpanded
+                                        ),
+
+                                    new TemplateColumn<FileTree>(
+                                        $"{new string(' ',38)}Эталон{new string(' ',33)}|{new string(' ',25)}Фактическое значение{new string(' ',19)}|",
+                                        "FileCell",
+                                        new GridLength(1,GridUnitType.Star),
+                                        new ColumnOptions<FileTree>(){}
+                                        ){},
+                                }
+                };
+
+                await Task.Delay(100);
+                ProgressBarIsVisible = true;
+                ProgressBarLoopScrol = true;
+                await Task.Delay(100);
+                ProgressBarLoopScrol = false;
+                ProgressBarIsVisible = false;
+
+            });
+        }
         #endregion
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

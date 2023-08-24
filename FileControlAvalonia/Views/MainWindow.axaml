@@ -167,7 +167,7 @@ SystemDecorations="BorderOnly"-->
 			</TextBlock>
 
 			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*">
-				<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
+				<!--<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
 					<StackPanel Orientation="Horizontal">
 						<Canvas Margin="0 1 0 0">
 							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="353" Margin="0 0 0 0">Файл</Label>
@@ -182,7 +182,7 @@ SystemDecorations="BorderOnly"-->
 							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="165" Margin="0 0 0 0" Height="25"></Label>
 						</Canvas>
 					</StackPanel>
-				</Border>
+				</Border>-->
 				<TreeDataGrid Name="fileViewer"  VerticalAlignment="Stretch" Grid.Row="1"
 						   HorizontalAlignment="Stretch" Margin= "0 -5 0 0" ShowColumnHeaders="False"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
@@ -231,9 +231,6 @@ SystemDecorations="BorderOnly"-->
 								</Button>
 							</Grid>
 						</DataTemplate>
-						<DataTemplate x:Key="ButtonCell" DataType="m:FileTree">
-
-						</DataTemplate>
 					</TreeDataGrid.Resources>
 					<TreeDataGrid.Styles>
 						<Style Selector="TreeDataGridCellsPresenter">
@@ -250,19 +247,22 @@ SystemDecorations="BorderOnly"-->
 							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
 							<Setter Property="Height" Value="70"></Setter>
 						</Style>
-
+						<!--<Style Selector="TreeDataGridExpanderCell">
+							<Setter Property="MaxWidth" Value="200"></Setter>
+							
+						</Style>-->
 						<Style Selector="TreeDataGridExpanderCell">
 							<Setter Property="Template">
 								<Setter.Value>
 									<ControlTemplate>
-										<ToggleButton
-                                        
+										<ToggleButton 
 													  HorizontalAlignment="Stretch"
 													  VerticalAlignment="Stretch"
 													  Focusable="True"
 													  IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
 													  Background="Transparent"
-													  IsVisible="True">
+													  IsVisible="True"
+													  >
 											<ContentControl>
 												<Border x:Name="CellBorder"
 														Background="{TemplateBinding Background}"
@@ -270,7 +270,8 @@ SystemDecorations="BorderOnly"-->
 														BorderThickness="{TemplateBinding BorderThickness}"
 														CornerRadius="{TemplateBinding CornerRadius}"
 														Padding="{TemplateBinding Indent, Converter={StaticResource IndentConverter}}}"
-                                                 >
+
+														>
 													<StackPanel Orientation="Horizontal" Margin=" 0 0 0 0">
 														<Image Margin="-0 0 4 0"
 															  VerticalAlignment="Center"
@@ -341,67 +342,70 @@ SystemDecorations="BorderOnly"-->
 				</ProgressBar.Template>
 			</ProgressBar>
 			<!--Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, StringFormat={}{0:0}%}"-->
-			<StackPanel Grid.Row="5" Margin="10 0 10 10" VerticalAlignment="Bottom"
-						Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Уровень пользователя: {0} |">
-							<Binding Path="UserLevel"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Всего файлов: {0}">
-							<Binding Path="TotalFiles"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
+			<Canvas VerticalAlignment="Bottom" Grid.Row="5" Margin="0 0 0 20">
+				<StackPanel  Margin="10 0 10 10" VerticalAlignment="Bottom"
+					Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="20">
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Уровень пользователя: {0} |">
+								<Binding Path="UserLevel"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Всего файлов: {0}">
+								<Binding Path="TotalFiles"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
 
 
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Соответствует: {0}">
-							<Binding Path="Checked"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Частично соответствует: {0}">
-							<Binding Path="PartialChecked"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Не соответствует: {0}">
-							<Binding Path="FailedChecked"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Нет доступа: {0}">
-							<Binding Path="NoAccess"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Не найдено: {0}">
-							<Binding Path="NotFound"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-				<TextBlock Classes="f1">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="Не проверено: {0}">
-							<Binding Path="NotChecked"></Binding>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-			</StackPanel>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Соответствует: {0}">
+								<Binding Path="Checked"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Частично соответствует: {0}">
+								<Binding Path="PartialChecked"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Не соответствует: {0}">
+								<Binding Path="FailedChecked"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Нет доступа: {0}">
+								<Binding Path="NoAccess"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Не найдено: {0}">
+								<Binding Path="NotFound"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					<TextBlock Classes="f1">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="Не проверено: {0}">
+								<Binding Path="NotChecked"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</StackPanel>
+			</Canvas>
+		
 		</Grid>
 	</Border>
 </Window>

@@ -80,7 +80,7 @@ namespace FileControlAvalonia.SettingsApp
                     AppSettings = settings;
                     SetExtensions(AppSettings);
                     RootPath = settings.RootPath;
-                    return AppSettings;
+                    return settings;
                 }
             }
             catch (Exception ex)
@@ -92,7 +92,8 @@ namespace FileControlAvalonia.SettingsApp
                 var cryptPassword = DataBaseOptions.CryptPassword(DataBaseOptions.Password);
 
                 settings.Password = cryptPassword;
-
+                settings.WindowHeight = 600;
+                settings.WindowWidth = 1200;
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {

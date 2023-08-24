@@ -263,6 +263,7 @@ namespace FileControlAvalonia.ViewModels
             _yLocation = _settings.YLocation;
 
             ResizeWindow += Locator.Current.GetService<MainWindow>().ResizeWindow;
+            ResizeWindow += Locator.Current.GetService<MainWindowViewModel>().ResizeWindow;
         }
 
         #region COMMANDS
