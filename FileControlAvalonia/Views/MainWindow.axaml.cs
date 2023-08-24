@@ -42,10 +42,10 @@ namespace FileControlAvalonia.Views
             this.Width = (double)SettingsManager.AppSettings.WindowWidth;
             this.Height = (double)SettingsManager.AppSettings.WindowHeight;
         }
-        public void ResizeWindow(MainWindow mainWindow, double width, double height)
+        public void ResizeWindow(double width, double height)
         {
-            mainWindow.Width = width;
-            mainWindow.Height = height;
+            Width = width;
+            Height = height;
         }
         public void DragMoveWindow(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {

@@ -32,12 +32,23 @@ namespace FileControlAvalonia.ViewModels
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
         private string _pastPassword;
+
+
         private string _windowHeightVM;
         private string _windowWidthVM;
         private string _xLocationVM;
         private string _yLocationVM;
+
+        private int? _windowHeight;
+        private int? _windowWidth;
+        private int? _xLocation;
+        private int? _yLocation;
+
         private bool _dragAndDropWindowVM;
+        //private 
+
         private bool _isEnabledPasswordTextBox = false;
+        private event Action<double, double> ResizeWindow;
 
         public string UserVM
         {
@@ -244,6 +255,14 @@ namespace FileControlAvalonia.ViewModels
             _xLocationVM = _settings.XLocation == null ? "0" : _settings.XLocation.ToString();
             _yLocationVM = _settings.YLocation == null ? "0" : _settings.YLocation.ToString();
             _dragAndDropWindowVM = _settings.DragAndDropWindow == null? false: _settings.DragAndDropWindow;
+
+
+            _windowHeight =_settings.WindowHeight;
+            _windowWidth = _settings.WindowWidth;
+            _xLocation = _settings.XLocation;
+            _yLocation = _settings.YLocation;
+
+            ResizeWindow += Locator.Current.GetService<MainWindow>().ResizeWindow;
         }
 
         #region COMMANDS
@@ -288,9 +307,9 @@ namespace FileControlAvalonia.ViewModels
                 IsEnabledPasswordTextBox = false;
 
 
-                if(SettingsManager.AppSettings.WindowHeight != _settings.WindowHeight && SettingsManager.AppSettings.WindowWidth != _settings.WindowWidth)
+                if(SettingsManager.AppSettings.WindowHeight != _windowHeight || SettingsManager.AppSettings.WindowWidth != _windowWidth)
                 {
-                    mainwWindow.ResizeWindow(mainwWindow, (double)_settings.WindowHeight, (double)_settings.WindowHeight);
+                    ResizeWindow.Invoke((double)_settings.WindowWidth, (double)_settings.WindowHeight);
                 }
 
                 window.Close();
