@@ -39,10 +39,10 @@ namespace FileControlAvalonia.ViewModels
         private string _xLocationVM;
         private string _yLocationVM;
 
-        private int? _windowHeight;
-        private int? _windowWidth;
-        private int? _xLocation;
-        private int? _yLocation;
+        private double? _windowHeight;
+        private double? _windowWidth;
+        private double? _xLocation;
+        private double? _yLocation;
 
         private bool _dragAndDropWindowVM;
         //private 

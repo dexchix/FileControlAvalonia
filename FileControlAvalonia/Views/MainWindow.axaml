@@ -166,23 +166,40 @@ SystemDecorations="BorderOnly"-->
 				</TextBlock.Text>
 			</TextBlock>
 
-			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*">
-				<!--<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="-5 -10 0 0">
+			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*" Margin="0 3 0 0">
+				<!--<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="0 -10 0 0">
 					<StackPanel Orientation="Horizontal">
 						<Canvas Margin="0 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="353" Margin="0 0 0 0">Файл</Label>
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="353">Файл</Label>
 						</Canvas>
 						<Canvas Margin="352 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335" Margin="0 0 0 0">Эталон</Label>
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335">Эталон</Label>
 						</Canvas>
 						<Canvas Margin="334 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335" Margin="0 0 0 0">Фактическое значение</Label>
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335">Фактическое значение</Label>
 						</Canvas>
 						<Canvas Margin="334 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="165" Margin="0 0 0 0" Height="25"></Label>
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="170" Height="25"></Label>
 						</Canvas>
 					</StackPanel>
 				</Border>-->
+				<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="0 -10 0 0">
+					<StackPanel Orientation="Horizontal">
+						<Canvas Margin="0 1 0 0">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="{Binding WidthNameColumn}">Файл</Label>
+						</Canvas>
+						<Canvas Margin="{Binding MarginEtalonColumn}">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="{Binding WidthEtalonAndFactColumn}">Эталон</Label>
+						</Canvas>
+						<Canvas Margin="{Binding MarginFactAndDeleteColumn}">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="{Binding WidthEtalonAndFactColumn}">Фактическое значение</Label>
+						</Canvas>
+						<Canvas Margin="{Binding MarginFactAndDeleteColumn}">
+							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="171" Height="25"></Label>
+						</Canvas>
+					</StackPanel>
+				</Border>
+				
 				<TreeDataGrid Name="fileViewer"  VerticalAlignment="Stretch" Grid.Row="1"
 						   HorizontalAlignment="Stretch" Margin= "0 -5 0 0" ShowColumnHeaders="False"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
@@ -247,10 +264,7 @@ SystemDecorations="BorderOnly"-->
 							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
 							<Setter Property="Height" Value="70"></Setter>
 						</Style>
-						<!--<Style Selector="TreeDataGridExpanderCell">
-							<Setter Property="MaxWidth" Value="200"></Setter>
-							
-						</Style>-->
+			
 						<Style Selector="TreeDataGridExpanderCell">
 							<Setter Property="Template">
 								<Setter.Value>

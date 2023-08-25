@@ -19,10 +19,10 @@ namespace FileControlAvalonia.SettingsApp
         public string? AvalibleFileExtensions { get; set; }
         public string? AccessParametrForCheckButton { get; set; }
         public string? RootPath { get; set; }
-        public int? WindowHeight { get; set; }
-        public int? WindowWidth { get; set; }
-        public int? XLocation { get; set; }
-        public int? YLocation { get; set; }
+        public double WindowHeight { get; set; }
+        public double WindowWidth { get; set; }
+        public double XLocation { get; set; }
+        public double YLocation { get; set; }
         public bool DragAndDropWindow { get; set; }
     }
 }

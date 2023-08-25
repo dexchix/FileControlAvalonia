@@ -15,6 +15,7 @@ using System.Security.Policy;
 using FileControlAvalonia.SettingsApp;
 using System.Diagnostics;
 using System.Reflection;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FileControlAvalonia.Views
 {
@@ -23,6 +24,7 @@ namespace FileControlAvalonia.Views
         public static bool IsChildWindowOpen { get; set; } = false;
         public Grid title;
         public TreeDataGrid treeDataGrid;
+        public static double TreeDataGridWidth;
 
         public MainWindow()
         {
@@ -33,6 +35,8 @@ namespace FileControlAvalonia.Views
                 title.PointerPressed += DragMoveWindow;
             treeDataGrid = this.FindControl<TreeDataGrid>("fileViewer");
 
+            //TreeDataGridWidth = this.Width - 10;
+            TreeDataGridWidth = SettingsManager.AppSettings.WindowWidth - 10;
             this.Opened += SetSizeWindow;
 
             this.WhenActivated(d => d(ViewModel!.ShowDialogInfoWindow.RegisterHandler(InfoWindowShowDialog)));
@@ -49,11 +53,14 @@ namespace FileControlAvalonia.Views
         {
             this.Width = (double)SettingsManager.AppSettings.WindowWidth;
             this.Height = (double)SettingsManager.AppSettings.WindowHeight;
+
+            TreeDataGridWidth = this.Width - 10;
         }
         public void ResizeWindow(double width, double height)
         {
             Width = width;
             Height = height;
+            TreeDataGridWidth = Width - 10;
         }
         public void DragMoveWindow(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {

@@ -59,7 +59,13 @@ namespace FileControlAvalonia.ViewModels
         private string _progressBarText;
         private bool _progressBarLoopScrol = false;
         private int _progressBarMaximum;
-        private int _mainColumn = 400;
+        #endregion
+
+        #region HeaderTreeDataGrid
+        private double _widthNameColumn;
+        private double _widthEtalonAndFactColumn;
+        private Thickness _marginEtalonColumn;
+        private Thickness _marginFactAndDeleteColumn;
         #endregion
 
         new public event PropertyChangedEventHandler? PropertyChanged;
@@ -200,12 +206,29 @@ namespace FileControlAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _progressBarMaximum, value);
         }
         #endregion
-        public int MainColumn
-        {
-            get => _mainColumn;
-            set => this.RaiseAndSetIfChanged(ref _mainColumn, value);
-        }
 
+        #region HeaderTreeDataGrid
+        public double WidthNameColumn
+        {
+            get => _widthNameColumn;
+            set => this.RaiseAndSetIfChanged(ref _widthNameColumn, value);
+        }
+        public double WidthEtalonAndFactColumn
+        {
+            get => _widthEtalonAndFactColumn;
+            set => this.RaiseAndSetIfChanged(ref _widthEtalonAndFactColumn, value);
+        }
+        public Thickness MarginEtalonColumn
+        {
+            get => _marginEtalonColumn;
+            set => this.RaiseAndSetIfChanged(ref _marginEtalonColumn, value);
+        }
+        public Thickness MarginFactAndDeleteColumn
+        {
+            get => _marginFactAndDeleteColumn;
+            set => this.RaiseAndSetIfChanged(ref _marginFactAndDeleteColumn, value);
+        }
+        #endregion
 
         public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
@@ -218,7 +241,7 @@ namespace FileControlAvalonia.ViewModels
             ViewCollectionFiles = new ObservableCollection<FileTree>();
             MainFileTreeCollection = new ObservableCollection<FileTree>();
 
-            int witdhHierarhicalColumn = (int)(SettingsManager.AppSettings.WindowWidth! / 3.2432);
+            double witdhHierarhicalColumn = (int)(SettingsManager.AppSettings.WindowWidth! / 3.2) + 5;
             Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
             {
                 Columns =
@@ -245,6 +268,10 @@ namespace FileControlAvalonia.ViewModels
                         ){},
                 }
             };
+            WidthNameColumn = witdhHierarhicalColumn+2;
+            WidthEtalonAndFactColumn = (int)(MainWindow.TreeDataGridWidth - 170 - WidthNameColumn) / 2;
+            MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
+            MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
@@ -378,7 +405,6 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = false;
             ProgressBarIsVisible = false;
             EnabledButtons = true;
-
         }
 
         async public void CreateEtalonCommand()
@@ -607,9 +633,9 @@ namespace FileControlAvalonia.ViewModels
         }
         async public void ResizeWindow(double a, double b)
         {
-            int newWitdhHierarhicalColumn = (int)(SettingsManager.AppSettings.WindowWidth! / 3.2432);
+            double newWitdhHierarhicalColumn = (int)(SettingsManager.AppSettings.WindowWidth! / 3.2);
             await Task.Run(async () =>
-            { 
+            {
                 Source = new HierarchicalTreeDataGridSource<FileTree>(ViewCollectionFiles)
                 {
                     Columns =
@@ -636,6 +662,11 @@ namespace FileControlAvalonia.ViewModels
                                         ){},
                                 }
                 };
+                WidthNameColumn = (int)newWitdhHierarhicalColumn+2;
+                WidthEtalonAndFactColumn = (int)(MainWindow.TreeDataGridWidth - 170 - WidthNameColumn) / 2;
+                MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
+                MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
+                
 
                 await Task.Delay(100);
                 ProgressBarIsVisible = true;
