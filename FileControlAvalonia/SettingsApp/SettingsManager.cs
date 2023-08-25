@@ -94,6 +94,8 @@ namespace FileControlAvalonia.SettingsApp
                 settings.Password = cryptPassword;
                 settings.WindowHeight = 600;
                 settings.WindowWidth = 1200;
+                settings.XLocation = 0;
+                settings.YLocation = 0;
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {

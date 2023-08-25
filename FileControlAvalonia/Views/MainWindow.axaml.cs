@@ -16,6 +16,7 @@ using FileControlAvalonia.SettingsApp;
 using System.Diagnostics;
 using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace FileControlAvalonia.Views
 {
@@ -47,24 +48,6 @@ namespace FileControlAvalonia.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-        }
-
-        private void SetSizeWindow(object? sender, EventArgs e)
-        {
-            this.Width = (double)SettingsManager.AppSettings.WindowWidth;
-            this.Height = (double)SettingsManager.AppSettings.WindowHeight;
-
-            TreeDataGridWidth = this.Width - 10;
-        }
-        public void ResizeWindow(double width, double height)
-        {
-            Width = width;
-            Height = height;
-            TreeDataGridWidth = Width - 10;
-        }
-        public void DragMoveWindow(object? sender, Avalonia.Input.PointerPressedEventArgs e)
-        {
-            this.BeginMoveDrag(e);
         }
 
         private void InitializeComponent()
@@ -104,7 +87,7 @@ namespace FileControlAvalonia.Views
 
         private void DeactivatedWindow(object? sender, EventArgs e)
         {
-            if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 string activeWindow = WindowsAPI.GetActiveProcessName();
                 if (activeWindow != WindowsAPI.programProcessName)
@@ -130,13 +113,32 @@ namespace FileControlAvalonia.Views
                 }
             }
         }
-
-
+        public void DragMoveWindow(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        {
+            this.BeginMoveDrag(e);
+        }
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Position = new PixelPoint(WindowAssistant.X_Coordinate, WindowAssistant.Y_Coordinate);
+            Position = new PixelPoint((int)SettingsManager.AppSettings.XLocation, (int)SettingsManager.AppSettings.YLocation);
             CanResize = false;
+        }
+        private void SetSizeWindow(object? sender, EventArgs e)
+        {
+            this.Width = (double)SettingsManager.AppSettings.WindowWidth;
+            this.Height = (double)SettingsManager.AppSettings.WindowHeight;
+
+            TreeDataGridWidth = this.Width - 10;
+        }
+        public void ResizeWindow(double width, double height)
+        {
+            Width = width;
+            Height = height;
+            TreeDataGridWidth = Width - 10;
+        }
+        public void ChangeLocation(double x, double y)
+        {
+            Position = new PixelPoint((int)x, (int)y);
         }
     }
 }

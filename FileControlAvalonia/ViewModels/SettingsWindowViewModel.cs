@@ -49,6 +49,7 @@ namespace FileControlAvalonia.ViewModels
 
         private bool _isEnabledPasswordTextBox = false;
         private event Action<double, double> ResizeWindow;
+        public event Action<double, double> ChangeLocationWindow;
 
         public string UserVM
         {
@@ -264,6 +265,9 @@ namespace FileControlAvalonia.ViewModels
 
             ResizeWindow += Locator.Current.GetService<MainWindow>().ResizeWindow;
             ResizeWindow += Locator.Current.GetService<MainWindowViewModel>().ResizeWindow;
+            ChangeLocationWindow += Locator.Current.GetService<MainWindow>().ChangeLocation;
+
+
         }
 
         #region COMMANDS
@@ -294,8 +298,6 @@ namespace FileControlAvalonia.ViewModels
 
                 _settings.WindowHeight = Convert.ToInt32(WindowHeightVM);
                 _settings.WindowWidth = Convert.ToInt32(WindowWidthVM);
-                _settings.XLocation= Convert.ToInt32(XLocationVM);
-                _settings.YLocation = Convert.ToInt32(YLocationVM);
 
 
                 var mainwWindow = Locator.Current.GetService<MainWindow>();
@@ -304,7 +306,7 @@ namespace FileControlAvalonia.ViewModels
                 else
                     mainwWindow.title.PointerPressed -= mainwWindow.DragMoveWindow;
 
-                SettingsManager.SetSettings(_settings);
+                
                 IsEnabledPasswordTextBox = false;
 
 
@@ -312,7 +314,16 @@ namespace FileControlAvalonia.ViewModels
                 {
                     ResizeWindow.Invoke((double)_settings.WindowWidth, (double)_settings.WindowHeight);
                 }
+                var XLocation = Convert.ToInt32(XLocationVM);
+                var YLocation = Convert.ToInt32(YLocationVM);
+                if (SettingsManager.AppSettings.XLocation != XLocation || SettingsManager.AppSettings.YLocation != YLocation)
+                {
+                    ChangeLocationWindow.Invoke((double)(XLocation), (double)(YLocation));
+                }
+                _settings.XLocation = Convert.ToDouble(XLocationVM);
+                _settings.YLocation = Convert.ToDouble(YLocationVM);
 
+                SettingsManager.SetSettings(_settings);
                 window.Close();
             }
         }

@@ -666,7 +666,7 @@ namespace FileControlAvalonia.ViewModels
                 WidthEtalonAndFactColumn = (int)(MainWindow.TreeDataGridWidth - 170 - WidthNameColumn) / 2;
                 MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
                 MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
-                
+
 
                 await Task.Delay(100);
                 ProgressBarIsVisible = true;

@@ -127,10 +127,10 @@
 				<TabItem Header="Параметры окна" FontSize="15">
 					<Grid ColumnDefinitions="*, *">
 						<StackPanel Orientation="Vertical" Grid.Column="0" Spacing="11.5">
-							<Label Content = "Высота окна"></Label>
-							<Label Content = "Ширина окна"></Label>
-							<Label Content = "Расположение (Х)"></Label>
-							<Label Content = "Расположение (Y)"></Label>
+							<Label Content = "Высота окна (600 min) "></Label>
+							<Label Content = "Ширина окна (1200 min)"></Label>
+							<Label Content = "Расположение (Х) (0 min)"></Label>
+							<Label Content = "Расположение (Y) (0 min)"></Label>
 							<Label Content = "Возможность перетаскивания окон"></Label>
 						</StackPanel>
 						<StackPanel Orientation="Vertical" Grid.Column="1" Spacing="2" Margin="30 0 0 0" Width="270">
