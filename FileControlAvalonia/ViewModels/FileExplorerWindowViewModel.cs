@@ -87,39 +87,54 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancelCommand(Window window)
         {
-            FileTransferBroker.AddedFiles.Clear();
+            //FileTransferBroker.AddedFiles.Clear();
             Dispose();
             window.Close();
         }
         async public void OkCommand(Window window)
         {
-            if(FileTransferBroker.AddedFiles.Count > 0)
-            {
-                window.Close();
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
-                Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+            Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
+            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
 
-                ObservableCollection<FileTree> test = null;
-                await Task.Run(async () =>
-                {
-                    var awdwa = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
-                    FactParameterizer.SetFactValuesInFilesCollection(awdwa);
-                    FilesCollectionManager.SetEtalonValues(awdwa);
-                    test = awdwa;
-                });
-                MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(test!);
 
-                FileTransferBroker.AddedFiles.Clear();
-                Dispose();
-            }
-            else
-            {
-                FileTransferBroker.AddedFiles.Clear();
-                Dispose();
-                window.Close();
-            }
+
+            //Locator.Current.GetService(typeof(MainWindowViewModel)).
+            window.Close();
+
+            await TransitFiles();
+
+            Dispose();
+            #region FileTransferBrokerRealization
+            //if(FileTransferBroker.AddedFiles.Count > 0)
+            //{
+            //    window.Close();
+            //    Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
+            //    Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+            //    Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
+            //    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
+
+            //    ObservableCollection<FileTree> test = null;
+            //    await Task.Run(async () =>
+            //    {
+            //        var awdwa = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
+            //        FactParameterizer.SetFactValuesInFilesCollection(awdwa);
+            //        FilesCollectionManager.SetEtalonValues(awdwa);
+            //        test = awdwa;
+            //    });
+            //    MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(test!);
+
+            //    FileTransferBroker.AddedFiles.Clear();
+            //    Dispose();
+            //}
+            //else
+            //{
+            //    FileTransferBroker.AddedFiles.Clear();
+            //    Dispose();
+            //    window.Close();
+            //}
+            #endregion
         }
         public void UpCommand()
         {

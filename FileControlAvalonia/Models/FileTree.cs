@@ -43,12 +43,12 @@ namespace FileControlAvalonia.Models
             set
             {
                 this.RaiseAndSetIfChanged(ref _isChecked, value);
-                if (Parent != null && _loadChildren && Parent.Path == SettingsManager.RootPath) { FileTransferBroker.FillListAddedFiles(this, value); }
+                //if (Parent != null && _loadChildren && Parent.Path == SettingsManager.RootPath) { FileTransferBroker.FillListAddedFiles(this, value); }
                 if (HasChildren)
                 {
                     foreach (var child in Children!)
                     {
-                        if(_loadChildren)FileTransferBroker.FillListAddedFiles(child, value);
+                        //if(_loadChildren)FileTransferBroker.FillListAddedFiles(child, value);
                         child.IsChecked = value;
                     }
                 }
