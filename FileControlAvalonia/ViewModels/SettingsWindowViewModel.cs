@@ -253,8 +253,12 @@ namespace FileControlAvalonia.ViewModels
 
             _windowHeightVM = _settings.WindowHeight == null ? "600" : _settings.WindowHeight.ToString();
             _windowWidthVM = _settings.WindowWidth == null ? "1200" : _settings.WindowWidth.ToString();
-            _xLocationVM = _settings.XLocation == null ? "0" : _settings.XLocation.ToString();
-            _yLocationVM = _settings.YLocation == null ? "0" : _settings.YLocation.ToString();
+            //_xLocationVM = _settings.XLocation == null ? "0" : _settings.XLocation.ToString();
+            //_yLocationVM = _settings.YLocation == null ? "0" : _settings.YLocation.ToString();
+
+            _xLocationVM = Locator.Current.GetService<MainWindow>().Position.X.ToString();
+            _yLocationVM = Locator.Current.GetService<MainWindow>().Position.Y.ToString();
+
             _dragAndDropWindowVM = _settings.DragAndDropWindow == null? false: _settings.DragAndDropWindow;
 
 

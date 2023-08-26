@@ -2,21 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System;
-using FileControlAvalonia.Services;
 using FileControlAvalonia.ViewModels;
 using ReactiveUI;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
-using Splat;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using System.Security.Policy;
 using FileControlAvalonia.SettingsApp;
-using System.Diagnostics;
-using System.Reflection;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
 
 namespace FileControlAvalonia.Views
 {
@@ -30,24 +20,33 @@ namespace FileControlAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
+            GetInfoTDG();
 
-            title = this.FindControl<Grid>("Title");
-            if (SettingsManager.AppSettings.DragAndDropWindow)
-                title.PointerPressed += DragMoveWindow;
-            treeDataGrid = this.FindControl<TreeDataGrid>("fileViewer");
-
-            //TreeDataGridWidth = this.Width - 10;
-            TreeDataGridWidth = SettingsManager.AppSettings.WindowWidth - 10;
             this.Opened += SetSizeWindow;
+            this.Closing += SetSettingsWindow;
 
             this.WhenActivated(d => d(ViewModel!.ShowDialogInfoWindow.RegisterHandler(InfoWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogSettingsWindow.RegisterHandler(SettingsWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogFileExplorerWindow.RegisterHandler(FileExplorerWindowShodDialog)));
-
-
 #if DEBUG
             this.AttachDevTools();
 #endif
+        }
+
+        private void GetInfoTDG()
+        {
+            title = this.FindControl<Grid>("Title");
+            if (SettingsManager.AppSettings.DragAndDropWindow)
+                title.PointerPressed += DragMoveWindow;
+            treeDataGrid = this.FindControl<TreeDataGrid>("fileViewer");
+            TreeDataGridWidth = SettingsManager.AppSettings.WindowWidth - 10;
+        }
+
+        private void SetSettingsWindow(object? sender, EventArgs e)
+        {
+            SettingsManager.AppSettings.XLocation = this.Position.X;
+            SettingsManager.AppSettings.YLocation = this.Position.Y;
+            SettingsManager.SetSettings(SettingsManager.AppSettings);
         }
 
         private void InitializeComponent()
@@ -60,7 +59,7 @@ namespace FileControlAvalonia.Views
         {
             var dialog = new InfoWindow();
             dialog.DataContext = interaction.Input;
-
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             var result = await dialog.ShowDialog<InfoWindowViewModel?>(this);
             interaction.SetOutput(result);
         }
@@ -69,7 +68,7 @@ namespace FileControlAvalonia.Views
         {
             var dialog = new SettingsWindow();
             dialog.DataContext = interaction.Input;
-
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             var result = await dialog.ShowDialog<SettingsWindowViewModel?>(this);
             interaction.SetOutput(result);
         }
@@ -78,7 +77,7 @@ namespace FileControlAvalonia.Views
         {
             var dialog = new FileExplorerWindow();
             dialog.DataContext = interaction.Input;
-
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             var result = await dialog.ShowDialog<FileExplorerWindowViewModel?>(this);
             interaction.SetOutput(result);
         }

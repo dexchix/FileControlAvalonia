@@ -50,7 +50,6 @@ namespace FileControlAvalonia.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Position = new PixelPoint(WindowAssistant.X_Coordinate + 350, WindowAssistant.Y_Coordinate + 10);
             CanResize = false;
         }
         private void ResizeWindow(object? sender, SelectionChangedEventArgs e)

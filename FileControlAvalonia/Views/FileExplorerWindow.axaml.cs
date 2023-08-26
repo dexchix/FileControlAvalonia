@@ -14,7 +14,6 @@ namespace FileControlAvalonia.Views
         {
             InitializeComponent();
             //Deactivated += DeactivatedWindow;
-
         }
 
         private void DeactivatedWindow(object? sender, EventArgs e)
@@ -52,7 +51,6 @@ namespace FileControlAvalonia.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Position = new PixelPoint(WindowAssistant.X_Coordinate + 400, WindowAssistant.Y_Coordinate + 70);
             CanResize = false;
         }
     }
