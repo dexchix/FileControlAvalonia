@@ -154,9 +154,10 @@ namespace FileControlAvalonia.ViewModels
         async private Task TransitFiles()
         {
             var childrenTFL = new ObservableCollection<FileTree>();
+            var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
             await Task.Run(() =>
             {
-                var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
+                
 
                 var newFileTree = FilesCollectionManager.GetDeepCopyFileTree(transformFileTree);
 

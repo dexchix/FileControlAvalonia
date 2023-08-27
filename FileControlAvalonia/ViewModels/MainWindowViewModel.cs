@@ -478,6 +478,7 @@ namespace FileControlAvalonia.ViewModels
             var comparator = new Comprasion();
             ProgressBarIsVisible = true;
             ProgressBarLoopScrol = true;
+            EnabledButtons = false;
             ProgressBarText = "Получение данных из БД";
             await Task.Delay(2000);
             await Task.Run(() =>
@@ -507,7 +508,6 @@ namespace FileControlAvalonia.ViewModels
             UserLevelCreateEtalon = info.Creator;
 
             UserLevel = Environment.UserName;
-
             TotalFiles = comparator.TotalFiles;
             Checked = comparator.Checked;
             PartialChecked = comparator.PartialChecked;
@@ -515,6 +515,7 @@ namespace FileControlAvalonia.ViewModels
             NoAccess = comparator.NoAccess;
             NotFound = comparator.NotFound;
             NotChecked = comparator.NotChecked;
+            EnabledButtons = true;
         }
 
         public void ExpandAllNodesCommand()
