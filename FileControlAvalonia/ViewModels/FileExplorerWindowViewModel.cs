@@ -88,8 +88,9 @@ namespace FileControlAvalonia.ViewModels
         public void CancelCommand(Window window)
         {
             //FileTransferBroker.AddedFiles.Clear();
-            Dispose();
+         
             window.Close();
+            Dispose();
         }
         async public void OkCommand(Window window)
         {
@@ -157,7 +158,6 @@ namespace FileControlAvalonia.ViewModels
             var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
             await Task.Run(() =>
             {
-                
 
                 var newFileTree = FilesCollectionManager.GetDeepCopyFileTree(transformFileTree);
 
@@ -176,7 +176,7 @@ namespace FileControlAvalonia.ViewModels
             try
             {
                 var rootParent = FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree);
-                //FilesCollectionManager.FileTreeDestroction(rootParent);
+                FilesCollectionManager.FileTreeDestroction(rootParent);
                 rootParent = null;
 
 
