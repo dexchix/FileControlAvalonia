@@ -304,11 +304,11 @@ namespace FileControlAvalonia.ViewModels
                 _settings.WindowWidth = Convert.ToInt32(WindowWidthVM);
 
 
-                var mainwWindow = Locator.Current.GetService<MainWindow>();
+                var mainWindow = Locator.Current.GetService<MainWindow>();
                 if (DragAndDropWindowVM)
-                    mainwWindow.title.PointerPressed += mainwWindow.DragMoveWindow;
+                    mainWindow.title.PointerPressed += mainWindow.DragMoveWindow;
                 else
-                    mainwWindow.title.PointerPressed -= mainwWindow.DragMoveWindow;
+                    mainWindow.title.PointerPressed -= mainWindow.DragMoveWindow;
 
                 
                 IsEnabledPasswordTextBox = false;
@@ -323,6 +323,11 @@ namespace FileControlAvalonia.ViewModels
                 if (SettingsManager.AppSettings.XLocation != XLocation || SettingsManager.AppSettings.YLocation != YLocation)
                 {
                     ChangeLocationWindow.Invoke((double)(XLocation), (double)(YLocation));
+                    if (SettingsManager.AppSettings.DragAndDropWindow)
+                    {
+                        mainWindow.title.PointerPressed -= mainWindow.DragMoveWindow;
+                        mainWindow.title.PointerPressed += mainWindow.DragMoveWindow;
+                    }
                 }
                 _settings.XLocation = Convert.ToDouble(XLocationVM);
                 _settings.YLocation = Convert.ToDouble(YLocationVM);
