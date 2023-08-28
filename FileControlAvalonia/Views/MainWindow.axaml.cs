@@ -59,7 +59,23 @@ namespace FileControlAvalonia.Views
         {
             var dialog = new InfoWindow();
             dialog.DataContext = interaction.Input;
-            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+
+            //double parentX = Position.X;
+            //double parentY = Position.Y;
+            //double parentWidth = Bounds.Width;
+            //double parentHeight = Bounds.Height;
+
+            //double childWidth = dialog.Bounds.Width;
+            //double childHeight = dialog.Bounds.Height;
+
+            //double childX = parentX + (parentWidth - childWidth) / 2;
+            //double childY = parentY + (parentHeight - childHeight) / 2;
+
+            //dialog.Position = new PixelPoint((int)childX, (int)childY);
+
+
             var result = await dialog.ShowDialog<InfoWindowViewModel?>(this);
             interaction.SetOutput(result);
         }
@@ -68,7 +84,22 @@ namespace FileControlAvalonia.Views
         {
             var dialog = new SettingsWindow();
             dialog.DataContext = interaction.Input;
-            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+
+            //double parentX = Position.X;
+            //double parentY = Position.Y;
+            //double parentWidth = Bounds.Width;
+            //double parentHeight = Bounds.Height;
+
+            //double childWidth = dialog.Bounds.Width;
+            //double childHeight = dialog.Bounds.Height;
+
+            //double childX = parentX + (parentWidth - childWidth) / 2;
+            //double childY = parentY + (parentHeight - childHeight) / 2;
+
+            //dialog.Position = new PixelPoint((int)childX, (int)childY);
+
             var result = await dialog.ShowDialog<SettingsWindowViewModel?>(this);
             interaction.SetOutput(result);
         }
@@ -77,7 +108,24 @@ namespace FileControlAvalonia.Views
         {
             var dialog = new FileExplorerWindow();
             dialog.DataContext = interaction.Input;
-            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+
+            //double parentX = Position.X;
+            //double parentY = Position.Y;
+            //double parentWidth = Bounds.Width;
+            //double parentHeight = Bounds.Height;
+
+            //double childWidth = dialog.Bounds.Width;
+            //double childHeight = dialog.Bounds.Height;
+
+            //double childX = parentX + (parentWidth - childWidth) / 2;
+            //double childY = parentY + (parentHeight - childHeight) / 2;
+
+            //dialog.Position = new PixelPoint((int)childX, (int)childY);
+
+
+
             var result = await dialog.ShowDialog<FileExplorerWindowViewModel?>(this);
             interaction.SetOutput(result);
         }

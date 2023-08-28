@@ -7,7 +7,8 @@
         x:Class="FileControlAvalonia.Views.InfoWindow"
         Title="InfoWindow"
 		Height="285" Width="985"
-		CanResize="False" ExtendClientAreaToDecorationsHint="True"
+		CanResize="False"
+		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         SystemDecorations="BorderOnly">

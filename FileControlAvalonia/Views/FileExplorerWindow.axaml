@@ -10,6 +10,7 @@
 		x:Class="FileControlAvalonia.Views.FileExplorerWindow"
 		Icon="/Assets/AddFile.ico"
 	    Width="390" Height="440"
+		CanResize="False"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"

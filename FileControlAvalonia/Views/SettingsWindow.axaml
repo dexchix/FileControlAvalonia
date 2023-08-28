@@ -9,6 +9,7 @@
         x:Class="FileControlAvalonia.Views.SettingsWindow"
         Title="Настройки" Icon="/Assets/setting.png"
 		Width="615" Height="330"
+		CanResize="False"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"

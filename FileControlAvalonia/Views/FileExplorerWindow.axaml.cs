@@ -5,6 +5,7 @@ using FileControlAvalonia.ViewModels;
 using System;
 using System.Timers;
 using FileControlAvalonia.Services;
+using Splat;
 
 namespace FileControlAvalonia.Views
 {
@@ -51,7 +52,15 @@ namespace FileControlAvalonia.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            CanResize = false;
+            double parentX = Locator.Current.GetService<MainWindow>().Position.X;
+            double parentY = Locator.Current.GetService<MainWindow>().Position.Y;
+            double parentBoundsWidth = Locator.Current.GetService<MainWindow>().Bounds.Width;
+            double parentBoundsHeight = Locator.Current.GetService<MainWindow>().Bounds.Height;
+
+            double childX = parentX + (parentBoundsWidth - Bounds.Width) / 2;
+            double childY = parentY + (parentBoundsHeight - Bounds.Height) / 2;
+
+            Position = new PixelPoint((int)childX, (int)childY);
         }
     }
 }
