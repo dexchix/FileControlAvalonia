@@ -139,7 +139,7 @@
 							<NumericUpDown HorizontalAlignment="Stretch" Text ="{Binding WindowWidthVM}, Mode=TwoWay" Minimum="1200"></NumericUpDown>
 							<NumericUpDown HorizontalAlignment="Stretch" Text ="{Binding XLocationVM}, Mode=TwoWay" ></NumericUpDown>
 							<NumericUpDown HorizontalAlignment="Stretch" Text ="{Binding YLocationVM}, Mode=TwoWay" ></NumericUpDown>
-							<CheckBox Margin="135 0 0 0" IsChecked="{Binding DragAndDropWindowVM}, Mode=TwoWay" ></CheckBox>
+							<CheckBox Margin="0 0 0 0" IsChecked="{Binding DragAndDropWindowVM}, Mode=TwoWay" ></CheckBox>
 						</StackPanel>
 					</Grid>
 				</TabItem>
