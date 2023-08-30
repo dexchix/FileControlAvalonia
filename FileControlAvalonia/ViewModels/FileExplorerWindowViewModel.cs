@@ -192,9 +192,6 @@ namespace FileControlAvalonia.ViewModels
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-
-
-                var awdwa = FileTree.sadas;
             }
             catch
             {

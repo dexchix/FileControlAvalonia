@@ -164,11 +164,19 @@ namespace FileControlAvalonia.FileTreeLogic
 
             void FillList(FileTree fileTree)
             {
-                foreach(var file in fileTree.Children)
+                for(var i = 0; i< fileTree.Children.Count; i++)
                 {
-                    listDestroctionFiles.Add(file);
-                    if (file.IsDirectory) FillList(file);
+                    if (fileTree.Children[i].IsOpened == true)
+                    {
+                        listDestroctionFiles.Add(fileTree.Children[i]);
+                        if (fileTree.Children[i].IsDirectory) FillList(fileTree.Children[i]);
+                    }
                 }
+                //foreach(var file in fileTree.Children)
+                //{
+                //    listDestroctionFiles.Add(file);
+                //    if (file.IsDirectory) FillList(file);
+                //}
             }
 
             FillList(fileTree);

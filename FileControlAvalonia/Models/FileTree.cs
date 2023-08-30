@@ -109,6 +109,7 @@ namespace FileControlAvalonia.Models
             get => _isExpanded;
             set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
         }
+        public bool IsOpened { get; set; }
 
         public bool IsDirectory { get; }
         public FileTree? Parent { get; set; }
@@ -141,6 +142,7 @@ namespace FileControlAvalonia.Models
         {
             try
             {
+                IsOpened = true;
                 var extensions = SettingsManager.ModifyExtensions;
 
                 if (!IsDirectory)
@@ -184,22 +186,6 @@ namespace FileControlAvalonia.Models
             }
 
         }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
-        public override string ToString()
-        {
-            return Path;
-        }
-
-
-        ~FileTree()
-        {
-            sadas++;
-        }
-        public static int sadas = 0;
     }
 
 }

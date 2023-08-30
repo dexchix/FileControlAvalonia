@@ -47,7 +47,7 @@ namespace FileControlAvalonia.Helper
                 {
                     folder.Remove(file);
                 }
-                if (file.IsDirectory)
+                if (file.IsDirectory&& file.IsOpened)
                 {
                     RemoveUnSelectedFiles(file.Children!);
                 }
@@ -78,12 +78,12 @@ namespace FileControlAvalonia.Helper
         {
             foreach (var file in files.ToList())
             {
-                if (file.IsDirectory && file.Children?.Count == 0 && file.IsChecked == false)
+                if (file.IsDirectory && /*file.Children?.Count == 0*/!file.IsOpened   && file.IsChecked == false)
                 {
                     _removedChildrens.Add(file);
                     _parentOfRemoveChild.Add(file.Parent!);
                 }
-                else if (file.IsDirectory)
+                else if (file.IsDirectory && file.IsOpened)
                 {
                     CheckEmptyFolders(file.Children!);
                 }
