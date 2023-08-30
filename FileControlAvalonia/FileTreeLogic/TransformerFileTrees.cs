@@ -25,69 +25,87 @@ namespace FileControlAvalonia.Helper
         }
 
         #region METHODS
-        /// <summary>
-        /// Возвращяет дерево в котором находятся только выбранные элементы
-        /// </summary>
-        /// <returns></returns>
+        ///// <summary>
+        ///// Возвращяет дерево в котором находятся только выбранные элементы
+        ///// </summary>
+        ///// <returns></returns>
         public FileTree GetUpdatedFileTree()
         {
-            RemoveUnSelectedFiles(_fileTree.Children!);
-            RemoveEmptyFoldersAndUnselectedFiles();
+            //RemoveUnSelectedFiles(_fileTree.Children!);
+            //RemoveEmptyFoldersAndUnselectedFiles();
+            //return _fileTree;
+            RemoveUnOpenedsElements(_fileTree);
             return _fileTree;
         }
-        /// <summary>
-        /// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 
-        /// </summary>
-        /// <param name="folder"></param>
-        private void RemoveUnSelectedFiles(ObservableCollection<FileTree> folder)
+        ///// <summary>
+        ///// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 
+        ///// </summary>
+        ///// <param name="folder"></param>
+        //private void RemoveUnSelectedFiles(ObservableCollection<FileTree> folder)
+        //{
+        //    foreach (var file in folder.ToList())
+        //    {
+        //        if (file.IsChecked == false && !file.IsDirectory)
+        //        {
+        //            folder.Remove(file);
+        //        }
+        //        if (file.IsDirectory&& file.IsOpened)
+        //        {
+        //            RemoveUnSelectedFiles(file.Children!);
+        //        }
+        //    }
+        //}
+        ///// <summary>
+        ///// Удаляет пустые папки и не выбранные элементы
+        ///// </summary>
+        //private void RemoveEmptyFoldersAndUnselectedFiles()
+        //{
+        //    do
+        //    {
+        //        for (int i = 0; i < _parentOfRemoveChild.Count; i++)
+        //        {
+        //            _parentOfRemoveChild[i].Children!.Remove(_removedChildrens[i]);
+        //        }
+        //        _parentOfRemoveChild.Clear();
+        //        _removedChildrens.Clear();
+        //        CheckEmptyFolders(_fileTree.Children!);
+        //    }
+        //    while (_parentOfRemoveChild.Count > 0);
+        //}
+        ///// <summary>
+        ///// Проверяет папку и добавляет её элементы и родителя в коллеции элементов которые должны быть удалены
+        ///// </summary>
+        ///// <param name="files"></param>
+        //private void CheckEmptyFolders(ObservableCollection<FileTree> files)
+        //{
+        //    foreach (var file in files.ToList())
+        //    {
+        //        if (file.IsDirectory && /*file.Children?.Count == 0*/!file.IsOpened   && file.IsChecked == false)
+        //        {
+        //            _removedChildrens.Add(file);
+        //            _parentOfRemoveChild.Add(file.Parent!);
+        //        }
+        //        else if (file.IsDirectory && file.IsOpened)
+        //        {
+        //            CheckEmptyFolders(file.Children!);
+        //        }
+        //    }
+        //}
+        private void RemoveUnOpenedsElements(FileTree element)
         {
-            foreach (var file in folder.ToList())
+            foreach(var file in element.Children.ToList())
             {
-                if (file.IsChecked == false && !file.IsDirectory)
+                if(!file.IsChecked && !file.IsOpened)
+                    element.Children.Remove(file);
+                else if (file.IsOpened && file.IsDirectory)
                 {
-                    folder.Remove(file);
-                }
-                if (file.IsDirectory&& file.IsOpened)
-                {
-                    RemoveUnSelectedFiles(file.Children!);
+                    RemoveUnOpenedsElements(file);
                 }
             }
         }
-        /// <summary>
-        /// Удаляет пустые папки и не выбранные элементы
-        /// </summary>
-        private void RemoveEmptyFoldersAndUnselectedFiles()
+        private void RemoveUnCheckedElements(FileTree element)
         {
-            do
-            {
-                for (int i = 0; i < _parentOfRemoveChild.Count; i++)
-                {
-                    _parentOfRemoveChild[i].Children!.Remove(_removedChildrens[i]);
-                }
-                _parentOfRemoveChild.Clear();
-                _removedChildrens.Clear();
-                CheckEmptyFolders(_fileTree.Children!);
-            }
-            while (_parentOfRemoveChild.Count > 0);
-        }
-        /// <summary>
-        /// Проверяет папку и добавляет её элементы и родителя в коллеции элементов которые должны быть удалены
-        /// </summary>
-        /// <param name="files"></param>
-        private void CheckEmptyFolders(ObservableCollection<FileTree> files)
-        {
-            foreach (var file in files.ToList())
-            {
-                if (file.IsDirectory && /*file.Children?.Count == 0*/!file.IsOpened   && file.IsChecked == false)
-                {
-                    _removedChildrens.Add(file);
-                    _parentOfRemoveChild.Add(file.Parent!);
-                }
-                else if (file.IsDirectory && file.IsOpened)
-                {
-                    CheckEmptyFolders(file.Children!);
-                }
-            }
+            
         }
     }
     #endregion
