@@ -89,7 +89,8 @@ namespace FileControlAvalonia.ViewModels
         {
             if (FileTree != null)
             {
-                _fileTreeNavigator.watcher.StopWatch();
+                if (_fileTreeNavigator.watcher != null)
+                    _fileTreeNavigator.watcher.StopWatch();
                 window.Close();
                 Dispose();
             }
@@ -99,7 +100,12 @@ namespace FileControlAvalonia.ViewModels
         {
             if (FileTree != null)
             {
-                _fileTreeNavigator.watcher.StopWatch();
+                if (_fileTreeNavigator.watcher != null)
+                    _fileTreeNavigator.watcher.StopWatch();
+                else
+                {
+
+                }
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
                 Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
@@ -113,7 +119,7 @@ namespace FileControlAvalonia.ViewModels
                 Dispose();
             }
             else window.Close();
-            
+
             #region FileTransferBrokerRealization
             //if(FileTransferBroker.AddedFiles.Count > 0)
             //{

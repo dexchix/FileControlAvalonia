@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.FileTreeLogic
@@ -20,6 +21,7 @@ namespace FileControlAvalonia.FileTreeLogic
         //public static readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
         public FileTree? fileTree;
         public Watcher? watcher;
+        public CancellationTokenSource cts = new CancellationTokenSource();
         new public event PropertyChangedEventHandler? PropertyChanged;
         #endregion 
 
@@ -37,8 +39,9 @@ namespace FileControlAvalonia.FileTreeLogic
             if (Directory.Exists(SettingsManager.RootPath))
             {
                 fileTree = new FileTree(SettingsManager.RootPath, true, true);
-                Task.Run(() =>
+                Task.Run(async () =>
                 {
+                    await Task.Delay(5000);
                     watcher = new Watcher(SettingsManager.RootPath, this);
                 });
                 //CheckChangeRootPath();
@@ -199,7 +202,7 @@ namespace FileControlAvalonia.FileTreeLogic
 
         ~FileTreeNavigator()
         {
-
+            watcher.StopWatch();
         }
     }
 }

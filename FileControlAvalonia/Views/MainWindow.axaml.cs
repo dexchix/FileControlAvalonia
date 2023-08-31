@@ -29,7 +29,7 @@ namespace FileControlAvalonia.Views
             this.WhenActivated(d => d(ViewModel!.ShowDialogSettingsWindow.RegisterHandler(SettingsWindowShowDialog)));
             this.WhenActivated(d => d(ViewModel!.ShowDialogFileExplorerWindow.RegisterHandler(FileExplorerWindowShodDialog)));
 #if DEBUG
-            this.AttachDevTools();
+            //this.AttachDevTools();
 #endif
         }
 
