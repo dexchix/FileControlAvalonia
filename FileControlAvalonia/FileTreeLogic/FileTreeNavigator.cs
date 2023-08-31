@@ -37,7 +37,10 @@ namespace FileControlAvalonia.FileTreeLogic
             if (Directory.Exists(SettingsManager.RootPath))
             {
                 fileTree = new FileTree(SettingsManager.RootPath, true, true);
-                watcher = new Watcher(SettingsManager.RootPath, this);
+                Task.Run(() =>
+                {
+                    watcher = new Watcher(SettingsManager.RootPath, this);
+                });
                 //CheckChangeRootPath();
             }
         }
@@ -95,7 +98,7 @@ namespace FileControlAvalonia.FileTreeLogic
             var rootParant = files.Where(x => searchedFilePath.StartsWith(x.Path))
                                          .OrderByDescending(x => x.Path.Length)
                                          .FirstOrDefault()!;
-            var parent = SearchFileInFileTree(searchedFilePath,rootParant);
+            var parent = SearchFileInFileTree(searchedFilePath, rootParant);
             return parent;
         }
         /// <summary>

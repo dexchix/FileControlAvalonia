@@ -37,44 +37,8 @@ namespace FileControlAvalonia.Helper
             RemoveUnOpenedsElements(_fileTree); 
             RemoveUnCheckedElements(_fileTree);
             RemoveEmptyFoldersAndUnselectedFiles();
-
             return _fileTree;
         }
-        ///// <summary>
-        ///// Удаляет из копии колекции файловых деревьев все файлы с свойтсво IsChecked = false 
-        ///// </summary>
-        ///// <param name="folder"></param>
-        //private void RemoveUnSelectedFiles(ObservableCollection<FileTree> folder)
-        //{
-        //    foreach (var file in folder.ToList())
-        //    {
-        //        if (file.IsChecked == false && !file.IsDirectory)
-        //        {
-        //            folder.Remove(file);
-        //        }
-        //        if (file.IsDirectory&& file.IsOpened)
-        //        {
-        //            RemoveUnSelectedFiles(file.Children!);
-        //        }
-        //    }
-        //}
-        ///// <summary>
-        ///// Удаляет пустые папки и не выбранные элементы
-        ///// </summary>
-        //private void RemoveEmptyFoldersAndUnselectedFiles()
-        //{
-        //    do
-        //    {
-        //        for (int i = 0; i < _parentOfRemoveChild.Count; i++)
-        //        {
-        //            _parentOfRemoveChild[i].Children!.Remove(_removedChildrens[i]);
-        //        }
-        //        _parentOfRemoveChild.Clear();
-        //        _removedChildrens.Clear();
-        //        CheckEmptyFolders(_fileTree.Children!);
-        //    }
-        //    while (_parentOfRemoveChild.Count > 0);
-        //}
         /// <summary>
         /// Проверяет папку и добавляет её элементы и родителя в коллеции элементов которые должны быть удалены
         /// </summary>

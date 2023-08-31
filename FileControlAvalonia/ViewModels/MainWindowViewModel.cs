@@ -669,10 +669,10 @@ namespace FileControlAvalonia.ViewModels
                 MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
 
 
-                await Task.Delay(100);
+                await Task.Delay(50);
                 ProgressBarIsVisible = true;
                 ProgressBarLoopScrol = true;
-                await Task.Delay(100);
+                await Task.Delay(50);
                 ProgressBarLoopScrol = false;
                 ProgressBarIsVisible = false;
 
