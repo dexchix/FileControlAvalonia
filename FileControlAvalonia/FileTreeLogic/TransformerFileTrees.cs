@@ -34,7 +34,10 @@ namespace FileControlAvalonia.Helper
             //RemoveUnSelectedFiles(_fileTree.Children!);
             //RemoveEmptyFoldersAndUnselectedFiles();
             //return _fileTree;
-            RemoveUnOpenedsElements(_fileTree);
+            RemoveUnOpenedsElements(_fileTree); 
+            RemoveUnCheckedElements(_fileTree);
+            RemoveEmptyFoldersAndUnselectedFiles();
+
             return _fileTree;
         }
         ///// <summary>
@@ -72,29 +75,33 @@ namespace FileControlAvalonia.Helper
         //    }
         //    while (_parentOfRemoveChild.Count > 0);
         //}
-        ///// <summary>
-        ///// Проверяет папку и добавляет её элементы и родителя в коллеции элементов которые должны быть удалены
-        ///// </summary>
-        ///// <param name="files"></param>
-        //private void CheckEmptyFolders(ObservableCollection<FileTree> files)
-        //{
-        //    foreach (var file in files.ToList())
-        //    {
-        //        if (file.IsDirectory && /*file.Children?.Count == 0*/!file.IsOpened   && file.IsChecked == false)
-        //        {
-        //            _removedChildrens.Add(file);
-        //            _parentOfRemoveChild.Add(file.Parent!);
-        //        }
-        //        else if (file.IsDirectory && file.IsOpened)
-        //        {
-        //            CheckEmptyFolders(file.Children!);
-        //        }
-        //    }
-        //}
+        /// <summary>
+        /// Проверяет папку и добавляет её элементы и родителя в коллеции элементов которые должны быть удалены
+        /// </summary>
+        /// <param name="files"></param>
+        private void CheckEmptyFolders(ObservableCollection<FileTree> files)
+        {
+            foreach (var file in files.ToList())
+            {
+                if (file.IsDirectory && file.Children?.Count == 0 && file.IsChecked == false)
+                {
+                    _removedChildrens.Add(file);
+                    _parentOfRemoveChild.Add(file.Parent!);
+                }
+                else if (file.IsDirectory && file.IsOpened)
+                {
+                    CheckEmptyFolders(file.Children!);
+                }
+            }
+        }
         private void RemoveUnOpenedsElements(FileTree element)
         {
             foreach(var file in element.Children.ToList())
             {
+                if(file.Path == "C:\\Users")
+                {
+
+                }
                 if(!file.IsChecked && !file.IsOpened)
                     element.Children.Remove(file);
                 else if (file.IsOpened && file.IsDirectory)
@@ -105,7 +112,35 @@ namespace FileControlAvalonia.Helper
         }
         private void RemoveUnCheckedElements(FileTree element)
         {
-            
+            foreach (var file in element.Children.ToList())
+            {
+                if (!file.IsDirectory && !file.IsChecked)
+                    element.Children.Remove(file);
+                else if (file.IsDirectory)
+                    RemoveUnCheckedElements(file);
+
+            }
+        }
+        /// <summary>
+        /// Удаляет пустые папки и не выбранные элементы
+        /// </summary>
+        private void RemoveEmptyFoldersAndUnselectedFiles()
+        {
+            do
+            {
+                for (int i = 0; i < _parentOfRemoveChild.Count; i++)
+                {
+                    _parentOfRemoveChild[i].Children!.Remove(_removedChildrens[i]);
+                }
+                _parentOfRemoveChild.Clear();
+                _removedChildrens.Clear();
+                CheckEmptyFolders(_fileTree.Children!);
+            }
+            while (_parentOfRemoveChild.Count > 0);
+        }
+        private void RemoveEmptyFolders()
+        {
+
         }
     }
     #endregion

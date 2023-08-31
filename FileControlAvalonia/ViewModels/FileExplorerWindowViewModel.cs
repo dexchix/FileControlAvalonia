@@ -87,26 +87,33 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancelCommand(Window window)
         {
-            //FileTransferBroker.AddedFiles.Clear();
-         
-            window.Close();
-            Dispose();
+            if (FileTree != null)
+            {
+                _fileTreeNavigator.watcher.StopWatch();
+                window.Close();
+                Dispose();
+            }
+            else window.Close();
         }
         async public void OkCommand(Window window)
         {
-            Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
-            Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
-            Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
-            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
+            if (FileTree != null)
+            {
+                _fileTreeNavigator.watcher.StopWatch();
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+                Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
 
+                //Locator.Current.GetService(typeof(MainWindowViewModel)).
+                window.Close();
 
+                await TransitFiles();
 
-            //Locator.Current.GetService(typeof(MainWindowViewModel)).
-            window.Close();
-
-            await TransitFiles();
-
-            Dispose();
+                Dispose();
+            }
+            else window.Close();
+            
             #region FileTransferBrokerRealization
             //if(FileTransferBroker.AddedFiles.Count > 0)
             //{
@@ -185,7 +192,6 @@ namespace FileControlAvalonia.ViewModels
                 _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;
                 _fileTreeNavigator.FileTree = null;
                 FileTree = null;
-                _fileTreeNavigator.watcher.StopWatch();
                 _fileTreeNavigator = null;
 
 
