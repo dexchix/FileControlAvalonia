@@ -120,7 +120,8 @@ namespace FileControlAvalonia.Views
         {
             base.OnOpened(e);
             Position = new PixelPoint((int)SettingsManager.AppSettings.XLocation, (int)SettingsManager.AppSettings.YLocation);
-            CanResize = false;
+            //this.Width = (double)SettingsManager.AppSettings.WindowWidth;
+            //this.Height = (double)SettingsManager.AppSettings.WindowHeight;
         }
         private void SetSizeWindow(object? sender, EventArgs e)
         {

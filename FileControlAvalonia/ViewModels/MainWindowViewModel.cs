@@ -66,6 +66,8 @@ namespace FileControlAvalonia.ViewModels
         private double _widthEtalonAndFactColumn;
         private Thickness _marginEtalonColumn;
         private Thickness _marginFactAndDeleteColumn;
+        private int _maxHeightMainWindow;
+        private int _maxWidthMainWindow;
         #endregion
 
         new public event PropertyChangedEventHandler? PropertyChanged;
@@ -230,6 +232,17 @@ namespace FileControlAvalonia.ViewModels
         }
         #endregion
 
+        public int MaxHeightMainWindow
+        {
+            get => _maxHeightMainWindow;
+            set => this.RaiseAndSetIfChanged(ref _maxHeightMainWindow, value);
+        }
+        public int MaxWidthMainWindow
+        {
+            get => _maxWidthMainWindow;
+            set => this.RaiseAndSetIfChanged(ref _maxWidthMainWindow, value);
+        }
+
         public List<string> Filters => new List<string>() { "ВСЕ ФАЙЛЫ", "ПРОШЕДШИЕ ПРОВЕРКУ", "ЧАСТИЧНО ПРОШЕДШИЕ ПРОВЕРКУ", "НЕ ПРОШЕДШИЕ ПРОВЕРКУ", "БЕЗ ДОСТУПА", "ОТСУТСТВУЮЩИЕ" };
         public Interaction<InfoWindowViewModel, InfoWindowViewModel?> ShowDialogInfoWindow { get; }
         public Interaction<SettingsWindowViewModel, SettingsWindowViewModel?> ShowDialogSettingsWindow { get; }
@@ -272,6 +285,9 @@ namespace FileControlAvalonia.ViewModels
             WidthEtalonAndFactColumn = (int)(MainWindow.TreeDataGridWidth - 170 - WidthNameColumn) / 2;
             MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
             MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
+
+            MaxHeightMainWindow = (int)SettingsManager.AppSettings.WindowHeight;
+            MaxWidthMainWindow =  (int)SettingsManager.AppSettings.WindowWidth;
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
@@ -668,6 +684,12 @@ namespace FileControlAvalonia.ViewModels
                 MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
                 MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
 
+                Dispatcher.UIThread.Post(() =>
+                {
+                    MaxHeightMainWindow = (int)Locator.Current.GetService<MainWindow>().Height;
+                    MaxWidthMainWindow = (int)Locator.Current.GetService<MainWindow>().Width;
+                });
+ 
 
                 await Task.Delay(50);
                 ProgressBarIsVisible = true;

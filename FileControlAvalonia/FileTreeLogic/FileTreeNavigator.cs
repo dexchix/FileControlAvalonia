@@ -41,7 +41,7 @@ namespace FileControlAvalonia.FileTreeLogic
                 fileTree = new FileTree(SettingsManager.RootPath, true, true);
                 Task.Run(async () =>
                 {
-                    await Task.Delay(5000);
+                    //await Task.Delay(5000);
                     watcher = new Watcher(SettingsManager.RootPath, this);
                 });
                 //CheckChangeRootPath();

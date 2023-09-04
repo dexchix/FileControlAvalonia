@@ -21,8 +21,11 @@ SystemDecorations="BorderOnly"-->
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-		
-		Width="1600" Height="900"
+		MaxHeight="{Binding MaxHeightMainWindow}" 
+		MaxWidth="{Binding MaxWidthMainWindow}"
+		MinHeight="{Binding MaxHeightMainWindow}" 
+		MinWidth="{Binding MaxWidthMainWindow}" 
+		CanResize="False"
         SystemDecorations="BorderOnly">
 
 	<Window.Resources>
@@ -167,22 +170,6 @@ SystemDecorations="BorderOnly"-->
 			</TextBlock>
 
 			<Grid Grid.Row="3" Grid.ColumnSpan="3" RowDefinitions="25,*" Margin="0 3 0 0">
-				<!--<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="0 -10 0 0">
-					<StackPanel Orientation="Horizontal">
-						<Canvas Margin="0 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="353">Файл</Label>
-						</Canvas>
-						<Canvas Margin="352 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335">Эталон</Label>
-						</Canvas>
-						<Canvas Margin="334 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="335">Фактическое значение</Label>
-						</Canvas>
-						<Canvas Margin="334 1 0 0">
-							<Label BorderBrush="Black" HorizontalContentAlignment="Center" BorderThickness="1" Width="170" Height="25"></Label>
-						</Canvas>
-					</StackPanel>
-				</Border>-->
 				<Border HorizontalAlignment="Stretch" Height="25" Grid.Row="0" Margin="0 -10 0 0">
 					<StackPanel Orientation="Horizontal">
 						<Canvas Margin="0 1 0 0">
