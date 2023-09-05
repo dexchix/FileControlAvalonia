@@ -51,10 +51,13 @@ namespace FileControlAvalonia.FileTreeLogic
         /// </summary>
         public void StopWatch()
         {
-            _watcher.Created -= CreatedFile;
-            _watcher.Deleted -= DeleteFile;
-            _watcher.Renamed -= RenamedFile;
-            _watcher = null;
+            if (_watcher != null)
+            {
+                _watcher.Created -= CreatedFile;
+                _watcher.Deleted -= DeleteFile;
+                _watcher.Renamed -= RenamedFile;
+                _watcher = null;
+            }
         }
         /// <summary>
         /// Метод обработчик FSW

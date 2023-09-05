@@ -202,7 +202,8 @@ namespace FileControlAvalonia.FileTreeLogic
 
         ~FileTreeNavigator()
         {
-            watcher.StopWatch();
+            if (watcher != null)
+                watcher.StopWatch();
         }
     }
 }
