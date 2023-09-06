@@ -50,7 +50,7 @@ namespace FileControlAvalonia.Core
             bool folderExist = Directory.Exists(filePath);
             bool fileExist = File.Exists(filePath);
             if (folderExist || fileExist)
-            {  
+            {
                 if (folderExist)
                     return new DirectoryInfo(filePath).LastWriteTime.ToString();
                 else
@@ -93,9 +93,26 @@ namespace FileControlAvalonia.Core
         }
         public static void SetFactValues(this FileTree file)
         {
-            file.FVersion = GetVersion(file.Path);
-            file.FHash = GetMD5Hash(file.Path);
-            file.FLastUpdate = GetLastUpdate(file.Path);
+            var version = GetVersion(file.Path);
+            var fhash = GetMD5Hash(file.Path);
+            var lastUpdate = GetLastUpdate(file.Path);
+
+            file.FVersion = version;
+            file.FHash = fhash;
+            file.FLastUpdate = lastUpdate;
+
+            if (version == "Отказано в доступе")
+                file.FVersion = "-";
+
+            if (lastUpdate == "Отказано в доступе")
+                file.FLastUpdate = "-";
+
+            if (fhash == "Отказано в доступе")
+            {
+                file.FVersion = "Отказано в доступе";
+                file.FHash = "Отказано в доступе";
+                file.FLastUpdate = "Отказано в доступе";
+            }
         }
         public static void SetFactValuesInFilesCollection(ObservableCollection<FileTree> files)
         {
