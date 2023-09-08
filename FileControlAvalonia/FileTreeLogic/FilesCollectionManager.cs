@@ -9,6 +9,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 
 namespace FileControlAvalonia.FileTreeLogic
@@ -192,5 +193,49 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
+        public static int GetCountFilesByFileTree(FileTree fileTree)
+        {
+            static int CountElementsInFolder(IEnumerable<FileTree> children)
+            {
+                int count = 0;
+                
+                foreach(var child in children)
+                {
+                    if (!child.IsDirectory)
+                        count++;
+                    else count += CountElementsInFolder(child.Children);
+                }    
+                return count;
+            }
+            int count = CountElementsInFolder(fileTree.Children);
+            return count;
+
+        }
+        public static int GetCountFilesByPath(string folderPath)
+        {
+            static int CountElementsInFolder(string folderPath)
+            {
+                int count = 0;
+                try
+                {
+                    count += Directory.GetFiles(folderPath).Length;
+                    foreach (string subfolder in Directory.GetDirectories(folderPath))
+                    {
+                        count += CountElementsInFolder(subfolder);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                return count;
+            }
+
+            int count = CountElementsInFolder(folderPath);
+            return count;
+        }
+
+
     }
 }
