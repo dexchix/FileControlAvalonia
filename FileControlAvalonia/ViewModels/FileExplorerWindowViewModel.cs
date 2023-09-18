@@ -185,15 +185,6 @@ namespace FileControlAvalonia.ViewModels
 
                 ParallelProcessing.ParallelCalculateFactParametrs(childrenTFL, count);
 
-                //while (true)
-                //{
-                //    if (ParallelProcessing.count == count)
-                //    {
-                //        ParallelProcessing.count = 0;
-                //        break;
-                //    }
-                //}
-
                 var end = DateTime.Now;
 
                 FilesCollectionManager.SetEtalonValues(childrenTFL);

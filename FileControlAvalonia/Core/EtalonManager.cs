@@ -29,6 +29,49 @@ namespace FileControlAvalonia.Core
         /// <param name="createEalon">Если true - создает эталон, если false - добавляет файлы</param>
         public static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
+            //FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
+            //var converter = new DataBase.DataBaseConverter();
+            //var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
+
+            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
+
+            //using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            //{
+            //    if (createEalon == true)
+            //    {
+            //        var commandClearTableFiles = new SQLiteCommand(connection)
+            //        {
+            //            CommandText = "DELETE FROM FilesTable"
+            //        };
+            //        commandClearTableFiles.ExecuteNonQuery();
+            //    }
+
+            //    foreach (var file in etalonFilesCollection)
+            //    {
+            //        var insertCommandFilesTable = new SQLiteCommand(connection)
+            //        {
+            //            CommandText = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) " +
+            //                          $"VALUES ('{file.Name.ToString()}', '{file.Path.ToString()}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}', {file.IsDirectory});"
+            //        };
+            //        try
+            //        {
+            //            insertCommandFilesTable.ExecuteNonQuery();
+            //            if (!createEalon)
+            //            {
+            //                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+            //                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
+            //            }
+            //            else
+            //                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Logger.logger.Error($" Ошибка записи файла {file.Path} в базу данных - {ex.Message}");
+            //        }
+
+
+            //    }
+            //}
             FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
@@ -46,30 +89,50 @@ namespace FileControlAvalonia.Core
                     commandClearTableFiles.ExecuteNonQuery();
                 }
 
-                foreach (var file in etalonFilesCollection)
+                string startQuery = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) VALUES";
+                StringBuilder beginComand = new StringBuilder(startQuery);
+
+                for (int i = 0; i < etalonFilesCollection.Count; i++)
                 {
-                    var insertCommandFilesTable = new SQLiteCommand(connection)
+                    if (i == 0)
                     {
-                        CommandText = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) " +
-                                      $"VALUES ('{file.Name.ToString()}', '{file.Path.ToString()}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}', {file.IsDirectory});"
-                    };
-                    try
+                        beginComand.Append($"('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
+                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                        continue;
+                    }
+                    if (i == etalonFilesCollection.Count - 1)
                     {
-                        insertCommandFilesTable.ExecuteNonQuery();
-                        if (!createEalon)
+                        beginComand.Append($", ('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
+                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+
+                        var insertCommandFilesTable = new SQLiteCommand(connection)
                         {
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
-                        }
-                        else
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                            CommandText = beginComand.ToString()
+                        };
+                        insertCommandFilesTable.ExecuteNonQuery();
                     }
-                    catch(Exception ex)
+                    else if (i % 10000 == 0)
                     {
-                        Logger.logger.Error($" Ошибка записи файла {file.Path} в базу данных - {ex.Message}");
+                        beginComand.Append($", ('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
+                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+
+                        var insertCommandFilesTable = new SQLiteCommand(connection)
+                        {
+                            CommandText = beginComand.ToString()
+                        };
+                        insertCommandFilesTable.ExecuteNonQuery();
+                    }
+                    else if (i>1000 && i % 10000 == 1)
+                    {
+                        beginComand.Clear().Append(startQuery);
+                        beginComand.Append($"('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
                     }
 
-
+                    else
+                    {
+                        beginComand.Append($", ('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
+                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                    }
                 }
             }
         }
