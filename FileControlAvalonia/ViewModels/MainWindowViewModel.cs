@@ -324,7 +324,7 @@ namespace FileControlAvalonia.ViewModels
             ShowDialogSettingsWindow = new Interaction<SettingsWindowViewModel, SettingsWindowViewModel?>();
             ShowDialogFileExplorerWindow = new Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?>();
         }
-
+        
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
         {
@@ -502,7 +502,7 @@ namespace FileControlAvalonia.ViewModels
                 try
                 {
                     MainFileTreeCollection = EtalonManager.GetEtalon();
-                    comparator.CompareFiles(MainFileTreeCollection);
+                    //comparator.CompareFiles(MainFileTreeCollection);
                 }
                 catch
                 {

@@ -169,7 +169,7 @@ namespace FileControlAvalonia.ViewModels
         {
             var childrenTFL = new ObservableCollection<FileTree>();
             var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
 
                 var newFileTree = FilesCollectionManager.GetDeepCopyFileTree(transformFileTree);
@@ -177,7 +177,25 @@ namespace FileControlAvalonia.ViewModels
                 childrenTFL = newFileTree.Children;
                 foreach (var children in childrenTFL.ToList())
                     children.Parent = null;
-                FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
+
+                var start = DateTime.Now;
+                var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, true);
+
+                //FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
+
+                ParallelProcessing.ParallelCalculateFactParametrs(childrenTFL, count);
+
+                //while (true)
+                //{
+                //    if (ParallelProcessing.count == count)
+                //    {
+                //        ParallelProcessing.count = 0;
+                //        break;
+                //    }
+                //}
+
+                var end = DateTime.Now;
+
                 FilesCollectionManager.SetEtalonValues(childrenTFL);
             });
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);

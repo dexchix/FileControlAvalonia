@@ -193,21 +193,25 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
-        public static int GetCountFilesByFileTree(FileTree fileTree)
+        public static int GetCountElementsByFileTree(FileTree fileTree, bool considerFolders)
         {
-            static int CountElementsInFolder(IEnumerable<FileTree> children)
+            static int CountElementsInFolder(IEnumerable<FileTree> children, bool considerFolders)
             {
                 int count = 0;
                 
                 foreach(var child in children)
                 {
-                    if (!child.IsDirectory)
+                    if (child.IsDirectory && considerFolders == true)
+                    {
                         count++;
-                    else count += CountElementsInFolder(child.Children);
+                    }
+                    else if (!child.IsDirectory)
+                        count++;
+                    count += CountElementsInFolder(child.Children, considerFolders);
                 }    
                 return count;
             }
-            int count = CountElementsInFolder(fileTree.Children);
+            int count = CountElementsInFolder(fileTree.Children, considerFolders);
             return count;
 
         }
