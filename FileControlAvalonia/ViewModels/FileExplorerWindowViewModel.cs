@@ -17,6 +17,8 @@ using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
 using Splat;
 using FileControlAvalonia.DataBase;
+using System.Collections.Generic;
+using System.Data;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -178,16 +180,25 @@ namespace FileControlAvalonia.ViewModels
                 foreach (var children in childrenTFL.ToList())
                     children.Parent = null;
 
-                var start = DateTime.Now;
+                var start1 = DateTime.Now;
                 var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, true);
+                var end1 = DateTime.Now;
 
+                var start2 = DateTime.Now;
+                var newList = UpdateTreeToList(childrenTFL);
+                var end2 = DateTime.Now;
+
+
+                //
+
+                //
+
+                var start3 = DateTime.Now;
+                //ParallelProcessing.ParallelCalculateFactParametrs(childrenTFL, count);
+                ParallelProcessing.ParallelCalculateFactParametrs1(newList, count);
                 //FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
-
-                ParallelProcessing.ParallelCalculateFactParametrs(childrenTFL, count);
-
-                var end = DateTime.Now;
-
-                FilesCollectionManager.SetEtalonValues(childrenTFL);
+                //FilesCollectionManager.SetEtalonValues(childrenTFL);
+                var end3 = DateTime.Now;
             });
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
 
@@ -221,5 +232,24 @@ namespace FileControlAvalonia.ViewModels
 
         }
         #endregion
+
+        private List<FileTree> UpdateTreeToList(ObservableCollection<FileTree> files)
+        {
+            var list = new List<FileTree>();
+            Iterate(files);
+
+
+            void Iterate(ObservableCollection<FileTree> childrens)
+            {
+                foreach (var file in childrens)
+                {
+                    list.Add(file);
+                    if (file.IsDirectory)
+                        Iterate(file.Children);
+                }
+            }
+
+            return list;
+        }
     }
 }

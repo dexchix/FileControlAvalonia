@@ -29,49 +29,6 @@ namespace FileControlAvalonia.Core
         /// <param name="createEalon">Если true - создает эталон, если false - добавляет файлы</param>
         public static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
-            //FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
-            //var converter = new DataBase.DataBaseConverter();
-            //var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
-
-            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
-
-            //using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            //{
-            //    if (createEalon == true)
-            //    {
-            //        var commandClearTableFiles = new SQLiteCommand(connection)
-            //        {
-            //            CommandText = "DELETE FROM FilesTable"
-            //        };
-            //        commandClearTableFiles.ExecuteNonQuery();
-            //    }
-
-            //    foreach (var file in etalonFilesCollection)
-            //    {
-            //        var insertCommandFilesTable = new SQLiteCommand(connection)
-            //        {
-            //            CommandText = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) " +
-            //                          $"VALUES ('{file.Name.ToString()}', '{file.Path.ToString()}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}', {file.IsDirectory});"
-            //        };
-            //        try
-            //        {
-            //            insertCommandFilesTable.ExecuteNonQuery();
-            //            if (!createEalon)
-            //            {
-            //                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-            //                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
-            //            }
-            //            else
-            //                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            Logger.logger.Error($" Ошибка записи файла {file.Path} в базу данных - {ex.Message}");
-            //        }
-
-
-            //    }
-            //}
             FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
