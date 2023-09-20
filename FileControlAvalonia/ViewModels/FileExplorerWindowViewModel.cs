@@ -195,7 +195,7 @@ namespace FileControlAvalonia.ViewModels
 
                 var start3 = DateTime.Now;
                 //ParallelProcessing.ParallelCalculateFactParametrs(childrenTFL, count);
-                ParallelProcessing.ParallelCalculateFactParametrs1(newList, count);
+                ParallelProcessing.ParallelCalculateFactParametrs(newList, count);
                 //FactParameterizer.SetFactValuesInFilesCollection(childrenTFL);
                 //FilesCollectionManager.SetEtalonValues(childrenTFL);
                 var end3 = DateTime.Now;
