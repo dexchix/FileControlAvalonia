@@ -240,6 +240,23 @@ namespace FileControlAvalonia.FileTreeLogic
             return count;
         }
 
+        public static List<FileTree> UpdateTreeToList(ObservableCollection<FileTree> files)
+        {
+            var list = new List<FileTree>();
+            Iterate(files);
 
+
+            void Iterate(ObservableCollection<FileTree> childrens)
+            {
+                foreach (var file in childrens)
+                {
+                    list.Add(file);
+                    if (file.IsDirectory)
+                        Iterate(file.Children);
+                }
+            }
+
+            return list;
+        }
     }
 }

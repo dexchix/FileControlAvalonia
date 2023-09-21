@@ -502,7 +502,7 @@ namespace FileControlAvalonia.ViewModels
                 try
                 {
                     MainFileTreeCollection = EtalonManager.GetEtalon();
-                    //comparator.CompareFiles(MainFileTreeCollection);
+                    comparator.CompareFiles(MainFileTreeCollection);
                 }
                 catch
                 {

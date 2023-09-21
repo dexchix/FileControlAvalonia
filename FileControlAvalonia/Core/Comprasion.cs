@@ -1,6 +1,10 @@
-﻿using FileControlAvalonia.Models;
+﻿using FileControlAvalonia.FileTreeLogic;
+using FileControlAvalonia.Models;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Core
 {
@@ -14,26 +18,37 @@ namespace FileControlAvalonia.Core
         public int NotChecked = 0;
         public int NotFound = 0;
 
-        async public void CompareFiles(ObservableCollection<FileTree> mainFileTreeCollection)
+        public void CompareFiles(ObservableCollection<FileTree> mainFileTreeCollection)
         {
-            foreach (var file in mainFileTreeCollection.ToList())
-            {
-                SetStatus(file);
-
-                if (file.IsDirectory)
+            var filesList = FilesCollectionManager.UpdateTreeToList(mainFileTreeCollection);
+            var start = DateTime.Now;
+            //if (filesList.Count <= 1000)
+            //{
+                foreach (var file in mainFileTreeCollection.ToList())
                 {
-                    CompareFiles(file.Children);
+                    SetStatus(file);
+
+                    if (file.IsDirectory)
+                    {
+                        CompareFiles(file.Children);
+                    }
+                    else
+                    {
+
+                        //await Task.Delay(500);
+                        TotalFiles++;
+                        //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = TotalFiles;
+                        //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}"
+                    };
+
                 }
-                else
-                {
+            //}
+            //else
+            //{
+            //    ParallelCompareFiles(filesList, filesList.Count);
+            //}
+            var end = DateTime.Now;
 
-                    //await Task.Delay(500);
-                    TotalFiles++;
-                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = TotalFiles;
-                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверяется {file.Path}"
-                };
-
-            }
         }
         public void SetStatus(FileTree fileTree)
         {
@@ -42,7 +57,8 @@ namespace FileControlAvalonia.Core
             {
                 fileTree.Status = StatusFile.NoAccess;
                 if (!fileTree.IsDirectory)
-                    NoAccess++;
+                    lock (_lock)
+                        NoAccess++;
                 ChangeStatusParents(fileTree, StatusFile.FailedChecked);
                 return;
 
@@ -52,7 +68,8 @@ namespace FileControlAvalonia.Core
             {
                 fileTree.Status = StatusFile.NotFound;
                 if (!fileTree.IsDirectory)
-                    NotFound++;
+                    lock (_lock)
+                        NotFound++;
                 ChangeStatusParents(fileTree, StatusFile.FailedChecked);
                 return;
             }
@@ -63,7 +80,8 @@ namespace FileControlAvalonia.Core
             {
                 fileTree.Status = StatusFile.Checked;
                 if (!fileTree.IsDirectory)
-                    Checked++;
+                    lock (_lock)
+                        Checked++;
                 return;
             }
             //PartialChecked
@@ -74,13 +92,14 @@ namespace FileControlAvalonia.Core
                 if (!fileTree.IsDirectory)
                 {
                     fileTree.Status = StatusFile.PartiallyChecked;
-                    PartialChecked++;
+                    lock (_lock)
+                        PartialChecked++;
                     ChangeStatusParents(fileTree, fileTree.Status);
                 }
                 else
                     fileTree.Status = StatusFile.Checked;
 
-                
+
                 return;
             }
             //FailedChecked
@@ -93,6 +112,53 @@ namespace FileControlAvalonia.Core
                 return;
             }
         }
+
+        private static int _count = 0;
+        private static object _lock = new object();
+
+        public void ParallelCompareFiles(List<FileTree> files, int countFiles)
+        {
+            int start = 0;
+            int limit = 1;
+            var section = countFiles / 8;
+            int residue = countFiles - section * 8;
+            for (int i = 0; i < 8; i++)
+            {
+                int localStart = start * section;
+                int localLimit = limit * section;
+                start++;
+                limit++;
+                Task.Run(() =>
+                {
+                    for (int i = localStart; i < localLimit; i++)
+                    {
+                        SetStatus(files[i]);
+                        lock (_lock)
+                        {
+                            _count++;
+                        }
+                    }
+                });
+            }
+            for (int i = countFiles - residue; i < countFiles; i++)
+            {
+                SetStatus(files[i]);
+                lock (_lock)
+                {
+                    _count++;
+                }
+            }
+
+            while (true)
+            {
+                if (_count == countFiles)
+                {
+                    _count = 0;
+                    break;
+                }
+            }
+        }
+
         private void ChangeStatusParents(FileTree fileTree, StatusFile status)
         {
             if (fileTree != null && fileTree.Parent != null)

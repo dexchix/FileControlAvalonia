@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Tmds.DBus;
 
@@ -33,7 +34,7 @@ namespace FileControlAvalonia.Core
             var converter = new DataBase.DataBaseConverter();
             var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
 
-            Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
+            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
 
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
@@ -45,7 +46,7 @@ namespace FileControlAvalonia.Core
                     };
                     commandClearTableFiles.ExecuteNonQuery();
                 }
-
+                var start1 = DateTime.Now;
                 string startQuery = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) VALUES";
                 StringBuilder beginComand = new StringBuilder(startQuery);
 
@@ -91,6 +92,7 @@ namespace FileControlAvalonia.Core
                             $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
                     }
                 }
+                var end1 = DateTime.Now;
             }
         }
 
