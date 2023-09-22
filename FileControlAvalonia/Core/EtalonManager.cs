@@ -46,7 +46,7 @@ namespace FileControlAvalonia.Core
                     };
                     commandClearTableFiles.ExecuteNonQuery();
                 }
-                var start1 = DateTime.Now;
+
                 string startQuery = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) VALUES";
                 StringBuilder beginComand = new StringBuilder(startQuery);
 
@@ -92,7 +92,6 @@ namespace FileControlAvalonia.Core
                             $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
                     }
                 }
-                var end1 = DateTime.Now;
             }
         }
 
@@ -125,23 +124,47 @@ namespace FileControlAvalonia.Core
 
                 using (var connection = new SQLiteConnection(DataBaseOptions.Options))
                 {
-                    foreach (var deletedFile in listDelitedFiles)
+
+                    string startQuery = "DELETE FROM FilesTable WHERE Path IN (";
+                    StringBuilder beginComand = new StringBuilder(startQuery);
+
+                    for (int i = 0; i < listDelitedFiles.Count; i++)
                     {
-                        var insertCommandFilesTable = new SQLiteCommand(connection)
+                        if (i == 0)
                         {
-                            CommandText = $"DELETE FROM FilesTable WHERE Path = '{deletedFile.Path}';"
-                        };
-                        try
-                        {
-                            insertCommandFilesTable.ExecuteNonQuery();
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Удаляется {deletedFile.Path}";
+                            beginComand.Append($"'{listDelitedFiles[i].Path}'");
+                            continue;
                         }
-                        catch(Exception ex)
+                        if (i == listDelitedFiles.Count - 1)
                         {
-                            Logger.logger.Error($"Ошибка удаления файла {deletedFile.Path} из базы данных - {ex.Message}");
+                            beginComand.Append($", '{listDelitedFiles[i].Path}')");
+
+                            var insertCommandFilesTable = new SQLiteCommand(connection)
+                            {
+                                CommandText = beginComand.ToString()
+                            };
+                            insertCommandFilesTable.ExecuteNonQuery();
+                        }
+                        else if (i % 10000 == 0)
+                        {
+                            beginComand.Append($", '{listDelitedFiles[i].Path}')");
+
+                            var insertCommandFilesTable = new SQLiteCommand(connection)
+                            {
+                                CommandText = beginComand.ToString()
+                            };
+                            insertCommandFilesTable.ExecuteNonQuery();
+                        }
+                        else if (i > 1000 && i % 10000 == 1)
+                        {
+                            beginComand.Clear().Append(startQuery);
+                            beginComand.Append($"'{listDelitedFiles[i].Path}'");
                         }
 
+                        else
+                        {
+                            beginComand.Append($", '{listDelitedFiles[i].Path}'");
+                        }
                     }
                 }
             }

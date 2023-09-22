@@ -384,7 +384,8 @@ namespace FileControlAvalonia.ViewModels
 
             await Task.Run(() =>
             {
-                FactParameterizer.SetFactValuesInFilesCollection(MainFileTreeCollection);
+                var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
+                ParallelProcessing.ParallelCalculateFactParametrs(newList, newList.Count);
                 comparator.CompareFiles(MainFileTreeCollection);
 
                 TotalFiles = comparator.TotalFiles;
@@ -395,7 +396,9 @@ namespace FileControlAvalonia.ViewModels
                 NotFound = comparator.NotFound;
                 NotChecked = comparator.NotChecked;
 
+                var start = DateTime.Now;
                 new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
+                var end = DateTime.Now;
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
             DateLastCheck = DateTime.Now.ToString();

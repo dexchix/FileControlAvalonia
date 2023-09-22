@@ -22,8 +22,8 @@ namespace FileControlAvalonia.Core
         {
             var filesList = FilesCollectionManager.UpdateTreeToList(mainFileTreeCollection);
             var start = DateTime.Now;
-            //if (filesList.Count <= 1000)
-            //{
+            if (filesList.Count <= 1000)
+            {
                 foreach (var file in mainFileTreeCollection.ToList())
                 {
                     SetStatus(file);
@@ -42,11 +42,11 @@ namespace FileControlAvalonia.Core
                     };
 
                 }
-            //}
-            //else
-            //{
-            //    ParallelCompareFiles(filesList, filesList.Count);
-            //}
+            }
+            else
+            {
+                ParallelCompareFiles(filesList, filesList.Count);
+            }
             var end = DateTime.Now;
 
         }
