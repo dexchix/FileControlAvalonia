@@ -217,4 +217,11 @@ namespace FileControlAvalonia.ViewModels
         }
         #endregion
     }
+    public class AAAA
+    {
+        public virtual void SSSS()
+        {
+
+        }
+    }
 }

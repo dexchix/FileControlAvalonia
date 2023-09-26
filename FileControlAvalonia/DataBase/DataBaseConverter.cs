@@ -1,6 +1,7 @@
 ﻿using FileControlAvalonia.Core;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,52 +25,12 @@ namespace FileControlAvalonia.DataBase
         }
         public ObservableCollection<FileTree> ConvertFormatDBToFileTreeCollection(List<FileDB> files)
         {
+            var startTime = DateTime.Now;
             var etalon = new ObservableCollection<FileTree>();
-            //var filesDictionary = new ConcurrentDictionary<string, FileTree>();
-            var filesDictionary = new List<FileTree>();
+            var filesDictionary = new Dictionary<string, FileTree>();
+
             var rootsDictionary = new List<FileTree>();
-            //while (fileCounter < files.Count)
-            //{
-            //    if (files[fileCounter].ParentPath == "")
-            //    {
-            //        var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false)
-            //        {
-            //            EHash = files[fileCounter].EHashSum,
-            //            ELastUpdate = files[fileCounter].ELastUpdate,
-            //            EVersion = files[fileCounter].EVersion,
 
-            //            FHash = files[fileCounter].FHashSum,
-            //            FLastUpdate = files[fileCounter].FLastUpdate,
-            //            FVersion = files[fileCounter].FVersion,
-
-            //            Status = files[fileCounter].Status,
-            //        };
-
-            //        etalon.Add(addFile);
-            //        fileCounter++;
-            //    }
-            //    else
-            //    {
-            //        var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false, 
-            //                                   FileTreeNavigator.SeachFileInFilesCollection(files[fileCounter].ParentPath, etalon))
-            //        {
-            //            EHash = files[fileCounter].EHashSum,
-            //            ELastUpdate = files[fileCounter].ELastUpdate,
-            //            EVersion = files[fileCounter].EVersion,
-
-            //            FHash = files[fileCounter].FHashSum,
-            //            FLastUpdate = files[fileCounter].FLastUpdate,
-            //            FVersion = files[fileCounter].FVersion,
-
-            //            Status = files[fileCounter].Status,
-            //        };
-
-            //        var parent = FileTreeNavigator.SeachFileInFilesCollection(Path.GetDirectoryName(addFile.Path)!, etalon);
-            //        parent.Children!.Add(addFile);
-            //        fileCounter++;
-            //    }
-            //}
-            //return etalon;
             if (files.Count <= 1000)
             {
                 while (fileCounter < files.Count)
@@ -133,19 +94,19 @@ namespace FileControlAvalonia.DataBase
                         {
                             var addFile = new FileTree(files[i].Path, files[i].IsDirectory, false)
                             {
-                                EHash = files[fileCounter].EHashSum,
-                                ELastUpdate = files[fileCounter].ELastUpdate,
-                                EVersion = files[fileCounter].EVersion,
+                                EHash = files[i].EHashSum,
+                                ELastUpdate = files[i].ELastUpdate,
+                                EVersion = files[i].EVersion,
 
-                                FHash = files[fileCounter].FHashSum,
-                                FLastUpdate = files[fileCounter].FLastUpdate,
-                                FVersion = files[fileCounter].FVersion,
+                                FHash = files[i].FHashSum,
+                                FLastUpdate = files[i].FLastUpdate,
+                                FVersion = files[i].FVersion,
 
-                                Status = files[fileCounter].Status,
+                                Status = files[i].Status,
                             };
                             lock (_lock)
                             {
-                                filesDictionary.Add(addFile);
+                                filesDictionary.Add(addFile.Path, addFile);
                                 if (files[i].ParentPath == "")
                                     rootsDictionary.Add(addFile);
                                 _count++;
@@ -157,19 +118,19 @@ namespace FileControlAvalonia.DataBase
                 {
                     var addFile = new FileTree(files[i].Path, files[i].IsDirectory, false)
                     {
-                        EHash = files[fileCounter].EHashSum,
-                        ELastUpdate = files[fileCounter].ELastUpdate,
-                        EVersion = files[fileCounter].EVersion,
+                        EHash = files[i].EHashSum,
+                        ELastUpdate = files[i].ELastUpdate,
+                        EVersion = files[i].EVersion,
 
-                        FHash = files[fileCounter].FHashSum,
-                        FLastUpdate = files[fileCounter].FLastUpdate,
-                        FVersion = files[fileCounter].FVersion,
+                        FHash = files[i].FHashSum,
+                        FLastUpdate = files[i].FLastUpdate,
+                        FVersion = files[i].FVersion,
 
-                        Status = files[fileCounter].Status,
+                        Status = files[i].Status,
                     };
                     lock (_lock)
                     {
-                        filesDictionary.Add(addFile);
+                        filesDictionary.Add(addFile.Path, addFile);
                         if (files[i].ParentPath == "")
                             rootsDictionary.Add(addFile);
                         _count++;
@@ -186,7 +147,7 @@ namespace FileControlAvalonia.DataBase
                         break;
                     }
                 }
-
+                //Присваивание Parent и Children
                 for (int i = 0; i < 8; i++)
                 {
                     int localStart = start * section;
@@ -197,13 +158,17 @@ namespace FileControlAvalonia.DataBase
                     {
                         for (int i = localStart; i < localLimit; i++)
                         {
-                            var file = filesDictionary.FirstOrDefault(path => path.Path == files[i].ParentPath);
                             lock (_lock)
                             {
-                                if (file != null)
+                                var file = filesDictionary[files[i].Path];
+                                if (files[i].ParentPath != "")
                                 {
-                                    filesDictionary[i].Parent = file;
-                                    filesDictionary[i].Parent.Children.Add(filesDictionary[i]);
+                                    var fileParent = filesDictionary[files[i].ParentPath];
+                                    if (fileParent != null)
+                                    {
+                                        file.Parent = fileParent;
+                                        fileParent.Children.Add(file);
+                                    }
                                 }
                                 _count++;
                             }
@@ -212,19 +177,19 @@ namespace FileControlAvalonia.DataBase
                 }
                 for (int i = files.Count - residue; i < files.Count; i++)
                 {
-                    var addFile = new FileTree(files[i].Path, files[i].IsDirectory, false);
                     lock (_lock)
                     {
-                        var file = filesDictionary.FirstOrDefault(path => path.Path == files[i].ParentPath);
-                        lock (_lock)
+                        var file = filesDictionary[files[i].Path];
+                        if (files[i].ParentPath != "")
                         {
-                            if (file != null)
+                            var fileParent = filesDictionary[files[i].ParentPath];
+                            if (fileParent != null)
                             {
-                                filesDictionary[i].Parent = file;
-                                filesDictionary[i].Parent.Children.Add(filesDictionary[i]);
+                                file.Parent = fileParent;
+                                fileParent.Children.Add(file);
                             }
-                            _count++;
                         }
+                        _count++;
                     }
                 }
                 while (true)
@@ -240,6 +205,7 @@ namespace FileControlAvalonia.DataBase
                 {
                     etalon.Add(file);
                 }
+                var end = DateTime.Now;
                 return etalon;
             }
 
