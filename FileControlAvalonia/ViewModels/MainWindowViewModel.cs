@@ -387,23 +387,18 @@ namespace FileControlAvalonia.ViewModels
                 var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
                 ProgressBarMaximum = newList.Count;
 
-                var processing = new ParallelProcessing();
-                processing.ParallelCalculateFactParametrs(newList, newList.Count);
+                
+                var comnparator = ParallelProcessing.ParallelComprasion(newList, newList.Count);
                 //====================
                 ProgressBarValue = 0;
 
-                comparator = processing.Comprasion;
-
-                ProgressBarMaximum = newList.Count;
-                comparator.CompareFiles(MainFileTreeCollection);
-
-                TotalFiles = comparator.TotalFiles;
-                Checked = comparator.Checked;
-                PartialChecked = comparator.PartialChecked;
-                FailedChecked = comparator.FailedChecked;
-                NoAccess = comparator.NoAccess;
-                NotFound = comparator.NotFound;
-                NotChecked = comparator.NotChecked;
+                TotalFiles = comnparator.TotalFiles;
+                Checked = comnparator.Checked;
+                PartialChecked = comnparator.PartialChecked;
+                FailedChecked = comnparator.FailedChecked;
+                NoAccess = comnparator.NoAccess;
+                NotFound = comnparator.NotFound;
+                NotChecked = comnparator.NotChecked;
 
                 var start = DateTime.Now;
                 new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
