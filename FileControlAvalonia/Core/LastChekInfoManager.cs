@@ -95,7 +95,6 @@ namespace FileControlAvalonia.Core
 
         public static void UpdateFactInfoInDB(FileTree file, SQLiteConnection connection)
         {
-
             var updateFactCommand = new SQLiteCommand(connection)
             {
                 CommandText = $"UPDATE FilesTable SET FHashSum = '{file.FHash}', FLastUpdate = '{file.FLastUpdate}', FVersion = '{file.FVersion}'  WHERE Path = '{file.Path}';"

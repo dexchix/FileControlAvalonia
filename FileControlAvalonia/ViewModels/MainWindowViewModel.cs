@@ -281,13 +281,13 @@ namespace FileControlAvalonia.ViewModels
                         ){},
                 }
             };
-            WidthNameColumn = witdhHierarhicalColumn+2;
+            WidthNameColumn = witdhHierarhicalColumn + 2;
             WidthEtalonAndFactColumn = (int)(MainWindow.TreeDataGridWidth - 170 - WidthNameColumn) / 2;
             MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
             MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
 
             MaxHeightMainWindow = (int)SettingsManager.AppSettings.WindowHeight;
-            MaxWidthMainWindow =  (int)SettingsManager.AppSettings.WindowWidth;
+            MaxWidthMainWindow = (int)SettingsManager.AppSettings.WindowWidth;
 
             MessageBus.Current.Listen<ObservableCollection<FileTree>>().Subscribe(async transportFileTree =>
             {
@@ -324,7 +324,7 @@ namespace FileControlAvalonia.ViewModels
             ShowDialogSettingsWindow = new Interaction<SettingsWindowViewModel, SettingsWindowViewModel?>();
             ShowDialogFileExplorerWindow = new Interaction<FileExplorerWindowViewModel, FileExplorerWindowViewModel?>();
         }
-        
+
         #region CONVERTERS
         public static IMultiValueConverter ArrowIconConverter
         {
@@ -374,7 +374,7 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
-            var comparator = new Comprasion();
+            Comprasion comparator = null;
             ProgressBarIsVisible = true;
             EnabledButtons = false;
             //ProgressBarLoopScrol = true;
@@ -386,9 +386,13 @@ namespace FileControlAvalonia.ViewModels
             {
                 var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
                 ProgressBarMaximum = newList.Count;
-                //ParallelProcessing.ParallelCalculateFactParametrs(newList, newList.Count);
+
+                var processing = new ParallelProcessing();
+                processing.ParallelCalculateFactParametrs(newList, newList.Count);
                 //====================
                 ProgressBarValue = 0;
+
+                comparator = processing.Comprasion;
 
                 ProgressBarMaximum = newList.Count;
                 comparator.CompareFiles(MainFileTreeCollection);
@@ -608,6 +612,7 @@ namespace FileControlAvalonia.ViewModels
         {
             EnabledButtons = false;
             ProgressBarIsVisible = true;
+            ProgressBarLoopScrol = true;
             ProgressBarText = "Удаление файлов";
             ProgressBarValue = 0;
 
@@ -635,6 +640,7 @@ namespace FileControlAvalonia.ViewModels
 
             ProgressBarText = $"Удаление завершено. Удалено {stats.TotalFiles} файлов";
             await Task.Delay(1500);
+            ProgressBarLoopScrol = false;
             ProgressBarIsVisible = false;
             EnabledButtons = true;
             ProgressBarValue = 0;
@@ -689,7 +695,7 @@ namespace FileControlAvalonia.ViewModels
                                         ){},
                                 }
                 };
-                WidthNameColumn = (int)newWitdhHierarhicalColumn+2;
+                WidthNameColumn = (int)newWitdhHierarhicalColumn + 2;
                 WidthEtalonAndFactColumn = (int)(MainWindow.TreeDataGridWidth - 170 - WidthNameColumn) / 2;
                 MarginEtalonColumn = Thickness.Parse($"{(int)WidthNameColumn - 1} 1 0 0");
                 MarginFactAndDeleteColumn = Thickness.Parse($"{WidthEtalonAndFactColumn - 1} 1 0 0");
@@ -699,7 +705,7 @@ namespace FileControlAvalonia.ViewModels
                     MaxHeightMainWindow = (int)Locator.Current.GetService<MainWindow>().Height;
                     MaxWidthMainWindow = (int)Locator.Current.GetService<MainWindow>().Width;
                 });
- 
+
 
                 await Task.Delay(50);
                 ProgressBarIsVisible = true;

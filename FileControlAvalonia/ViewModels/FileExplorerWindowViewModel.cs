@@ -181,7 +181,7 @@ namespace FileControlAvalonia.ViewModels
                 foreach (var children in childrenTFL.ToList())
                     children.Parent = null;
 
-                var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, true);
+                var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, false);
                 var newList = FilesCollectionManager.UpdateTreeToList(childrenTFL);
                 
                 //ProgressBar======================

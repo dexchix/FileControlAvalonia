@@ -137,8 +137,8 @@ namespace FileControlAvalonia.Core
                         SetStatus(files[i]);
                         lock (_lock)
                         {
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue += 50;
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
+                            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue += 50;
+                            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
                             _count++;
                         }
                     }
@@ -149,8 +149,8 @@ namespace FileControlAvalonia.Core
                 SetStatus(files[i]);
                 lock (_lock)
                 {
-                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue+=50;
-                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
+                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue+=50;
+                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
                     _count++;
                 }
             }
