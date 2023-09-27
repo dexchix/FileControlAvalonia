@@ -1,5 +1,7 @@
 ﻿using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.ViewModels;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -135,6 +137,8 @@ namespace FileControlAvalonia.Core
                         SetStatus(files[i]);
                         lock (_lock)
                         {
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue += 50;
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
                             _count++;
                         }
                     }
@@ -145,6 +149,8 @@ namespace FileControlAvalonia.Core
                 SetStatus(files[i]);
                 lock (_lock)
                 {
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue+=50;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
                     _count++;
                 }
             }

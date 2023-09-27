@@ -54,7 +54,7 @@ namespace FileControlAvalonia.FileTreeLogic
             }
             stats.GetFilesStats(addedBDFilesCollection);
 
-            Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = false;
+            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = false;
 
             EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false);
         }

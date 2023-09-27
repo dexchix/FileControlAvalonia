@@ -109,9 +109,10 @@ namespace FileControlAvalonia.ViewModels
 
                 }
                 Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+                //Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = 0;
                 Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
+                //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Вычисление параметров";
 
                 //Locator.Current.GetService(typeof(MainWindowViewModel)).
                 window.Close();
@@ -182,6 +183,12 @@ namespace FileControlAvalonia.ViewModels
 
                 var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, true);
                 var newList = FilesCollectionManager.UpdateTreeToList(childrenTFL);
+                
+                //ProgressBar======================
+                Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = count;
+
+                //===================================
+
                 ParallelProcessing.ParallelCalculateFactParametrs(newList, count);
             });
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);

@@ -293,7 +293,7 @@ namespace FileControlAvalonia.ViewModels
             {
                 ProgressBarIsVisible = true;
                 ProgressBarLoopScrol = true;
-                ProgressBarText = "Добавление файлов";
+                ProgressBarText = "Запись в БД";
                 ProgressBarValue = 0;
                 EnabledButtons = false;
 
@@ -306,7 +306,7 @@ namespace FileControlAvalonia.ViewModels
                 });
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
-
+                ProgressBarLoopScrol = false;
 
                 TotalFiles += fileStats.TotalFiles;
                 Checked += fileStats.Checked;
@@ -377,7 +377,7 @@ namespace FileControlAvalonia.ViewModels
             var comparator = new Comprasion();
             ProgressBarIsVisible = true;
             EnabledButtons = false;
-            ProgressBarLoopScrol = true;
+            //ProgressBarLoopScrol = true;
             ProgressBarText = "Осуществляется проверка";
             //ProgressBarValue = 0;
             //ProgressBarMaximum = TotalFiles;
@@ -385,7 +385,12 @@ namespace FileControlAvalonia.ViewModels
             await Task.Run(() =>
             {
                 var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
-                ParallelProcessing.ParallelCalculateFactParametrs(newList, newList.Count);
+                ProgressBarMaximum = newList.Count;
+                //ParallelProcessing.ParallelCalculateFactParametrs(newList, newList.Count);
+                //====================
+                ProgressBarValue = 0;
+
+                ProgressBarMaximum = newList.Count;
                 comparator.CompareFiles(MainFileTreeCollection);
 
                 TotalFiles = comparator.TotalFiles;
@@ -462,6 +467,7 @@ namespace FileControlAvalonia.ViewModels
 
             ProgressBarIsVisible = false;
             EnabledButtons = true;
+            ProgressBarText = string.Empty;
         }
         public void CloseProgramCommand()
         {
@@ -535,6 +541,7 @@ namespace FileControlAvalonia.ViewModels
             NotFound = comparator.NotFound;
             NotChecked = comparator.NotChecked;
             EnabledButtons = true;
+            ProgressBarValue = 0;
         }
 
         public void ExpandAllNodesCommand()

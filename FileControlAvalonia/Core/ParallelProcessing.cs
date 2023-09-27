@@ -1,4 +1,6 @@
 ﻿using FileControlAvalonia.Models;
+using FileControlAvalonia.ViewModels;
+using Splat;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,7 +37,13 @@ namespace FileControlAvalonia.Core
                         {
                             FactParameterizer.SetFactValues(files[i]);
                             lock (_lock)
+                            {
                                 _count++;
+                                //ProgressBar=====================================================================================
+                                Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                                Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Вычисление {files[i].Path}";
+                                //================================================================================================
+                            }
                         }
                     });
                 }
@@ -43,7 +51,13 @@ namespace FileControlAvalonia.Core
                 {
                     FactParameterizer.SetFactValues(files[i]);
                     lock (_lock)
+                    {
                         _count++;
+                        //ProgressBar=====================================================================================
+                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                        Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Вычисление {files[i].Path}";
+                        //================================================================================================
+                    }
                 }
             }
 
@@ -51,6 +65,10 @@ namespace FileControlAvalonia.Core
             {
                 if (_count == countFiles)
                 {
+                    //ProgressBar=====================================================================================
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue=0;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = 0;
+                    //================================================================================================
                     _count = 0;
                     break;
                 }
