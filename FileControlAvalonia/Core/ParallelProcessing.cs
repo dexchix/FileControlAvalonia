@@ -10,21 +10,30 @@ namespace FileControlAvalonia.Core
     {
         private static int _count = 0;
         private static object _lock = new object();
+        private static MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
 
         public static void ParallelCalculateFactParametrs(List<FileTree> files, int countFiles)
         {
-            if (countFiles <= 1000)
+            if (files.Count <= 1000)
             {
                 foreach (FileTree file in files)
+                {
+                    if (!file.IsDirectory) _mainWindowVM.ProgressBarValue++;
+                    _mainWindowVM.ProgressBarText = $"Добавлено {_mainWindowVM.ProgressBarValue} из {countFiles}";
                     FactParameterizer.SetFactValues(file);
+                    
+                }
+                _mainWindowVM.ProgressBarValue = 0;
+                _mainWindowVM.ProgressBarMaximum = 0;
+                _mainWindowVM.ProgressBarText = string.Empty;
                 return;
             }
             else
             {
                 int start = 0;
                 int limit = 1;
-                var section = countFiles / 8;
-                int residue = countFiles - section * 8;
+                var section = files.Count / 8;
+                int residue = files.Count - section * 8;
                 for (int i = 0; i < 8; i++)
                 {
                     int localStart = start * section;
@@ -43,8 +52,10 @@ namespace FileControlAvalonia.Core
                                 if (!files[i].IsDirectory)
                                 {
                                     //ProgressBar=====================================================================================
-                                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавлено {_count} из {countFiles}";
+                                    _mainWindowVM.ProgressBarValue++;
+                                    _mainWindowVM.ProgressBarText = $"Добавлено {_mainWindowVM.ProgressBarValue} из {countFiles}";
+                                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавлено {_count} из {countFiles}";
                                     //================================================================================================
                                 }
 
@@ -52,7 +63,7 @@ namespace FileControlAvalonia.Core
                         }
                     });
                 }
-                for (int i = countFiles - residue; i < countFiles; i++)
+                for (int i = files.Count - residue; i < files.Count; i++)
                 {
                     FactParameterizer.SetFactValues(files[i]);
                     lock (_lock)
@@ -61,8 +72,10 @@ namespace FileControlAvalonia.Core
                         if (!files[i].IsDirectory)
                         {
                             //ProgressBar=====================================================================================
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавлено {_count} из {countFiles}";
+                            _mainWindowVM.ProgressBarValue++;
+                            _mainWindowVM.ProgressBarText = $"Добавлено {_mainWindowVM.ProgressBarValue} из {countFiles}";
+                            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавлено {_count} из {countFiles}";
                             //================================================================================================
                         }
                     }
@@ -71,11 +84,14 @@ namespace FileControlAvalonia.Core
 
             while (true)
             {
-                if (_count == countFiles)
+                if (_count == files.Count)
                 {
                     //ProgressBar=====================================================================================
-                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = 0;
-                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = 0;
+                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = 0;
+                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = 0;
+                    _mainWindowVM.ProgressBarValue=0;
+                    _mainWindowVM.ProgressBarMaximum = 0;
+                    _mainWindowVM.ProgressBarText = string.Empty;
                     //================================================================================================
                     _count = 0;
                     break;
@@ -86,7 +102,7 @@ namespace FileControlAvalonia.Core
         public static Comprasion ParallelComprasion(List<FileTree> files, int countFiles)
         {
             var comparer = new Comprasion();
-            if (countFiles <= 1000)
+            if (files.Count <= 1000)
             {
                 foreach (FileTree file in files)
                 {
@@ -99,8 +115,8 @@ namespace FileControlAvalonia.Core
             {
                 int start = 0;
                 int limit = 1;
-                var section = countFiles / 8;
-                int residue = countFiles - section * 8;
+                var section = files.Count / 8;
+                int residue = files.Count - section * 8;
                 for (int i = 0; i < 8; i++)
                 {
                     int localStart = start * section;
@@ -120,8 +136,9 @@ namespace FileControlAvalonia.Core
                                 if (!files[i].IsDirectory)
                                 {
                                     //ProgressBar=====================================================================================
-                                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверено {_count} из {countFiles}";
+                                    _mainWindowVM.ProgressBarValue++;
+                                    comparer.TotalFiles++;
+                                    _mainWindowVM.ProgressBarText = $"Проверено {_mainWindowVM.ProgressBarValue} из {countFiles}";
                                     //================================================================================================
                                 }
 
@@ -129,7 +146,7 @@ namespace FileControlAvalonia.Core
                         }
                     });
                 }
-                for (int i = countFiles - residue; i < countFiles; i++)
+                for (int i = files.Count - residue; i < files.Count; i++)
                 {
                     FactParameterizer.SetFactValues(files[i]);
                     lock (_lock)
@@ -140,8 +157,9 @@ namespace FileControlAvalonia.Core
                         if (!files[i].IsDirectory)
                         {
                             //ProgressBar=====================================================================================
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавлено {_count} из {countFiles}";
+                            _mainWindowVM.ProgressBarValue++;
+                            comparer.TotalFiles++;
+                            _mainWindowVM.ProgressBarText = $"Проверено {_mainWindowVM.ProgressBarValue} из {countFiles}";
                             //================================================================================================
                         }
                     }
@@ -150,11 +168,12 @@ namespace FileControlAvalonia.Core
 
             while (true)
             {
-                if (_count == countFiles)
+                if (_count == files.Count)
                 {
                     //ProgressBar=====================================================================================
-                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = 0;
-                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = 0;
+                    _mainWindowVM.ProgressBarValue = 0;
+                    _mainWindowVM.ProgressBarMaximum = 0;
+                    _mainWindowVM.ProgressBarText = string.Empty;
                     //================================================================================================
                     _count = 0;
                     break;

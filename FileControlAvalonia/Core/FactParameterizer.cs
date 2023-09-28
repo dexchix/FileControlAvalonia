@@ -79,7 +79,7 @@ namespace FileControlAvalonia.Core
                     try
                     {
                         var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
-                        return versionInfo.FileVersion == null || versionInfo.FileVersion == "" ? "-" : versionInfo.FileVersion!;
+                        return versionInfo.FileVersion == null || versionInfo.FileVersion == string.Empty ? "-" : versionInfo.FileVersion!;
                     }
                     catch
                     {

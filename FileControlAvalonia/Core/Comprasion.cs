@@ -139,6 +139,7 @@ namespace FileControlAvalonia.Core
                         {
                             //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue += 50;
                             //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
+                            if (!files[i].IsDirectory) TotalFiles++;
                             _count++;
                         }
                     }
@@ -151,6 +152,7 @@ namespace FileControlAvalonia.Core
                 {
                     //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue+=50;
                     //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Проверка {files[i].Name}";
+                    if (!files[i].IsDirectory) TotalFiles++;
                     _count++;
                 }
             }

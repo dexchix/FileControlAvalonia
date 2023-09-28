@@ -163,7 +163,7 @@ namespace FileControlAvalonia.Models
 
                 foreach (var file in Directory.EnumerateFiles(Path, "*", options))
                 {
-                    if (extensions == null || extensions.Count == 0 || extensions[0] == "")
+                    if (extensions == null || extensions.Count == 0 || extensions[0] == string.Empty)
                     {
                         var children = new FileTree(file, false, _loadChildren, this);
                         result.Add(children);

@@ -63,31 +63,31 @@ namespace FileControlAvalonia.DataBase
             {
                 if (await Task.Factory.StartNew(() => Connect()))
                 {
-                    if (SettingsManager.AppSettings.OpcCommonTag != "")
+                    if (SettingsManager.AppSettings.OpcCommonTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcCommonTag, state);
                     }
-                    if (SettingsManager.AppSettings.OpcCountTag != "")
+                    if (SettingsManager.AppSettings.OpcCountTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcCountTag, compare.TotalFiles);
                     }
-                    if (SettingsManager.AppSettings.OpcFailedTag != "")
+                    if (SettingsManager.AppSettings.OpcFailedTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcFailedTag, compare.FailedChecked);
                     }
-                    if (SettingsManager.AppSettings.OpcPassedTag != "")
+                    if (SettingsManager.AppSettings.OpcPassedTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcPassedTag, compare.Checked);
                     }
-                    if (SettingsManager.AppSettings.OpcNoAccessTag != "")
+                    if (SettingsManager.AppSettings.OpcNoAccessTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcNoAccessTag, compare.NoAccess);
                     }
-                    if (SettingsManager.AppSettings.OpcNotFoundTag != "")
+                    if (SettingsManager.AppSettings.OpcNotFoundTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcNotFoundTag, compare.NotFound);
                     }
-                    if (SettingsManager.AppSettings.OpcSemiPassedTag != "")
+                    if (SettingsManager.AppSettings.OpcSemiPassedTag != string.Empty)
                     {
                         Write(SettingsManager.AppSettings.OpcSemiPassedTag, compare.PartialChecked);
                     }

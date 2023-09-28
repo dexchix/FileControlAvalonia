@@ -35,7 +35,7 @@ namespace FileControlAvalonia.DataBase
             {
                 while (fileCounter < files.Count)
                 {
-                    if (files[fileCounter].ParentPath == "")
+                    if (files[fileCounter].ParentPath == string.Empty)
                     {
                         var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false)
                         {
@@ -107,7 +107,7 @@ namespace FileControlAvalonia.DataBase
                             lock (_lock)
                             {
                                 filesDictionary.Add(addFile.Path, addFile);
-                                if (files[i].ParentPath == "")
+                                if (files[i].ParentPath == string.Empty)
                                     rootsDictionary.Add(addFile);
                                 _count++;
                             }
@@ -131,7 +131,7 @@ namespace FileControlAvalonia.DataBase
                     lock (_lock)
                     {
                         filesDictionary.Add(addFile.Path, addFile);
-                        if (files[i].ParentPath == "")
+                        if (files[i].ParentPath == string.Empty)
                             rootsDictionary.Add(addFile);
                         _count++;
                     }
@@ -161,7 +161,7 @@ namespace FileControlAvalonia.DataBase
                             lock (_lock)
                             {
                                 var file = filesDictionary[files[i].Path];
-                                if (files[i].ParentPath != "")
+                                if (files[i].ParentPath != string.Empty)
                                 {
                                     var fileParent = filesDictionary[files[i].ParentPath];
                                     if (fileParent != null)
@@ -180,7 +180,7 @@ namespace FileControlAvalonia.DataBase
                     lock (_lock)
                     {
                         var file = filesDictionary[files[i].Path];
-                        if (files[i].ParentPath != "")
+                        if (files[i].ParentPath != string.Empty)
                         {
                             var fileParent = filesDictionary[files[i].ParentPath];
                             if (fileParent != null)

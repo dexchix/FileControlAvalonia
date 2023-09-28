@@ -58,7 +58,7 @@ namespace FileControlAvalonia.SettingsApp
             if (settings.AvalibleFileExtensions != null)
             {
                 extensions = settings.AvalibleFileExtensions!.Split('/').ToList();
-                if (extensions.Count > 0 && extensions[0] != "")
+                if (extensions.Count > 0 && extensions[0] != string.Empty)
                 {
                     foreach (string extension in extensions)
                     {

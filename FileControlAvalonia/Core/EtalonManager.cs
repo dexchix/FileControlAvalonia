@@ -3,6 +3,7 @@ using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.ViewModels;
 using Newtonsoft.Json;
+using NLog;
 using Splat;
 using SQLite;
 using System;
@@ -24,7 +25,7 @@ namespace FileControlAvalonia.Core
 
 
         /// <summary>
-        /// Добавляет файлы в эталон или создает новый.
+        /// Добавляет файлы в эталон (БД) или создает новый (перезаполняет таблицу в БД).
         /// </summary>
         /// <param name="mainFileTreeCollection"></param>
         /// <param name="createEalon">Если true - создает эталон, если false - добавляет файлы</param>
@@ -183,15 +184,24 @@ namespace FileControlAvalonia.Core
         }
         public static EtalonAndChecksInfoDB GetInfo()
         {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            try
             {
-                var getInfoCommand = new SQLiteCommand(connection)
+                using (var connection = new SQLiteConnection(DataBaseOptions.Options))
                 {
-                    CommandText = $"SELECT Creator, Date, DateLastCheck, TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked FROM CheksTable"
-                };
-                var info = getInfoCommand.ExecuteQuery<EtalonAndChecksInfoDB>()[0];
-                return info;
+                    var getInfoCommand = new SQLiteCommand(connection)
+                    {
+                        CommandText = $"SELECT Creator, Date, DateLastCheck, TotalFiles, Checked, PartialChecked, FailedChecked, NoAccess, NotFound, NotChecked FROM CheksTable"
+                    };
+                    var info = getInfoCommand.ExecuteQuery<EtalonAndChecksInfoDB>()[0];
+                    return info;
+                }
             }
+            catch (Exception ex)
+            {
+                Logger.logger.Error($"Не удалось выгрузить информацию об эталоне. Отсутствует таблица. {ex.Message}");
+                return new EtalonAndChecksInfoDB();
+            }
+
         }
     }
 }

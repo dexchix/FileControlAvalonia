@@ -277,7 +277,7 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void CloseWindow(Window window)
         {
-            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
+            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == string.Empty)
             {
                 var mBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", "Введите новый пароль", ButtonEnum.OkCancel);
                 mBox.Show();
@@ -289,7 +289,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void Confirm(Window window)
         {
-            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == "")
+            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == string.Empty)
             {
                 var mBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", "Введите новый пароль", ButtonEnum.OkCancel);
                 mBox.Show();
