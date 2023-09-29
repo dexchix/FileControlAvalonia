@@ -8,6 +8,7 @@
     <ApplicationIcon>Assets\CopyModelDifferences_32x32.ico</ApplicationIcon>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <AssemblyName>FileControlAvalonia</AssemblyName>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
