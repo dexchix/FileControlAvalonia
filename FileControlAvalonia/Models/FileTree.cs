@@ -1,16 +1,10 @@
-﻿using Avalonia.Controls;
-using Avalonia.OpenGL;
-using FileControlAvalonia.Core;
-using FileControlAvalonia.FileTreeLogic;
+﻿using FileControlAvalonia.Core;
 using FileControlAvalonia.SettingsApp;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Models
@@ -34,6 +28,8 @@ namespace FileControlAvalonia.Models
         private bool _isChecked;
         private StatusFile _status = StatusFile.Checked;
         private bool _loadChildren;
+        public static int CountSelectedFiles { get; set; } = 0;
+        private static object _lock = new object(); 
         #endregion
 
         #region PROPERTIES
@@ -43,13 +39,21 @@ namespace FileControlAvalonia.Models
             set
             {
                 this.RaiseAndSetIfChanged(ref _isChecked, value);
-                //if (Parent != null && _loadChildren && Parent.Path == SettingsManager.RootPath) { FileTransferBroker.FillListAddedFiles(this, value); }
+
                 if (HasChildren)
                 {
-                    foreach (var child in Children!)
+                    foreach (var child in Children!.ToList())
                     {
-                        //if(_loadChildren)FileTransferBroker.FillListAddedFiles(child, value);
-                        child.IsChecked = value;
+                        //child.IsChecked = value;
+                        Task.Run(() =>
+                        {
+                            child.IsChecked = value;
+                            lock (_lock)
+                            {
+                                if (value == true) CountSelectedFiles++;
+                                else CountSelectedFiles--;
+                            }
+                        });
                     }
                 }
             }
