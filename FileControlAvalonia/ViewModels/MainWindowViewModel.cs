@@ -386,7 +386,7 @@ namespace FileControlAvalonia.ViewModels
             await Task.Run(() =>
             {
                 var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
-                ProgressBarMaximum = newList.Count;
+                ProgressBarMaximum = TotalFiles;
 
                 var comnparator = ParallelProcessing.ParallelComprasion(newList, TotalFiles);
                 //====================

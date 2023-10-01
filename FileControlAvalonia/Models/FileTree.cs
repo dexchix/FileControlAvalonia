@@ -1,7 +1,13 @@
 ﻿using FileControlAvalonia.Core;
 using FileControlAvalonia.SettingsApp;
+using FileControlAvalonia.ViewModels;
+using FileControlAvalonia.Views;
+using Microsoft.CodeAnalysis.FlowAnalysis;
+using OpcXml.Da;
 using ReactiveUI;
+using Splat;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -29,35 +35,132 @@ namespace FileControlAvalonia.Models
         private StatusFile _status = StatusFile.Checked;
         private bool _loadChildren;
         public static int CountSelectedFiles { get; set; } = 0;
-        private static object _lock = new object(); 
+        private static object _lock = new object();
+        public static List<Task> _startedTask = new List<Task>();
+        public static bool progressBarIsActive = false;
+        public static event Action SelectedFolder = FileExplorerWindowViewModel.ChangeStateProgressBarMain;
         #endregion
 
         #region PROPERTIES
         public bool IsChecked
         {
             get => _isChecked;
-            set
+            //set
+            //{
+            //    this.RaiseAndSetIfChanged(ref _isChecked, value);
+
+            //    if (HasChildren)
+            //    {
+            //        FileExplorerWindowViewModel._currentWM.ProgressBarIsVisible = true;
+            //        FileExplorerWindowViewModel._currentWM.ProgressBarLoopScrol = true;
+            //        FileExplorerWindowViewModel._currentWM.EnabledButtons = false;
+            //        foreach (var child in Children!.ToList())
+            //        {
+            //            //Task.Run(() =>
+            //            //{
+            //            //    child.IsChecked = value;
+            //            //    lock (_lock)
+            //            //    {
+            //            //        if (value == true) CountSelectedFiles++;
+            //            //        else CountSelectedFiles--;
+            //            //    }
+            //            //});
+            //            _startedTask.Add(Task.Run(() =>
+            //            {
+            //                child.IsChecked = value;
+            //                lock (_lock)
+            //                {
+            //                    if (value == true) CountSelectedFiles++;
+            //                    else CountSelectedFiles--;
+            //                }
+            //            }));
+            //        }
+            //        CheckSelectedFiles();
+            //    }
+            //}
+            set => SetIsCheckedRecursivelyAsync(value);
+        }
+        public async Task SetIsCheckedRecursivelyAsync(bool value)
+        {
+            //await Task.WhenAll(FileTree._startedTask.ToList());
+            lock (_lock)
             {
                 this.RaiseAndSetIfChanged(ref _isChecked, value);
+                if (value)
+                    CountSelectedFiles++;
+                else
+                    CountSelectedFiles--;
+            }
 
-                if (HasChildren)
+            if (HasChildren)
+            {
+                if (progressBarIsActive == false)
+                    Task.Run(() => SelectedFolder.Invoke());
+
+                List<Task> childTasks = new List<Task>();
+                foreach (var child in Children!.ToList())
                 {
-                    foreach (var child in Children!.ToList())
+                    lock (_lock)
                     {
-                        //child.IsChecked = value;
-                        Task.Run(() =>
+                        Task childTasl = (Task.Run(async () =>
                         {
-                            child.IsChecked = value;
-                            lock (_lock)
-                            {
-                                if (value == true) CountSelectedFiles++;
-                                else CountSelectedFiles--;
-                            }
-                        });
+
+                            if (value)
+                                CountSelectedFiles++;
+                            else
+                                CountSelectedFiles--;
+                            child.SetIsCheckedRecursivelyAsync(value); // Ждем завершения асинхронной задачи
+                        }));
+                        //childTasks.Add(childTasl);
+                        _startedTask.Add(childTasl);
                     }
                 }
+                //await Task.WhenAll(childTasks); // Дождитесь завершения всех асинхронных задач
+
+                //await Task.WhenAll(_startedTask.ToList());
+
+                //ChangeStateProgressBar(false);
             }
         }
+        //public async Task SetIsCheckedRecursivelyAsync(bool value)
+        //{
+        //    this.RaiseAndSetIfChanged(ref _isChecked, value);
+        //    if (value)
+        //        CountSelectedFiles++;
+        //    else
+        //        CountSelectedFiles--;
+
+        //    if (HasChildren)
+        //    {
+        //        if (!progressBarIsActive)
+        //            Task.Run(() => SelectedFolder.Invoke());
+
+        //        var childTasks = new List<Task>();
+        //        foreach (var child in Children!.ToList())
+        //        {
+        //            childTasks.Add(SetChildIsCheckedRecursivelyAsync(child, value));
+        //        }
+
+        //        await Task.WhenAll(childTasks);
+        //    }
+        //}
+
+        //private async Task SetChildIsCheckedRecursivelyAsync(FileTree child, bool value)
+        //{
+        //    // Обновление child.IsChecked и CountSelectedFiles без блокировки, если это безопасно.
+
+        //    if (child.HasChildren)
+        //    {
+        //        var grandChildTasks = new List<Task>();
+        //        foreach (var grandChild in child.Children!.ToList())
+        //        {
+        //            grandChildTasks.Add(SetChildIsCheckedRecursivelyAsync(grandChild, value));
+        //        }
+
+        //        await Task.WhenAll(grandChildTasks);
+        //    }
+        //}
+
         public string EHash
         {
             get => _eHash;

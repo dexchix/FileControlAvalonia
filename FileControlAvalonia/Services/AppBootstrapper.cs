@@ -14,7 +14,12 @@ namespace FileControlAvalonia.Services
     {
         public static void RegisterClasses()
         {
-            Locator.CurrentMutable.Register(() => new FileExplorerWindowViewModel(), typeof(FileExplorerWindowViewModel));
+            //Locator.CurrentMutable.RegisterConstant(()=> new FileExplorerWindowViewModel(), typeof(FileExplorerWindowViewModel));
+
+            Locator.CurrentMutable.RegisterLazySingleton(() => new FileExplorerWindowViewModel(), typeof(FileExplorerWindowViewModel));
+
+
+            //Locator.CurrentMutable.Register(() => new FileExplorerWindowViewModel(), typeof(FileExplorerWindowViewModel));
             Locator.CurrentMutable.Register(() => new SettingsWindowViewModel(), typeof(SettingsWindowViewModel));
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
             Locator.CurrentMutable.RegisterLazySingleton(() => new InfoWindowViewModel(), typeof(InfoWindowViewModel));

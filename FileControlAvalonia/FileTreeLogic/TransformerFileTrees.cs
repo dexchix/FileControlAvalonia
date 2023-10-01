@@ -62,10 +62,6 @@ namespace FileControlAvalonia.Helper
         {
             foreach(var file in element.Children.ToList())
             {
-                if(file.Path == "C:\\Users")
-                {
-
-                }
                 if(!file.IsChecked && !file.IsOpened)
                     element.Children.Remove(file);
                 else if (file.IsOpened && file.IsDirectory)
