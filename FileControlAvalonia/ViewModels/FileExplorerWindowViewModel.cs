@@ -16,6 +16,7 @@ using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
 using Splat;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -28,7 +29,45 @@ namespace FileControlAvalonia.ViewModels
         private FileTree? _fileTree;
         private int _counterSelectedFiles = 0;
         private MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
+        public static FileExplorerWindowViewModel _currentWM;
+        private string _progressBarText;
+        private bool _enabledButtons = true;
+        private bool _progressBarLoopScrol;
+        private bool _progressBarIsVisible = false;
+       
         #endregion
+
+        public static async void ChangeStateProgressBarMain()
+        {
+            Task.Run(async () =>
+            {
+                ChangeState(true);
+                await Task.WhenAll(FileTree._startedTask.ToList());
+                ChangeState(false);
+                FileTree.progressBarIsActive = false;
+                FileTree._startedTask.Clear();
+            });
+    
+        }
+
+        private static void ChangeState(bool active)
+        {
+            if (active)
+            {
+                FileTree.progressBarIsActive = true;
+                FileExplorerWindowViewModel._currentWM.ProgressBarIsVisible = true;
+                FileExplorerWindowViewModel._currentWM.ProgressBarLoopScrol = true;
+                FileExplorerWindowViewModel._currentWM.EnabledButtons = false;
+
+            }
+            else
+            {
+                FileExplorerWindowViewModel._currentWM.ProgressBarIsVisible = false;
+                FileExplorerWindowViewModel._currentWM.ProgressBarLoopScrol = false;
+                FileExplorerWindowViewModel._currentWM.EnabledButtons = true;
+            }
+
+        }
 
         #region PROPERTIES
         public int ItemIndex
@@ -37,6 +76,29 @@ namespace FileControlAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _itemIndex, value);
         }
         public string Extensions { get => SettingsManager.SettingsString!; }
+
+        #region ProgressBar
+        public string ProgressBarText
+        {
+            get => _progressBarText;
+            set => this.RaiseAndSetIfChanged(ref _progressBarText, value);
+        }
+        public bool EnabledButtons
+        {
+            get => _enabledButtons;
+            set => this.RaiseAndSetIfChanged(ref _enabledButtons, value);
+        }
+        public bool ProgressBarLoopScrol
+        {
+            get => _progressBarLoopScrol;
+            set => this.RaiseAndSetIfChanged(ref _progressBarLoopScrol, value);
+        }
+        public bool ProgressBarIsVisible
+        {
+            get => _progressBarIsVisible;
+            set => this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
+        }
+        #endregion
 
         public static IMultiValueConverter FileIconConverter
         {
@@ -66,6 +128,7 @@ namespace FileControlAvalonia.ViewModels
 
         public FileExplorerWindowViewModel()
         {
+            _currentWM = this;
             _fileTreeNavigator = new FileTreeNavigator();
             _fileTree = _fileTreeNavigator.FileTree;
             _fileTreeNavigator.PropertyChanged += OnMyPropertyChanged!;
@@ -119,28 +182,32 @@ namespace FileControlAvalonia.ViewModels
                 window.Close();
 
 
-                await Task.Run(async () =>
-                {
-                    while (true)
-                    {
-                        if (_counterSelectedFiles == FileTree.CountSelectedFiles)
-                        {
-                            FileTree.CountSelectedFiles = 0;
-                            break;
-                        }
-                        _counterSelectedFiles = FileTree.CountSelectedFiles;
-                        await Task.Delay(200);
-                    }
-                });
+                //await Task.WhenAll(FileTree._startedTask.ToList());
+                await Task.WhenAll(FileTree._startedTask.Where(task => task != null).ToList());
 
-                if (_counterSelectedFiles == 0)
-                {
-                    _mainWindowVM.EnabledButtons = true;
-                    _mainWindowVM.ProgressBarLoopScrol = false;
-                    _mainWindowVM.ProgressBarIsVisible = false;
-                    Dispose();
-                    return;
-                };
+                //await Task.Run(async () =>
+                //{
+                //    while (true)
+                //    {
+                //        if (_counterSelectedFiles == FileTree.CountSelectedFiles)
+                //        {
+                //            FileTree.CountSelectedFiles = 0;
+                //            break;
+                //        }
+                //        _counterSelectedFiles = FileTree.CountSelectedFiles;
+                //        await Task.Delay(200);
+                //    }
+                //});
+
+
+                //if (_counterSelectedFiles == 0)
+                //{
+                //    _mainWindowVM.EnabledButtons = true;
+                //    _mainWindowVM.ProgressBarLoopScrol = false;
+                //    _mainWindowVM.ProgressBarIsVisible = false;
+                //    Dispose();
+                //    return;
+                //};
 
                 await TransitFiles();
 
@@ -199,7 +266,6 @@ namespace FileControlAvalonia.ViewModels
             var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
             await Task.Run(async () =>
             {
-
                 var newFileTree = FilesCollectionManager.GetDeepCopyFileTree(transformFileTree);
 
                 childrenTFL = newFileTree.Children;
@@ -209,7 +275,7 @@ namespace FileControlAvalonia.ViewModels
                 var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, false);
                 var newList = FilesCollectionManager.UpdateTreeToList(childrenTFL);
 
-                //ProgressBar======================
+                //ProgressBar========================
                 _mainWindowVM.ProgressBarLoopScrol = false;
                 _mainWindowVM.ProgressBarMaximum = count;
                 //===================================

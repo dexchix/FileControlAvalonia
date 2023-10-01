@@ -57,7 +57,16 @@ namespace FileControlAvalonia.Core
                     {
                         beginComand.Append($"('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
                             $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
-                        continue;
+                        if (etalonFilesCollection.Count == 1)
+                        {
+                            var insertCommandFilesTable = new SQLiteCommand(connection)
+                            {
+                                CommandText = beginComand.ToString()
+                            };
+                            insertCommandFilesTable.ExecuteNonQuery();
+                            break;
+                        }
+                        else continue;
                     }
                     if (i == etalonFilesCollection.Count - 1)
                     {
@@ -81,7 +90,7 @@ namespace FileControlAvalonia.Core
                         };
                         insertCommandFilesTable.ExecuteNonQuery();
                     }
-                    else if (i>1000 && i % 10000 == 1)
+                    else if (i > 1000 && i % 10000 == 1)
                     {
                         beginComand.Clear().Append(startQuery);
                         beginComand.Append($"('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
@@ -134,6 +143,16 @@ namespace FileControlAvalonia.Core
                         if (i == 0)
                         {
                             beginComand.Append($"'{listDelitedFiles[i].Path}'");
+                            if(listDelitedFiles.Count == 1)
+                            {
+                                beginComand.Append($")");
+                                var insertCommandFilesTable = new SQLiteCommand(connection)
+                                {
+                                    CommandText = beginComand.ToString()
+                                };
+                                insertCommandFilesTable.ExecuteNonQuery();
+                                break;
+                            }
                             continue;
                         }
                         if (i == listDelitedFiles.Count - 1)

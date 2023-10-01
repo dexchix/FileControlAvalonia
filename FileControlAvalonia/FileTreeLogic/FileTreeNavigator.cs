@@ -17,8 +17,6 @@ namespace FileControlAvalonia.FileTreeLogic
     public class FileTreeNavigator : ReactiveObject
     {
         #region FIELDS
-        //public static readonly string pathRootFolder = "C:\\1\\5";
-        //public static readonly string pathRootFolder = "/home/orpo/Desktop/1/2";
         public FileTree? fileTree;
         public Watcher? watcher;
         public CancellationTokenSource cts = new CancellationTokenSource();

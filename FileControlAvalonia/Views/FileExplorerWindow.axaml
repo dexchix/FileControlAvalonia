@@ -9,7 +9,7 @@
 	    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		x:Class="FileControlAvalonia.Views.FileExplorerWindow"
 		Icon="/Assets/AddFile.ico"
-	    Width="390" Height="440"
+	    Width="390" Height="460"
 		CanResize="False"
 		ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
@@ -37,7 +37,7 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderBrush="Black" BorderThickness="1">
-	<Grid RowDefinitions="40,*,30">
+	<Grid RowDefinitions="40,*,auto,30" Height="440">
 		<StackPanel>
 			<Button Width="25" Height="25" Margin="5,5,0,0"
 					Command="{Binding GoBackFolderCommand}">
@@ -50,42 +50,70 @@
 			<TextBox Margin="4 5 4 5" Height="10" VerticalAlignment="Top"
 					 Text="{Binding FileTree.Path}" IsReadOnly="True"/>
 		</StackPanel>
-		<ListBox x:Name="FilesListBox" Grid.Row="1" BorderThickness="1" Width="380" Height="330" Margin="0,22,0,0"
+			<ListBox x:Name="FilesListBox" Grid.Row="1" BorderThickness="1" Width="380" VerticalAlignment="Stretch" Margin="0 30 0 0"
 				 Items="{Binding FileTree.Children}" HotKeyManager.HotKey="Right" SelectedIndex="{Binding ItemIndex}"
 				                                   >
-			<ListBox.KeyBindings>
-				<KeyBinding Gesture="Right" Command="{Binding GoToFolderCommand}"/>
-			</ListBox.KeyBindings>
-			<i:Interaction.Behaviors>
-				<ia:EventTriggerBehavior EventName="DoubleTapped">
-					<ia:InvokeCommandAction Command="{Binding GoToFolderCommand}"/>
-				</ia:EventTriggerBehavior>
-			</i:Interaction.Behaviors>
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<StackPanel Orientation="Horizontal" Height="25">
-						<CheckBox IsThreeState="False" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
-						<Image Margin="0,0,0,0" VerticalAlignment="Bottom" Height="25">
-							<Image.Source>
-								<MultiBinding Converter="{x:Static vm:FileExplorerWindowViewModel.FileIconConverter}">
-									<Binding Path="IsDirectory"/>
-									<Binding Path="IsExpanded"/>
-								</MultiBinding>
-							</Image.Source>
-						</Image>
-						<Label Content="{Binding Name}" VerticalAlignment="Stretch"/>
-					</StackPanel>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-			<ListBox.Styles>
-				<Style Selector="ListBox">
-					<Setter Property="IsTabStop" Value="True"></Setter>
-				</Style>
-			</ListBox.Styles>
-		</ListBox>
+				<ListBox.KeyBindings>
+					<KeyBinding Gesture="Right" Command="{Binding GoToFolderCommand}"/>
+				</ListBox.KeyBindings>
+				<i:Interaction.Behaviors>
+					<ia:EventTriggerBehavior EventName="DoubleTapped">
+						<ia:InvokeCommandAction Command="{Binding GoToFolderCommand}"/>
+					</ia:EventTriggerBehavior>
+				</i:Interaction.Behaviors>
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal" Height="25">
+							<!--<CheckBox IsThreeState="False" IsEnabled="{Binding EnabledButtons}"  IsChecked="{Binding IsChecked, Mode=TwoWay}"/>-->
 
-		<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10"
-					HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,10">
+							<CheckBox IsThreeState="False" IsEnabled="{Binding DataContext.EnabledButtons, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"  IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+							
+
+							<Image Margin="0,0,0,0" VerticalAlignment="Bottom" Height="25">
+								<Image.Source>
+									<MultiBinding Converter="{x:Static vm:FileExplorerWindowViewModel.FileIconConverter}">
+										<Binding Path="IsDirectory"/>
+										<Binding Path="IsExpanded"/>
+									</MultiBinding>
+								</Image.Source>
+							</Image>
+							<Label Content="{Binding Name}" VerticalAlignment="Stretch"/>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+				<ListBox.Styles>
+					<Style Selector="ListBox">
+						<Setter Property="IsTabStop" Value="True"></Setter>
+					</Style>
+				</ListBox.Styles>
+			</ListBox>
+			<ProgressBar Name="ProgressBar" Grid.Row="2" HorizontalAlignment="Stretch"  Minimum="0" Maximum="{Binding ProgressBarMaximum}" Value="{Binding ProgressBarValue}"
+			 Height="15" VerticalAlignment="Bottom" Margin="0 0 0 0" IsVisible="{Binding ProgressBarIsVisible}" Foreground="#f90" IsIndeterminate="{Binding ProgressBarLoopScrol}">
+				<ProgressBar.Template>
+					<ControlTemplate>
+						<Grid>
+							<Border x:Name="ProgressBarRoot" ClipToBounds="True" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+								<Panel>
+									<Panel x:Name="DeterminateRoot">
+										<Border CornerRadius="{TemplateBinding CornerRadius}" x:Name="PART_Indicator" Margin="{TemplateBinding Padding}" Background="{TemplateBinding Foreground}" />
+									</Panel>
+									<Panel x:Name="IndeterminateRoot">
+										<Border x:Name="IndeterminateProgressBarIndicator" CornerRadius="{TemplateBinding CornerRadius}" Margin="{TemplateBinding Padding}" Background="{TemplateBinding Foreground}" />
+										<Border x:Name="IndeterminateProgressBarIndicator2" CornerRadius="{TemplateBinding CornerRadius}" Margin="{TemplateBinding Padding}" Background="{TemplateBinding Foreground}" />
+									</Panel>
+								</Panel>
+							</Border>
+							<LayoutTransformControl HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True" Name="PART_LayoutTransformControl">
+								<Label Foreground="Black" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Content="{Binding ProgressBarText}"></Label>
+							</LayoutTransformControl>
+						</Grid>
+					</ControlTemplate>
+				</ProgressBar.Template>
+			</ProgressBar>
+		
+
+		<StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10"
+					HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 7 4 0">
 			<TextBox x:Name="TextBoxExtensions" Width="220" Watermark="png/exe/jpeg/spa/spu"
 					 Text="{Binding Extensions}" IsReadOnly="True" Margin="3 0 0 0">
 
@@ -93,9 +121,11 @@
 			<Button Width="70" Height="30" Content="ОК"
                     HorizontalContentAlignment="Center"
 					Command="{Binding OkCommand}"
+					IsEnabled="{Binding EnabledButtons}"
 					CommandParameter="{Binding ElementName=SelectFilesForm}"/>
 			<Button Width="70" Height="30" Content="Отмена"
                     HorizontalContentAlignment="Center"
+					IsEnabled="{Binding EnabledButtons}"
 					Command="{Binding CancelCommand}"
 					CommandParameter="{Binding ElementName=SelectFilesForm}"/>
 		</StackPanel>
