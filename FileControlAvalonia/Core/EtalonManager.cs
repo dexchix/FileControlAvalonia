@@ -55,8 +55,8 @@ namespace FileControlAvalonia.Core
                 {
                     if (i == 0)
                     {
-                        beginComand.Append($"('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
-                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                        beginComand.Append($"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
                         if (etalonFilesCollection.Count == 1)
                         {
                             var insertCommandFilesTable = new SQLiteCommand(connection)
@@ -70,8 +70,8 @@ namespace FileControlAvalonia.Core
                     }
                     if (i == etalonFilesCollection.Count - 1)
                     {
-                        beginComand.Append($", ('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
-                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
 
                         var insertCommandFilesTable = new SQLiteCommand(connection)
                         {
@@ -81,8 +81,8 @@ namespace FileControlAvalonia.Core
                     }
                     else if (i % 10000 == 0)
                     {
-                        beginComand.Append($", ('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
-                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
 
                         var insertCommandFilesTable = new SQLiteCommand(connection)
                         {
@@ -93,13 +93,14 @@ namespace FileControlAvalonia.Core
                     else if (i > 1000 && i % 10000 == 1)
                     {
                         beginComand.Clear().Append(startQuery);
-                        beginComand.Append($"('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                        beginComand.Append($"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
                     }
 
                     else
                     {
-                        beginComand.Append($", ('{etalonFilesCollection[i].Name.ToString()}', '{etalonFilesCollection[i].Path.ToString()}', '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}'," +
-                            $" '{etalonFilesCollection[i].ELastUpdate}', '{etalonFilesCollection[i].EVersion}', '{etalonFilesCollection[i].EHashSum}', '{etalonFilesCollection[i].ParentPath}', '{etalonFilesCollection[i].Status}', {etalonFilesCollection[i].IsDirectory})");
+                        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
                     }
                 }
             }

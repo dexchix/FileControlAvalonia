@@ -16,7 +16,6 @@ using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
 using Splat;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -44,7 +43,7 @@ namespace FileControlAvalonia.ViewModels
                 ChangeState(true);
                 await Task.WhenAll(FileTree._startedTask.ToList());
                 ChangeState(false);
-                FileTree.progressBarIsActive = false;
+                FileTree.TaskSelectedChildrenIsStarted = false;
                 FileTree._startedTask.Clear();
             });
     
@@ -54,7 +53,6 @@ namespace FileControlAvalonia.ViewModels
         {
             if (active)
             {
-                FileTree.progressBarIsActive = true;
                 FileExplorerWindowViewModel._currentWM.ProgressBarIsVisible = true;
                 FileExplorerWindowViewModel._currentWM.ProgressBarLoopScrol = true;
                 FileExplorerWindowViewModel._currentWM.EnabledButtons = false;
@@ -151,6 +149,7 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancelCommand(Window window)
         {
+
             if (FileTree != null)
             {
                 if (_fileTreeNavigator.watcher != null)
@@ -182,8 +181,10 @@ namespace FileControlAvalonia.ViewModels
                 window.Close();
 
 
+
+
                 //await Task.WhenAll(FileTree._startedTask.ToList());
-                await Task.WhenAll(FileTree._startedTask.Where(task => task != null).ToList());
+
 
                 //await Task.Run(async () =>
                 //{
@@ -314,12 +315,10 @@ namespace FileControlAvalonia.ViewModels
 
         }
         #endregion
-    }
-    public class AAAA
-    {
-        public virtual void SSSS()
-        {
+
+        ~FileExplorerWindowViewModel(){
 
         }
     }
+  
 }
