@@ -47,61 +47,140 @@ namespace FileControlAvalonia.Core
                     };
                     commandClearTableFiles.ExecuteNonQuery();
                 }
+                #region OLD_Logic
+                //string startQuery = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) VALUES";
+                //StringBuilder beginComand = new StringBuilder(startQuery);
 
-                string startQuery = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) VALUES";
-                StringBuilder beginComand = new StringBuilder(startQuery);
+                //for (int i = 0; i < etalonFilesCollection.Count; i++)
+                //{
+                //    if (i == 0)
+                //    {
+                //        beginComand.Append($"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                //            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
+                //        if (etalonFilesCollection.Count == 1)
+                //        {
+                //            var insertCommandFilesTable = new SQLiteCommand(connection)
+                //            {
+                //                CommandText = beginComand.ToString()
+                //            };
+                //            insertCommandFilesTable.ExecuteNonQuery();
+                //            break;
+                //        }
+                //        else continue;
+                //    }
+                //    if (i == etalonFilesCollection.Count - 1)
+                //    {
+                //        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                //            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory});");
 
-                for (int i = 0; i < etalonFilesCollection.Count; i++)
+                //        var insertCommandFilesTable = new SQLiteCommand(connection)
+                //        {
+                //            CommandText = beginComand.ToString()
+                //        };
+
+                //            insertCommandFilesTable.ExecuteNonQuery();
+
+                //    }
+                //    else if (i % 10000 == 0)
+                //    {
+                //        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                //            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory});");
+
+                //        var insertCommandFilesTable = new SQLiteCommand(connection)
+                //        {
+                //            CommandText = beginComand.ToString()
+                //        };
+                //        insertCommandFilesTable.ExecuteNonQuery();
+                //    }
+                //    else if (i > 1000 && i % 10000 == 1)
+                //    {
+                //        beginComand.Clear().Append(startQuery);
+                //        beginComand.Append($"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                //            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
+                //    }
+
+                //    else
+                //    {
+                //        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                //            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
+                //    }
+                //}
+                #endregion
+
+                //string startQuery = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) VALUES";
+                //StringBuilder beginComand = new StringBuilder(startQuery);
+
+                //for (int i = 0; i < etalonFilesCollection.Count; i++)
+                //{
+                //    string insertFile = $"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
+                //            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status.ToString()}', {@etalonFilesCollection[i].IsDirectory.ToString()})";
+                //    if (i == 0)
+                //    {
+                //        beginComand.Append(insertFile);
+                //        if (etalonFilesCollection.Count == 1)
+                //        {
+                //            var insertCommandFilesTable = new SQLiteCommand(connection)
+                //            {
+                //                CommandText = $"{beginComand};"
+                //            };
+                //            insertCommandFilesTable.ExecuteNonQuery();
+
+
+                //            break;
+                //        }
+                //        else continue;
+                //    }
+                //    if (i == etalonFilesCollection.Count - 1)
+                //    {
+                //        beginComand.Append($", {insertFile};");
+
+                //        var insertCommandFilesTable = new SQLiteCommand(connection)
+                //        {
+                //            CommandText = beginComand.ToString()
+                //        };
+                //        insertCommandFilesTable.ExecuteNonQuery();
+                //    }
+                //    else if (i % 10000 == 0)
+                //    {
+                //        beginComand.Append($", {insertFile};");
+
+                //        var insertCommandFilesTable = new SQLiteCommand(connection)
+                //        {
+                //            CommandText = beginComand.ToString()
+                //        };
+                //        insertCommandFilesTable.ExecuteNonQuery();
+                //    }
+                //    else if (i > 1000 && i % 10000 == 1)
+                //    {
+                //        beginComand.Clear().Append(startQuery);
+                //        beginComand.Append(insertFile);
+                //    }
+
+                //    else
+                //    {
+                //        beginComand.Append($", {insertFile}");
+                //    }
+                //}
+
+                foreach (var file in etalonFilesCollection)
                 {
-                    if (i == 0)
+                    var command = "INSERT INTO FilesTable (Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory) " +
+                                      $"VALUES ('{file.Name.ToString()}', '{file.Path.ToString()}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ELastUpdate}', '{file.EVersion}', '{file.EHashSum}', '{file.ParentPath}', '{file.Status}', {file.IsDirectory});";
+                    string command1 = command;
+                    var insertCommandFilesTable = new SQLiteCommand(connection)
                     {
-                        beginComand.Append($"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
-                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
-                        if (etalonFilesCollection.Count == 1)
+                        CommandText = command
+                    };
+   
+                        insertCommandFilesTable.ExecuteNonQuery();
+                        if (!createEalon)
                         {
-                            var insertCommandFilesTable = new SQLiteCommand(connection)
-                            {
-                                CommandText = beginComand.ToString()
-                            };
-                            insertCommandFilesTable.ExecuteNonQuery();
-                            break;
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавление {file.Path}";
                         }
-                        else continue;
-                    }
-                    if (i == etalonFilesCollection.Count - 1)
-                    {
-                        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
-                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
+                        else
+                            Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
 
-                        var insertCommandFilesTable = new SQLiteCommand(connection)
-                        {
-                            CommandText = beginComand.ToString()
-                        };
-                        insertCommandFilesTable.ExecuteNonQuery();
-                    }
-                    else if (i % 10000 == 0)
-                    {
-                        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
-                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
-
-                        var insertCommandFilesTable = new SQLiteCommand(connection)
-                        {
-                            CommandText = beginComand.ToString()
-                        };
-                        insertCommandFilesTable.ExecuteNonQuery();
-                    }
-                    else if (i > 1000 && i % 10000 == 1)
-                    {
-                        beginComand.Clear().Append(startQuery);
-                        beginComand.Append($"('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
-                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
-                    }
-
-                    else
-                    {
-                        beginComand.Append($", ('{@etalonFilesCollection[i].Name.ToString()}', '{@etalonFilesCollection[i].Path.ToString()}', '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}'," +
-                            $" '{@etalonFilesCollection[i].ELastUpdate}', '{@etalonFilesCollection[i].EVersion}', '{@etalonFilesCollection[i].EHashSum}', '{@etalonFilesCollection[i].ParentPath}', '{@etalonFilesCollection[i].Status}', {@etalonFilesCollection[i].IsDirectory})");
-                    }
                 }
             }
         }
