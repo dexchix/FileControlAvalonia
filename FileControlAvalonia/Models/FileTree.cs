@@ -1,7 +1,9 @@
-﻿using FileControlAvalonia.Core;
+﻿using Avalonia.Input.TextInput;
+using FileControlAvalonia.Core;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.ViewModels;
 using ReactiveUI;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,46 +18,34 @@ namespace FileControlAvalonia.Models
     {
         #region FIELDS
         public static int _counter { get; set; } = -1;
-        private string _eHash;
-        private string _fHash;
-        private string _eLastUpdate;
-        private string _fLastUpdate;
-        private string _eVersion;
-        private string _fVersion;
-        private string _path;
-        private string _name;
+        private string? _eHash;
+        private string? _fHash;
+        private string? _eLastUpdate;
+        private string? _fLastUpdate;
+        private string? _eVersion;
+        private string? _fVersion;
+        private string? _path;
+        private string? _name;
         private ObservableCollection<FileTree>? _children;
         private bool _hasChildren = true;
         private bool _isExpanded;
         private bool _isChecked;
         private StatusFile _status = StatusFile.Checked;
         private bool _loadChildren;
-        public static int CountSelectedFiles { get; set; } = 0;
         private static object _lock = new object();
         public static List<Task> _startedTask = new List<Task>();
         public static event Action SelectedFolder = FileExplorerWindowViewModel.ChangeStateProgressBarMain;
-        public static bool TaskSelectedChildrenIsStarted { get; set; } = false;
-        public static int Count = 0;
+        public static bool TaskSelectedChildrenIsStarted = false;
         #endregion
 
         #region PROPERTIES
+
+        [PrimaryKey, AutoIncrement]
+        public int ID { get; set; }
+        [Ignore]
         public bool IsChecked
         {
             get => _isChecked;
-            //set
-            //{
-            //    this.RaiseAndSetIfChanged(ref _isChecked, value);
-            //    Count++;
-
-            //    if (HasChildren)
-            //    {
-            //        foreach (var child in Children!.ToList())
-            //        {
-            //            child.IsChecked = value;
-            //        }
-            //    }
-            //}
-
             set
             {
                 this.RaiseAndSetIfChanged(ref _isChecked, value);
@@ -74,17 +64,8 @@ namespace FileControlAvalonia.Models
                 }
             }
         }
-        private void SelectedChildren(bool value, FileTree fileTree)
-        {
-            foreach (var child in fileTree.Children!.ToList())
-            {
-                lock (_lock)
-                {
-                    child.IsChecked = value;
-                }
-                if (child.IsDirectory) SelectedChildren(value, child);
-            }
-        }
+
+        public string ParentPath { get; set; }
 
         public string EHash
         {
@@ -116,6 +97,7 @@ namespace FileControlAvalonia.Models
             get => _fVersion;
             set => this.RaiseAndSetIfChanged(ref _fVersion, value);
         }
+        [Column("Status")]
         public StatusFile Status
         {
             get => _status;
@@ -131,20 +113,25 @@ namespace FileControlAvalonia.Models
             get => _name;
             set => this.RaiseAndSetIfChanged(ref _name, value);
         }
+        [Ignore]
         public bool HasChildren
         {
             get => _hasChildren;
             set => this.RaiseAndSetIfChanged(ref _hasChildren, value);
         }
+        [Ignore]
         public bool IsExpanded
         {
             get => _isExpanded;
             set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
         }
+        [Ignore]
         public bool IsOpened { get; set; }
 
         public bool IsDirectory { get; }
+        [Ignore]
         public FileTree? Parent { get; set; }
+        [Ignore]
         public ObservableCollection<FileTree>? Children
         {
             get
@@ -168,6 +155,22 @@ namespace FileControlAvalonia.Models
             _isChecked = false;
             Parent = parent;
             _loadChildren = loadChildren;
+        }
+        public FileTree()
+        {
+
+        }
+
+        private void SelectedChildren(bool value, FileTree fileTree)
+        {
+            foreach (var child in fileTree.Children!.ToList())
+            {
+                lock (_lock)
+                {
+                    child.IsChecked = value;
+                }
+                if (child.IsDirectory) SelectedChildren(value, child);
+            }
         }
 
         private ObservableCollection<FileTree>? LoadChildren()

@@ -32,8 +32,10 @@ namespace FileControlAvalonia.Core
         public async static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
             FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
-            var converter = new DataBase.DataBaseConverter();
-            var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
+            //var converter = new DataBase.DataBaseConverter();
+            //var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
+
+            var listFiles = FilesCollectionManager.UpdateTreeToList(mainFileTreeCollection);
 
             //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
 
@@ -48,26 +50,34 @@ namespace FileControlAvalonia.Core
                     commandClearTableFiles.ExecuteNonQuery();
                 }
                 var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
-                await asyncConnection.InsertAllAsync(etalonFilesCollection);
+                await asyncConnection.InsertAllAsync(listFiles);
             }
         }
 
-        public static ObservableCollection<FileTree> GetEtalon()
+        public static async Task<ObservableCollection<FileTree>> GetEtalon()
         {
-            List<FileDB> etalon;
+            //List<FileDB> etalon;
 
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            {
-                var command = new SQLiteCommand(connection)
-                {
-                    CommandText = "SELECT Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory FROM FileDB"
-                };
-                etalon = command.ExecuteQuery<FileDB>();
-            }
-            var converter = new DataBaseConverter();
-            var etalonInDBContext = converter.ConvertFormatDBToFileTreeCollection(etalon);
-            FileTree._counter = -1;
-            return etalonInDBContext;
+            //using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            //{
+            //    var command = new SQLiteCommand(connection)
+            //    {
+            //        CommandText = "SELECT Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory FROM FileDB"
+            //    };
+            //    etalon = command.ExecuteQuery<FileDB>();
+            //}
+            //var converter = new DataBaseConverter();
+            //var etalonInDBContext = converter.ConvertFormatDBToFileTreeCollection(etalon);
+            //FileTree._counter = -1;
+            //return etalonInDBContext;
+
+            var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
+            var files = asyncConnection.Table<FileTree>();
+
+            var werwe =  await files.ToListAsync();
+            
+           
+            return null;
         }
 
         public static async void DeliteFileInDB(FileTree file)

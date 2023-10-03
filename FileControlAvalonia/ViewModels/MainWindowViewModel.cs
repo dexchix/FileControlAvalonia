@@ -511,7 +511,8 @@ namespace FileControlAvalonia.ViewModels
             {
                 try
                 {
-                    MainFileTreeCollection = EtalonManager.GetEtalon();
+                    var dawdw = EtalonManager.GetEtalon();
+                    //MainFileTreeCollection = EtalonManager.GetEtalon();
                     comparator.CompareFiles(MainFileTreeCollection);
                 }
                 catch
