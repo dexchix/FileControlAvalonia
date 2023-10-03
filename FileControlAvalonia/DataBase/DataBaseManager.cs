@@ -40,18 +40,18 @@ namespace FileControlAvalonia.DataBase
         {
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FileDB(
+                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FileTree(
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                  Name TEXT,
                                                  Path TEXT,
                                                  ELastUpdate TEXT,
                                                  EVersion TEXT,
-                                                 EHashSum TEXT,
+                                                 EHash TEXT,
                                                  FLastUpdate TEXT,
                                                  FVersion TEXT,
-                                                 FHashSum TEXT,
+                                                 FHash TEXT,
                                                  ParentPath TEXT,
-                                                 Status TEXT,
+                                                 Status INTEGER,
                                                  IsDirectory BOOLEAN
                                              );";
 
