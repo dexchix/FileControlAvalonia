@@ -40,7 +40,7 @@ namespace FileControlAvalonia.DataBase
         {
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FilesTable (
+                string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FileDB(
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                  Name TEXT,
                                                  Path TEXT,
