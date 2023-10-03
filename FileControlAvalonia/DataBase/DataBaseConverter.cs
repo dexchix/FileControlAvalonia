@@ -161,7 +161,7 @@ namespace FileControlAvalonia.DataBase
                             lock (_lock)
                             {
                                 var file = filesDictionary[files[i].Path];
-                                if (files[i].ParentPath != string.Empty)
+                                if (files[i].ParentPath != null && files[i].ParentPath != string.Empty)
                                 {
                                     var fileParent = filesDictionary[files[i].ParentPath];
                                     if (fileParent != null)
