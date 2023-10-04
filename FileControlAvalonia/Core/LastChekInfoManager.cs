@@ -62,44 +62,15 @@ namespace FileControlAvalonia.Core
             SetInfoOfStatusFiles(mainCollection);
             using (var connection = new SQLiteConnection(DataBaseOptions.Options))
             {
-                if (_partialChecked.Count != 0)
-                {
-                    foreach (var file in _partialChecked)
-                    {
-                        UpdateFactInfoInDB(file, connection);
-                    }
-                }
-                if (_failedChecked.Count != 0)
-                { 
-                    foreach (var file in _failedChecked)
-                    {
-                        UpdateFactInfoInDB(file, connection);
-                    }
-                }
-                if(_notFound.Count != 0)
-                {
-                    foreach (var file in _notFound)
-                    {
-                        UpdateFactInfoInDB(file, connection);
-                    }
-                }
-                if (_notChecked.Count != 0)
-                {
-                    foreach (var file in _notChecked)
-                    {
-                        UpdateFactInfoInDB(file, connection);
-                    }
-                }
-            }
-        }
+                List<FileTree> combinedList = _partialChecked
+                                               .Concat(_failedChecked)
+                                               .Concat(_noAccess)
+                                               .Concat(_notFound)
+                                               .Concat(_notChecked)
+                                               .ToList();
 
-        public static void UpdateFactInfoInDB(FileTree file, SQLiteConnection connection)
-        {
-            var updateFactCommand = new SQLiteCommand(connection)
-            {
-                CommandText = $"UPDATE FileDB SET FHashSum = '{file.FHash}', FLastUpdate = '{file.FLastUpdate}', FVersion = '{file.FVersion}'  WHERE Path = '{file.Path}';"
-            };
-            updateFactCommand.ExecuteNonQuery();
+                connection.UpdateAll(combinedList);
+            }
         }
     }
 }

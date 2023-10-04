@@ -19,156 +19,59 @@ namespace FileControlAvalonia.Core
 {
     public static class EtalonManager
     {
-        //public static ObservableCollection<FileTree> CurentEtalon = GetEtalon();
-        //public static EtalonAndChecksInfoDB CheckInfo = GetInfo();
-
-
-
         /// <summary>
         /// Добавляет файлы в эталон (БД) или создает новый (перезаполняет таблицу в БД).
         /// </summary>
         /// <param name="mainFileTreeCollection"></param>
         /// <param name="createEalon">Если true - создает эталон, если false - добавляет файлы</param>
-        public async static void AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
+        public async static Task AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
             FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
-            //var converter = new DataBase.DataBaseConverter();
-            //var etalonFilesCollection = converter.ConvertFormatFileTreeToDB(mainFileTreeCollection);
 
             var listFiles = FilesCollectionManager.UpdateTreeToList(mainFileTreeCollection);
 
-            //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = etalonFilesCollection.Count;
+            var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
 
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            {
-                if (createEalon == true)
-                {
-                    var commandClearTableFiles = new SQLiteCommand(connection)
-                    {
-                        CommandText = "DELETE FROM FileDB"
-                    };
-                    commandClearTableFiles.ExecuteNonQuery();
-                }
-                var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
-                await asyncConnection.InsertAllAsync(listFiles);
-            }
+            if (createEalon == true)
+                await asyncConnection.DeleteAllAsync<FileTree>();
+
+            await asyncConnection.InsertAllAsync(listFiles);
+
+            asyncConnection.CloseAsync();
+
         }
 
         public static async Task<ObservableCollection<FileTree>> GetEtalon()
         {
-            //List<FileDB> etalon;
-
-            //using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-            //{
-            //    var command = new SQLiteCommand(connection)
-            //    {
-            //        CommandText = "SELECT Name, Path, ELastUpdate, EVersion, EHashSum, FLastUpdate, FVersion, FHashSum, ParentPath, Status, IsDirectory FROM FileDB"
-            //    };
-            //    etalon = command.ExecuteQuery<FileDB>();
-            //}
-            //var converter = new DataBaseConverter();
-            //var etalonInDBContext = converter.ConvertFormatDBToFileTreeCollection(etalon);
-            //FileTree._counter = -1;
-            //return etalonInDBContext;
 
             var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
-            var files = asyncConnection.Table<FileTree>();
+            var files = await asyncConnection.Table<FileTree>().ToListAsync();
+            var outputCollection = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(files);
+            await asyncConnection.CloseAsync();
 
-            var werwe =  await files.ToListAsync();
-            
-           
-            return null;
+            return outputCollection;
         }
 
-        public static async void DeliteFileInDB(FileTree file)
+        public static async Task DeliteFileInDB(FileTree file)
         {
+            var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
+
             if (file.Children != null)
             {
-                var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() { file });
-                listDelitedFiles.Reverse();
+                var listFiles = FilesCollectionManager.UpdateTreeToList(new ObservableCollection<FileTree>() { file });
 
-                Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = listDelitedFiles.Count;
+                var primaryKeysToDelete = listFiles.Select(obj => obj.ID).ToArray();
+                string placeholders = string.Join(",", primaryKeysToDelete);
 
-                //var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
-                //foreach(var fileee in listDelitedFiles)
-                //{
-                //    await asyncConnection.Delete
-                //}
-
-
-                using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-                {
-                    //connection.Up
-                    //connection.Delete
-                }
-
-                //using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-                //{
-
-                    //    string startQuery = "DELETE FROM FileDB WHERE Path IN (";
-                    //    StringBuilder beginComand = new StringBuilder(startQuery);
-
-                    //    for (int i = 0; i < listDelitedFiles.Count; i++)
-                    //    {
-                    //        if (i == 0)
-                    //        {
-                    //            beginComand.Append($"'{listDelitedFiles[i].Path}'");
-                    //            if (listDelitedFiles.Count == 1)
-                    //            {
-                    //                beginComand.Append($")");
-                    //                var insertCommandFilesTable = new SQLiteCommand(connection)
-                    //                {
-                    //                    CommandText = beginComand.ToString()
-                    //                };
-                    //                insertCommandFilesTable.ExecuteNonQuery();
-                    //                break;
-                    //            }
-                    //            continue;
-                    //        }
-                    //        if (i == listDelitedFiles.Count - 1)
-                    //        {
-                    //            beginComand.Append($", '{listDelitedFiles[i].Path}')");
-
-                    //            var insertCommandFilesTable = new SQLiteCommand(connection)
-                    //            {
-                    //                CommandText = beginComand.ToString()
-                    //            };
-                    //            insertCommandFilesTable.ExecuteNonQuery();
-                    //        }
-                    //        else if (i % 10000 == 0)
-                    //        {
-                    //            beginComand.Append($", '{listDelitedFiles[i].Path}')");
-
-                    //            var insertCommandFilesTable = new SQLiteCommand(connection)
-                    //            {
-                    //                CommandText = beginComand.ToString()
-                    //            };
-                    //            insertCommandFilesTable.ExecuteNonQuery();
-                    //        }
-                    //        else if (i > 1000 && i % 10000 == 1)
-                    //        {
-                    //            beginComand.Clear().Append(startQuery);
-                    //            beginComand.Append($"'{listDelitedFiles[i].Path}'");
-                    //        }
-
-                    //        else
-                    //        {
-                    //            beginComand.Append($", '{listDelitedFiles[i].Path}'");
-                    //        }
-                    //    }
-                    //}
+                string deleteQuery = $"DELETE FROM FileTree WHERE ID IN ({placeholders})";
+                await asyncConnection.ExecuteAsync(deleteQuery);
+                await asyncConnection.CloseAsync();
             }
             else
             {
-                var listDelitedFiles = new DataBaseConverter().ConvertFormatFileTreeToDB(new ObservableCollection<FileTree>() { file });
-                using (var connection = new SQLiteConnection(DataBaseOptions.Options))
-                {
-                    var insertCommandFilesTable = new SQLiteCommand(connection)
-                    {
-                        CommandText = $"DELETE FROM FileDB WHERE Path = '{file.Path}';"
-                    };
-                    insertCommandFilesTable.ExecuteNonQuery();
-                }
+                string deleteQuery = $"DELETE FROM FileTree WHERE ID = {file.ID}";
+                await asyncConnection.ExecuteAsync(deleteQuery);
+                await asyncConnection.CloseAsync();
             }
         }
         public static EtalonAndChecksInfoDB GetInfo()

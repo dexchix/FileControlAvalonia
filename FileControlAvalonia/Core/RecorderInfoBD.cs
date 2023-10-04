@@ -26,6 +26,7 @@ namespace FileControlAvalonia.Core
                 insertInfoCommand.ExecuteNonQuery();
             }
         }
+        
         /// <summary>
         /// Записывает в БД актуальную и
         /// </summary>

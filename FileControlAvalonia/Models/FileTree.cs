@@ -36,6 +36,7 @@ namespace FileControlAvalonia.Models
         public static List<Task> _startedTask = new List<Task>();
         public static event Action SelectedFolder = FileExplorerWindowViewModel.ChangeStateProgressBarMain;
         public static bool TaskSelectedChildrenIsStarted = false;
+        public string _parentPath;
         #endregion
 
         #region PROPERTIES
@@ -65,7 +66,13 @@ namespace FileControlAvalonia.Models
             }
         }
 
-        public string ParentPath { get; set; }
+        public string ParentPath
+        {
+            get => _parentPath;
+
+            set => _parentPath = value;
+
+        }
 
         public string EHash
         {
@@ -113,7 +120,7 @@ namespace FileControlAvalonia.Models
             get => _name;
             set => this.RaiseAndSetIfChanged(ref _name, value);
         }
-        [Ignore]
+
         public bool HasChildren
         {
             get => _hasChildren;
@@ -128,7 +135,7 @@ namespace FileControlAvalonia.Models
         [Ignore]
         public bool IsOpened { get; set; }
 
-        public bool IsDirectory { get; }
+        public bool IsDirectory { get; set; }
         [Ignore]
         public FileTree? Parent { get; set; }
         [Ignore]
@@ -155,6 +162,18 @@ namespace FileControlAvalonia.Models
             _isChecked = false;
             Parent = parent;
             _loadChildren = loadChildren;
+
+
+
+            if (Parent != null)
+            {
+                if (Parent.Path == SettingsManager.RootPath)
+                    ParentPath = null;
+                else
+                    ParentPath =  Parent.Path;
+            }
+            else
+                ParentPath = null;
         }
         public FileTree()
         {
@@ -223,7 +242,7 @@ namespace FileControlAvalonia.Models
         }
         public override string ToString()
         {
-            return Path;
+            return $"{Path} | ID = {ID}";
         }
     }
 }
