@@ -175,44 +175,12 @@ namespace FileControlAvalonia.ViewModels
                 _mainWindowVM.ProgressBarValue = 0;
                 _mainWindowVM.EnabledButtons = false;
 
-                //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Вычисление параметров";
-
-                //Locator.Current.GetService(typeof(MainWindowViewModel)).
                 window.Close();
 
 
-
-
-                //await Task.WhenAll(FileTree._startedTask.ToList());
-
-
-                //await Task.Run(async () =>
-                //{
-                //    while (true)
-                //    {
-                //        if (_counterSelectedFiles == FileTree.CountSelectedFiles)
-                //        {
-                //            FileTree.CountSelectedFiles = 0;
-                //            break;
-                //        }
-                //        _counterSelectedFiles = FileTree.CountSelectedFiles;
-                //        await Task.Delay(200);
-                //    }
-                //});
-
-
-                //if (_counterSelectedFiles == 0)
-                //{
-                //    _mainWindowVM.EnabledButtons = true;
-                //    _mainWindowVM.ProgressBarLoopScrol = false;
-                //    _mainWindowVM.ProgressBarIsVisible = false;
-                //    Dispose();
-                //    return;
-                //};
-
                 await TransitFiles();
 
-                Dispose();
+                //Dispose();
             }
             else window.Close();
 
@@ -267,13 +235,11 @@ namespace FileControlAvalonia.ViewModels
             var transformFileTree = new TransformerFileTrees(FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree)).GetUpdatedFileTree();
             await Task.Run(async () =>
             {
-                var newFileTree = FilesCollectionManager.GetDeepCopyFileTree(transformFileTree);
-
-                childrenTFL = newFileTree.Children;
+                childrenTFL = transformFileTree.Children;
                 foreach (var children in childrenTFL.ToList())
                     children.Parent = null;
 
-                var count = FilesCollectionManager.GetCountElementsByFileTree(newFileTree, false);
+                var count = FilesCollectionManager.GetCountElementsByFileTree(transformFileTree, false);
                 var newList = FilesCollectionManager.UpdateTreeToList(childrenTFL);
 
                 //ProgressBar========================
@@ -294,9 +260,6 @@ namespace FileControlAvalonia.ViewModels
                 var rootParent = FileTreeNavigator.SearchFileInFileTree(SettingsManager.RootPath, FileTree);
                 FilesCollectionManager.FileTreeDestroction(rootParent);
                 rootParent = null;
-
-
-
 
                 _fileTreeNavigator.PropertyChanged -= OnMyPropertyChanged;
                 _fileTreeNavigator.FileTree = null;

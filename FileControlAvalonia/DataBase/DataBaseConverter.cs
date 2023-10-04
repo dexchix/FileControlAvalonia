@@ -1,12 +1,8 @@
-﻿using FileControlAvalonia.Core;
-using FileControlAvalonia.FileTreeLogic;
+﻿using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.DataBase
@@ -16,16 +12,9 @@ namespace FileControlAvalonia.DataBase
         private object _lock = new object();
         private int _count = 0;
         private int fileCounter = 0;
-        public List<FileDB> ConvertFormatFileTreeToDB(ObservableCollection<FileTree> mainFileTreeCollection)
+
+        public ObservableCollection<FileTree> ConvertFormatDBToFileTreeCollection(List<FileTree> files)
         {
-            var filesToDB = new List<FileDB>();
-            FillDBListFiles(mainFileTreeCollection, filesToDB);
-            fileCounter = 0;
-            return filesToDB;
-        }
-        public ObservableCollection<FileTree> ConvertFormatDBToFileTreeCollection(List<FileDB> files)
-        {
-            var startTime = DateTime.Now;
             var etalon = new ObservableCollection<FileTree>();
             var filesDictionary = new Dictionary<string, FileTree>();
 
@@ -35,42 +24,15 @@ namespace FileControlAvalonia.DataBase
             {
                 while (fileCounter < files.Count)
                 {
-                    if (files[fileCounter].ParentPath == string.Empty)
+                    if (files[fileCounter].ParentPath == null || files[fileCounter].ParentPath == string.Empty)
                     {
-                        var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false)
-                        {
-                            EHash = files[fileCounter].EHashSum,
-                            ELastUpdate = files[fileCounter].ELastUpdate,
-                            EVersion = files[fileCounter].EVersion,
-
-                            FHash = files[fileCounter].FHashSum,
-                            FLastUpdate = files[fileCounter].FLastUpdate,
-                            FVersion = files[fileCounter].FVersion,
-
-                            Status = files[fileCounter].Status,
-                        };
-
-                        etalon.Add(addFile);
+                        etalon.Add(files[fileCounter]);
                         fileCounter++;
                     }
                     else
                     {
-                        var addFile = new FileTree(files[fileCounter].Path, files[fileCounter].IsDirectory, false,
-                                                   FileTreeNavigator.SeachFileInFilesCollection(files[fileCounter].ParentPath, etalon))
-                        {
-                            EHash = files[fileCounter].EHashSum,
-                            ELastUpdate = files[fileCounter].ELastUpdate,
-                            EVersion = files[fileCounter].EVersion,
-
-                            FHash = files[fileCounter].FHashSum,
-                            FLastUpdate = files[fileCounter].FLastUpdate,
-                            FVersion = files[fileCounter].FVersion,
-
-                            Status = files[fileCounter].Status,
-                        };
-
-                        var parent = FileTreeNavigator.SeachFileInFilesCollection(Path.GetDirectoryName(addFile.Path)!, etalon);
-                        parent.Children!.Add(addFile);
+                        var parent = FileTreeNavigator.SeachFileInFilesCollection(Path.GetDirectoryName(files[fileCounter].Path)!, etalon);
+                        parent.Children!.Add(files[fileCounter]);
                         fileCounter++;
                     }
                 }
@@ -92,23 +54,11 @@ namespace FileControlAvalonia.DataBase
                     {
                         for (int i = localStart; i < localLimit; i++)
                         {
-                            var addFile = new FileTree(files[i].Path, files[i].IsDirectory, false)
-                            {
-                                EHash = files[i].EHashSum,
-                                ELastUpdate = files[i].ELastUpdate,
-                                EVersion = files[i].EVersion,
-
-                                FHash = files[i].FHashSum,
-                                FLastUpdate = files[i].FLastUpdate,
-                                FVersion = files[i].FVersion,
-
-                                Status = files[i].Status,
-                            };
                             lock (_lock)
                             {
-                                filesDictionary.Add(addFile.Path, addFile);
-                                if (files[i].ParentPath == string.Empty)
-                                    rootsDictionary.Add(addFile);
+                                filesDictionary.Add(files[i].Path, files[i]);
+                                if (files[i].ParentPath == null || files[i].ParentPath == string.Empty)
+                                    rootsDictionary.Add(files[i]);
                                 _count++;
                             }
                         }
@@ -116,23 +66,11 @@ namespace FileControlAvalonia.DataBase
                 }
                 for (int i = files.Count - residue; i < files.Count; i++)
                 {
-                    var addFile = new FileTree(files[i].Path, files[i].IsDirectory, false)
-                    {
-                        EHash = files[i].EHashSum,
-                        ELastUpdate = files[i].ELastUpdate,
-                        EVersion = files[i].EVersion,
-
-                        FHash = files[i].FHashSum,
-                        FLastUpdate = files[i].FLastUpdate,
-                        FVersion = files[i].FVersion,
-
-                        Status = files[i].Status,
-                    };
                     lock (_lock)
                     {
-                        filesDictionary.Add(addFile.Path, addFile);
+                        filesDictionary.Add(files[i].Path, files[i]);
                         if (files[i].ParentPath == string.Empty)
-                            rootsDictionary.Add(addFile);
+                            rootsDictionary.Add(files[i]);
                         _count++;
                     }
                 }
@@ -205,38 +143,9 @@ namespace FileControlAvalonia.DataBase
                 {
                     etalon.Add(file);
                 }
-                var end = DateTime.Now;
                 return etalon;
             }
 
-        }
-
-        public void FillDBListFiles(ObservableCollection<FileTree> mainFileTreeCollection, List<FileDB> filesDB)
-        {
-            foreach (var file in mainFileTreeCollection.ToList())
-            {
-
-                if (file.IsDirectory)
-                {
-                    FileDB addedFileDB;
-                    if (file.Parent == null)
-                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, null, file.IsDirectory) { Status = file.Status };
-                    else
-                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path, file.IsDirectory) { Status = file.Status };
-                    filesDB.Add(addedFileDB);
-
-                    FillDBListFiles(file.Children, filesDB);
-                }
-                else
-                {
-                    FileDB addedFileDB;
-                    if (file.Parent == null)
-                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, null, file.IsDirectory) { Status = file.Status };
-                    else
-                        addedFileDB = new FileDB(file.Name, file.Path, file.ELastUpdate, file.EVersion, file.EHash, file.FLastUpdate, file.FVersion, file.FHash, file.Parent.Path, file.IsDirectory) { Status = file.Status };
-                    filesDB.Add(addedFileDB);
-                }
-            }
         }
     }
 }

@@ -299,10 +299,8 @@ namespace FileControlAvalonia.ViewModels
 
                 FileStats fileStats = new FileStats();
 
-                await Task.Run(() =>
-                {
-                    FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree, fileStats);
-                });
+                await FilesCollectionManager.AddFiles(MainFileTreeCollection, transportFileTree, fileStats);
+
                 FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
                 ProgressBarLoopScrol = false;
@@ -442,7 +440,7 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarValue = 0;
             int countFiles = 0;
 
-            await Task.Run(() => EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true));
+            await EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true);
             
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
@@ -511,8 +509,8 @@ namespace FileControlAvalonia.ViewModels
             {
                 try
                 {
-                    var dawdw = EtalonManager.GetEtalon();
-                    //MainFileTreeCollection = EtalonManager.GetEtalon();
+                    //var dawdw = EtalonManager.GetEtalon();
+                    MainFileTreeCollection = EtalonManager.GetEtalon().Result;
                     comparator.CompareFiles(MainFileTreeCollection);
                 }
                 catch
@@ -616,10 +614,10 @@ namespace FileControlAvalonia.ViewModels
 
             FileStats stats = new FileStats();
 
-            await Task.Run(() =>
+            await Task.Run(async() =>
             {
                 var deliteFileMain = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, MainFileTreeCollection);
-                EtalonManager.DeliteFileInDB(deliteFileMain);
+                await EtalonManager.DeliteFileInDB(deliteFileMain);
 
                 FilesCollectionManager.DeliteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
                 ProgressBarLoopScrol = false;

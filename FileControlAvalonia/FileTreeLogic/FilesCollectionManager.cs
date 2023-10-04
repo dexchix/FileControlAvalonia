@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileControlAvalonia.FileTreeLogic
 {
@@ -32,7 +33,7 @@ namespace FileControlAvalonia.FileTreeLogic
             }
         }
 
-        public static void AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles, FileStats stats)
+        public async static Task AddFiles(ObservableCollection<FileTree> mainCollectionFiles, ObservableCollection<FileTree> addedFiles, FileStats stats)
         {
             var addedBDFilesCollection = new ObservableCollection<FileTree>();
             foreach (var addFile in addedFiles)
@@ -51,7 +52,7 @@ namespace FileControlAvalonia.FileTreeLogic
 
             //Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = false;
 
-            EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false);
+            await EtalonManager.AddFilesOrCreateEtalon(addedBDFilesCollection, false);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     mainFileTreeCollection.Remove(delFile!);
                 }
 
-                
+
                 if (delitedFileViewCollection != null && delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children!.Remove(delitedFileViewCollection);
                 else
                 {
@@ -160,7 +161,7 @@ namespace FileControlAvalonia.FileTreeLogic
 
             void FillList(FileTree fileTree)
             {
-                for(var i = 0; i< fileTree.Children.Count; i++)
+                for (var i = 0; i < fileTree.Children.Count; i++)
                 {
                     if (fileTree.Children[i].IsOpened == true)
                     {
@@ -188,13 +189,14 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
+        public static string path;
         public static int GetCountElementsByFileTree(FileTree fileTree, bool considerFolders)
         {
             static int CountElementsInFolder(IEnumerable<FileTree> children, bool considerFolders)
             {
                 int count = 0;
-                
-                foreach(var child in children)
+
+                foreach (var child in children)
                 {
                     if (child.IsDirectory && considerFolders == true)
                     {
@@ -202,14 +204,18 @@ namespace FileControlAvalonia.FileTreeLogic
                     }
                     else if (!child.IsDirectory)
                         count++;
-                    count += CountElementsInFolder(child.Children, considerFolders);
-                }    
+                    path = child.Path;
+
+                    if (child.IsDirectory)
+                        count += CountElementsInFolder(child.Children, considerFolders);
+                }
                 return count;
             }
             int count = CountElementsInFolder(fileTree.Children, considerFolders);
             return count;
 
         }
+
         public static int GetCountFilesByPath(string folderPath)
         {
             static int CountElementsInFolder(string folderPath)

@@ -52,7 +52,8 @@ namespace FileControlAvalonia.DataBase
                                                  FHash TEXT,
                                                  ParentPath TEXT,
                                                  Status INTEGER,
-                                                 IsDirectory BOOLEAN
+                                                 IsDirectory BOOLEAN,
+                                                 HasChildren BOOLEAN
                                              );";
 
                 string createCheksTableQuery = @"CREATE TABLE IF NOT EXISTS CheksTable (
