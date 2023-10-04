@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace FileControlAvalonia.DataBase
 {
-    public class DataBaseConverter
+    public class Converter
     {
         private object _lock = new object();
         private int _count = 0;
         private int fileCounter = 0;
 
-        public ObservableCollection<FileTree> ConvertFormatDBToFileTreeCollection(List<FileTree> files)
+        public ObservableCollection<FileTree> ConvertListToHierarchicalCollection(List<FileTree> files)
         {
             var etalon = new ObservableCollection<FileTree>();
             var filesDictionary = new Dictionary<string, FileTree>();
@@ -124,7 +124,7 @@ namespace FileControlAvalonia.DataBase
                             if (fileParent != null)
                             {
                                 file.Parent = fileParent;
-                                fileParent.Children.Add(file);
+                                fileParent.Children!.Add(file);
                             }
                         }
                         _count++;

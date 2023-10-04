@@ -30,7 +30,7 @@ namespace FileControlAvalonia.Core
 
             var listFiles = FilesCollectionManager.UpdateTreeToList(mainFileTreeCollection);
 
-            var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
+            var asyncConnection = new SQLiteAsyncConnection(DataBaseManager.Options);
 
             if (createEalon == true)
                 await asyncConnection.DeleteAllAsync<FileTree>();
@@ -44,9 +44,9 @@ namespace FileControlAvalonia.Core
         public static async Task<ObservableCollection<FileTree>> GetEtalon()
         {
 
-            var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
+            var asyncConnection = new SQLiteAsyncConnection(DataBaseManager.Options);
             var files = await asyncConnection.Table<FileTree>().ToListAsync();
-            var outputCollection = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(files);
+            var outputCollection = new Converter().ConvertListToHierarchicalCollection(files);
             await asyncConnection.CloseAsync();
 
             return outputCollection;
@@ -54,7 +54,7 @@ namespace FileControlAvalonia.Core
 
         public static async Task DeliteFileInDB(FileTree file)
         {
-            var asyncConnection = new SQLiteAsyncConnection(DataBaseOptions.Options);
+            var asyncConnection = new SQLiteAsyncConnection(DataBaseManager.Options);
 
             if (file.Children != null)
             {
@@ -78,7 +78,7 @@ namespace FileControlAvalonia.Core
         {
             try
             {
-                using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+                using (var connection = new SQLiteConnection(DataBaseManager.Options))
                 {
                     var getInfoCommand = new SQLiteCommand(connection)
                     {

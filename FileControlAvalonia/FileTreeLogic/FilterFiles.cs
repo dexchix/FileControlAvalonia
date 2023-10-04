@@ -1,4 +1,4 @@
-﻿using FileControlAvalonia.Core;
+﻿using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.SettingsApp;
 using System;

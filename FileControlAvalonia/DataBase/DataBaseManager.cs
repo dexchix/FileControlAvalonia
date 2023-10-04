@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileControlAvalonia.Core;
+using FileControlAvalonia.SettingsApp;
+using ServiceLib;
 using Splat;
 using SQLite;
 using SQLitePCL;
@@ -18,27 +20,20 @@ namespace FileControlAvalonia.DataBase
         private static string databaseFileName = "FileIntegrityDB.db";
         private static string currentDirectory = Directory.GetCurrentDirectory();
         private static string databasePath = Path.Combine(currentDirectory, databaseFileName);
+
+        public static string NameDB { get; private set; } = "FileIntegrityDB.db";
+        public static string Password { get; private set; } = "Bzpa/123456789";
+        public static SQLiteConnectionString Options { get; set; }
+
         public static void InitializeDataBase()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                if (!File.Exists(databasePath))
-                {
-                    CreateDataBase();
-                }
-            }
-            else
-            {
-                if (!File.Exists(databasePath))
-                {
-                    CreateDataBase();
-                }
-            }
-
+            if (!File.Exists(databasePath))
+                CreateDataBase();
         }
+
         private static void CreateDataBase()
         {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            using (var connection = new SQLiteConnection(Options))
             {
                 string createFilesTableQuery = @"CREATE TABLE IF NOT EXISTS FileTree(
                                                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -87,7 +82,7 @@ namespace FileControlAvalonia.DataBase
         }
         public static void ChangePasswordDataBase(string newPassword)
         {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            using (var connection = new SQLiteConnection(Options))
             {
                 try
                 {
@@ -101,8 +96,23 @@ namespace FileControlAvalonia.DataBase
                 {
 
                 }
-                DataBaseOptions.SetOptions();
+                SetOptions();
             }
         }
+
+
+        public static void SetOptions()
+        {
+            Password = SettingsManager.AppSettings.Password;
+            Options = new SQLiteConnectionString(NameDB, true, Password);
+        }
+
+        #region CRYPT_Password
+
+        public static string CryptPassword(this string text) => EncryptingFunctions.EncryptPasswordReg(text);
+
+
+        public static string DecryptPassword(this string text) => EncryptingFunctions.DecryptPasswordReg(text);
+        #endregion
     }
 }

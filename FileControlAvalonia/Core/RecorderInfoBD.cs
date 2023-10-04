@@ -17,7 +17,7 @@ namespace FileControlAvalonia.Core
         /// <param name="dateLastCheck"></param>
         public static void RecordDateOfLastCheck(string dateLastCheck)
         {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            using (var connection = new SQLiteConnection(DataBaseManager.Options))
             {
                 var insertInfoCommand = new SQLiteCommand(connection)
                 {
@@ -28,7 +28,7 @@ namespace FileControlAvalonia.Core
         }
         
         /// <summary>
-        /// Записывает в БД актуальную и
+        /// Записывает в БД данные 
         /// </summary>
         /// <param name="totalFiles"></param>
         /// <param name="checkedD"></param>
@@ -39,7 +39,7 @@ namespace FileControlAvalonia.Core
         /// <param name="notChecked"></param>
         public static void RecordInfoCountFiles(int totalFiles, int checkedD, int partialChecked, int unChecked, int noAccess, int notFound, int notChecked)
         {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            using (var connection = new SQLiteConnection(DataBaseManager.Options))
             {
                 var insertInfoCommand = new SQLiteCommand(connection)
                 {
@@ -56,7 +56,7 @@ namespace FileControlAvalonia.Core
         /// <param name="dateCreateEtalon"></param>
         public static void RecordInfoOfCreateEtalon(string userLevel, string dateCreateEtalon)
         {
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            using (var connection = new SQLiteConnection(DataBaseManager.Options))
             {
                 var insertInfoCommand = new SQLiteCommand(connection)
                 {

@@ -196,7 +196,7 @@ namespace FileControlAvalonia.ViewModels
             //    ObservableCollection<FileTree> test = null;
             //    await Task.Run(async () =>
             //    {
-            //        var awdwa = new DataBaseConverter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
+            //        var awdwa = new Converter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
             //        FactParameterizer.SetFactValuesInFilesCollection(awdwa);
             //        FilesCollectionManager.SetEtalonValues(awdwa);
             //        test = awdwa;

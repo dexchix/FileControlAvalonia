@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileControlAvalonia.Core
+namespace FileControlAvalonia.Core.Enums
 {
     public enum UserLevels
     {

@@ -1,5 +1,5 @@
 ﻿using Avalonia.Input.TextInput;
-using FileControlAvalonia.Core;
+using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.ViewModels;
 using ReactiveUI;

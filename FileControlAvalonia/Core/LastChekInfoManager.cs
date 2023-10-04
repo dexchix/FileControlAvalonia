@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Data;
+using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.Models;
 using SQLite;
@@ -60,7 +61,7 @@ namespace FileControlAvalonia.Core
         public void UpdateFactParametresInDB(ObservableCollection<FileTree> mainCollection)
         {
             SetInfoOfStatusFiles(mainCollection);
-            using (var connection = new SQLiteConnection(DataBaseOptions.Options))
+            using (var connection = new SQLiteConnection(DataBaseManager.Options))
             {
                 List<FileTree> combinedList = _partialChecked
                                                .Concat(_failedChecked)
