@@ -1,6 +1,6 @@
 ﻿using Avalonia.Data.Converters;
 using Avalonia.Media;
-using FileControlAvalonia.Core;
+using FileControlAvalonia.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

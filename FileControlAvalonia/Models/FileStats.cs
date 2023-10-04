@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileControlAvalonia.Core.Enums;
 
 namespace FileControlAvalonia.Models
 {
@@ -29,42 +30,42 @@ namespace FileControlAvalonia.Models
                 {
                     switch (file.Status)
                     {
-                        case Core.StatusFile.Checked:
+                        case StatusFile.Checked:
                             {
                                 TotalFiles++;
                                 Checked++;
                                 break;
                             }
 
-                        case Core.StatusFile.PartiallyChecked:
+                        case StatusFile.PartiallyChecked:
                             {
                                 TotalFiles++;
                                 PartialChecked++;
                                 break;
                             }
 
-                        case Core.StatusFile.FailedChecked:
+                        case StatusFile.FailedChecked:
                             {
                                 TotalFiles++;
                                 FailedChecked++;
                                 break;
                             }
 
-                        case Core.StatusFile.NoAccess:
+                        case StatusFile.NoAccess:
                             {
                                 TotalFiles++;
                                 NoAccess++;
                                 break;
                             }
 
-                        case Core.StatusFile.NotFound:
+                        case StatusFile.NotFound:
                             {
                                 TotalFiles++;
                                 NotFound++;
                                 break;
                             }
 
-                        case Core.StatusFile.NotChecked:
+                        case StatusFile.NotChecked:
                             {
                                 TotalFiles++;
                                 NotChecked++;

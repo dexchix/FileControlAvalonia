@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FileControlAvalonia.Core;
+using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.Models;
 using System;
 using System.Collections.Generic;
@@ -169,11 +170,6 @@ namespace FileControlAvalonia.FileTreeLogic
                         if (fileTree.Children[i].IsDirectory) FillList(fileTree.Children[i]);
                     }
                 }
-                //foreach(var file in fileTree.Children)
-                //{
-                //    listDestroctionFiles.Add(file);
-                //    if (file.IsDirectory) FillList(file);
-                //}
             }
 
             FillList(fileTree);

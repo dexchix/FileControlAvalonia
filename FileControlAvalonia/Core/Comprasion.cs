@@ -1,4 +1,5 @@
-﻿using FileControlAvalonia.FileTreeLogic;
+﻿using FileControlAvalonia.Core.Enums;
+using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.ViewModels;
 using Splat;

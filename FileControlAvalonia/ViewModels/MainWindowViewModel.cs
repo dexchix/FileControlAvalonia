@@ -7,6 +7,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using FileControlAvalonia.Converters;
 using FileControlAvalonia.Core;
+using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.Models;
@@ -528,9 +529,9 @@ namespace FileControlAvalonia.ViewModels
             var info = EtalonManager.GetInfo();
 
 
-            DateCreateEtalon = info.Date;
-            DateLastCheck = info.DateLastCheck;
-            UserLevelCreateEtalon = info.Creator;
+            if (info.Date == string.Empty) DateCreateEtalon = "Эталон не создан"; else DateCreateEtalon = info.Date;
+            if (info.DateLastCheck == string.Empty) DateLastCheck = "Эталон не создан"; else DateLastCheck = info.DateLastCheck;
+            if (info.Creator == string.Empty) UserLevelCreateEtalon = "Эталон не создан"; else UserLevelCreateEtalon = info.Creator;
 
             UserLevel = Environment.UserName;
             TotalFiles = comparator.TotalFiles;
