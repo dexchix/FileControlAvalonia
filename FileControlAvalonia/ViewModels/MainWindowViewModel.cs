@@ -51,7 +51,6 @@ namespace FileControlAvalonia.ViewModels
         private string _userLevelCreateEtalon;
         #endregion
 
-        private bool _enabledButtons = true;
 
         #region ProgressBar
         private bool _progressBarIsVisible = false;
@@ -68,6 +67,9 @@ namespace FileControlAvalonia.ViewModels
         private Thickness _marginFactAndDeleteColumn;
         private int _maxHeightMainWindow;
         private int _maxWidthMainWindow;
+        private bool _cancellButtonIsVisible = false;
+        private bool _cancellButtonIsEnabled = true;
+        private bool _enabledButtons = true;
         #endregion
 
         new public event PropertyChangedEventHandler? PropertyChanged;
@@ -114,11 +116,7 @@ namespace FileControlAvalonia.ViewModels
             }
         }
 
-        public bool EnabledButtons
-        {
-            get => _enabledButtons;
-            set => this.RaiseAndSetIfChanged(ref _enabledButtons, value);
-        }
+
 
         public HierarchicalTreeDataGridSource<FileTree> Source
         {
@@ -230,6 +228,25 @@ namespace FileControlAvalonia.ViewModels
             get => _marginFactAndDeleteColumn;
             set => this.RaiseAndSetIfChanged(ref _marginFactAndDeleteColumn, value);
         }
+        #endregion
+
+        #region Controls
+        public bool EnabledButtons
+        {
+            get => _enabledButtons;
+            set => this.RaiseAndSetIfChanged(ref _enabledButtons, value);
+        }
+        public bool CancellButtonIsVisible
+        {
+            get => _cancellButtonIsVisible;
+            set => this.RaiseAndSetIfChanged(ref _cancellButtonIsVisible, value);
+        }
+        public bool CancellButtonIsEnabled
+        {
+            get => _cancellButtonIsEnabled;
+            set => this.RaiseAndSetIfChanged(ref _cancellButtonIsEnabled, value);
+        }
+
         #endregion
 
         public int MaxHeightMainWindow

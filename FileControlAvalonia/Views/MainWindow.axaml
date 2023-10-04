@@ -21,10 +21,10 @@ SystemDecorations="BorderOnly"-->
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-		MaxHeight="{Binding MaxHeightMainWindow}" 
+		MaxHeight="{Binding MaxHeightMainWindow}"
 		MaxWidth="{Binding MaxWidthMainWindow}"
-		MinHeight="{Binding MaxHeightMainWindow}" 
-		MinWidth="{Binding MaxWidthMainWindow}" 
+		MinHeight="{Binding MaxHeightMainWindow}"
+		MinWidth="{Binding MaxWidthMainWindow}"
 		CanResize="False"
         SystemDecorations="BorderOnly">
 
@@ -78,18 +78,18 @@ SystemDecorations="BorderOnly"-->
 					</Canvas>
 					<Label Name="TitleName" FontSize="13" Content="Контроль целостности ПО ВУ" Margin="20 0 0 0"></Label>
 				</StackPanel>
-			    <Button Grid.Column="1" Command="{Binding CloseProgramCommand}" VerticalAlignment="Top"
+				<Button Grid.Column="1" Command="{Binding CloseProgramCommand}" VerticalAlignment="Top"
 			    	HorizontalAlignment="Right" Margin="0 0 1 0">
-			    	<Image Source="/Assets/close1.png" Width="10" Height="10"/>
-			    	<Button.Styles>
-			    		<Style Selector="Button">
-			    			<Setter Property="Background" Value="Transparent"/>
-			    		</Style>
-			    		<Style Selector="Button:pointerover /template/ ContentPresenter">
-			    		</Style>
-			    	</Button.Styles>
-			    </Button>
-				
+					<Image Source="/Assets/close1.png" Width="10" Height="10"/>
+					<Button.Styles>
+						<Style Selector="Button">
+							<Setter Property="Background" Value="Transparent"/>
+						</Style>
+						<Style Selector="Button:pointerover /template/ ContentPresenter">
+						</Style>
+					</Button.Styles>
+				</Button>
+
 			</Grid>
 			<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
 				Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left">
@@ -156,9 +156,28 @@ SystemDecorations="BorderOnly"-->
 						</Canvas>
 					</Button>
 				</StackPanel>
-				<ComboBox Margin=" 25 5 0 0" HorizontalContentAlignment="Left" Height="30" Items="{Binding Filters}"
-						  Width="250" FontSize="11" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
-				</ComboBox>
+				<Grid ColumnDefinitions="205 255" Margin="-180 0 0 0">
+					<Button Width="200" Grid.Column="0"  Height="30" Margin="0 5 0 0" IsVisible="{Binding CancellButtonIsVisible}" IsEnabled="{Binding CancellButtonIsEnabled}">
+						<Label Content="ОТМЕНА" Foreground="White" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+						<Button.Styles>
+							<Style Selector="Button">
+								<Setter Property="Background" Value="Red"></Setter>
+								<Setter Property="BorderBrush" Value="Black"></Setter>
+								<Setter Property="BorderThickness" Value="1"></Setter>
+							</Style>
+							<Style Selector="Button:pointerover /template/ ContentPresenter">
+								<Setter Property="Background" Value="#cc0000"></Setter>
+								<Setter Property="BorderBrush" Value="Black"></Setter>
+								<Setter Property="BorderThickness" Value="1"></Setter>
+							</Style>
+						</Button.Styles>
+					</Button>
+
+					<ComboBox Margin=" 0 5 0 0" Grid.Column="1" HorizontalContentAlignment="Right" Height="30" Items="{Binding Filters}"
+			            Width="250" FontSize="11" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
+					</ComboBox>
+				</Grid>
+
 			</StackPanel>
 
 			<TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 0">
@@ -186,7 +205,7 @@ SystemDecorations="BorderOnly"-->
 						</Canvas>
 					</StackPanel>
 				</Border>
-				
+
 				<TreeDataGrid Name="fileViewer"  VerticalAlignment="Stretch" Grid.Row="1"
 						   HorizontalAlignment="Stretch" Margin= "0 -5 0 0" ShowColumnHeaders="False"
 						  BorderBrush="Black" BorderThickness="1" Source="{Binding Source}">
@@ -251,12 +270,12 @@ SystemDecorations="BorderOnly"-->
 							<Setter Property="BorderBrush" Value="#b9b9b9"></Setter>
 							<Setter Property="Height" Value="70"></Setter>
 						</Style>
-			
+
 						<Style Selector="TreeDataGridExpanderCell">
 							<Setter Property="Template">
 								<Setter.Value>
 									<ControlTemplate>
-										<ToggleButton 
+										<ToggleButton
 													  HorizontalAlignment="Stretch"
 													  VerticalAlignment="Stretch"
 													  Focusable="True"
@@ -406,7 +425,7 @@ SystemDecorations="BorderOnly"-->
 					</TextBlock>
 				</StackPanel>
 			</Canvas>
-		
+
 		</Grid>
 	</Border>
 </Window>
