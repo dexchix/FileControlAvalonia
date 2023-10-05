@@ -2,6 +2,7 @@
 using FileControlAvalonia.ViewModels;
 using Splat;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FileControlAvalonia.Core
@@ -12,7 +13,7 @@ namespace FileControlAvalonia.Core
         private static object _lock = new object();
         private static MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
 
-        public static void ParallelCalculateFactParametrs(List<FileTree> files, int countFiles)
+        public async static Task ParallelCalculateFactParametrs(List<FileTree> files, int countFiles, CancellationToken token)
         {
             if (files.Count <= 1000)
             {
@@ -59,6 +60,11 @@ namespace FileControlAvalonia.Core
                                     //================================================================================================
                                 }
 
+                                if(token.IsCancellationRequested)
+                                {
+                                    return;
+                                }
+
                             }
                         }
                     });
@@ -84,7 +90,7 @@ namespace FileControlAvalonia.Core
 
             while (true)
             {
-                if (_count == files.Count)
+                if (_count == files.Count || token.IsCancellationRequested)
                 {
                     //ProgressBar=====================================================================================
                     //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = 0;

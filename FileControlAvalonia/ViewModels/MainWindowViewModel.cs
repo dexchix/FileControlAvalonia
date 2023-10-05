@@ -67,7 +67,7 @@ namespace FileControlAvalonia.ViewModels
         private Thickness _marginFactAndDeleteColumn;
         private int _maxHeightMainWindow;
         private int _maxWidthMainWindow;
-        private bool _cancellButtonIsVisible = false;
+        private bool _cancellButtonIsVisible = true;
         private bool _cancellButtonIsEnabled = true;
         private bool _enabledButtons = true;
         #endregion
@@ -662,6 +662,10 @@ namespace FileControlAvalonia.ViewModels
             EnabledButtons = true;
             ProgressBarText = string.Empty;
             ProgressBarValue = 0;
+        }
+        public void CancellCommand()
+        {
+            FileExplorerWindowViewModel.CallCancelEvent();
         }
         #endregion
 
