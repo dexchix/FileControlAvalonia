@@ -157,7 +157,7 @@ SystemDecorations="BorderOnly"-->
 					</Button>
 				</StackPanel>
 				<Grid ColumnDefinitions="205 255" Margin="-180 0 0 0">
-					<Button Width="200" Grid.Column="0"  Height="30" Margin="0 5 0 0" IsVisible="{Binding CancellButtonIsVisible}" IsEnabled="{Binding CancellButtonIsEnabled}">
+					<Button Width="200" Grid.Column="0"  Height="30" Margin="0 5 0 0" Command="{Binding CancellCommand}" IsVisible="{Binding CancellButtonIsVisible}" IsEnabled="{Binding CancellButtonIsEnabled}">
 						<Label Content="ОТМЕНА" Foreground="White" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
 						<Button.Styles>
 							<Style Selector="Button">

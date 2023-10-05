@@ -16,6 +16,7 @@ using FileControlAvalonia.FileTreeLogic;
 using FileControlAvalonia.SettingsApp;
 using FileControlAvalonia.Core;
 using Splat;
+using System.Threading;
 
 namespace FileControlAvalonia.ViewModels
 {
@@ -33,9 +34,15 @@ namespace FileControlAvalonia.ViewModels
         private bool _enabledButtons = true;
         private bool _progressBarLoopScrol;
         private bool _progressBarIsVisible = false;
+        private CancellationTokenSource _ctc = new CancellationTokenSource();
+        public static event Action CancellAddOperation = delegate { _currentWM._ctc.Cancel(); };
        
         #endregion
 
+        public static void CallCancelEvent()
+        {
+            CancellAddOperation?.Invoke();
+        }
         public static async void ChangeStateProgressBarMain()
         {
             Task.Run(async () =>
@@ -174,6 +181,8 @@ namespace FileControlAvalonia.ViewModels
                 _mainWindowVM.ProgressBarText = "Загрузка";
                 _mainWindowVM.ProgressBarValue = 0;
                 _mainWindowVM.EnabledButtons = false;
+                _mainWindowVM.CancellButtonIsVisible = true;
+                _mainWindowVM.CancellButtonIsEnabled = true;
 
                 window.Close();
 
@@ -242,13 +251,28 @@ namespace FileControlAvalonia.ViewModels
                 var count = FilesCollectionManager.GetCountElementsByFileTree(transformFileTree, false);
                 var newList = FilesCollectionManager.UpdateTreeToList(childrenTFL);
 
+                if (_ctc.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 //ProgressBar========================
                 _mainWindowVM.ProgressBarLoopScrol = false;
                 _mainWindowVM.ProgressBarMaximum = count;
                 //===================================
 
-                ParallelProcessing.ParallelCalculateFactParametrs(newList, count);
+                await ParallelProcessing.ParallelCalculateFactParametrs(newList, count, _ctc.Token);
             });
+
+            if (_ctc.IsCancellationRequested)
+            {
+                Dispose();
+                _mainWindowVM.EnabledButtons = true;
+                _mainWindowVM.ProgressBarIsVisible = false;
+                _mainWindowVM.ProgressBarText = string.Empty;
+                return;
+            }
+
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
 
         }
