@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -37,6 +38,7 @@ namespace FileControlAvalonia.ViewModels
         private static ArrowConverter? s_arrowConverter;
         private int _filterIndex = 0;
         private string _userLevel;
+        private CancellationTokenSource _ctcCheckComand;
 
         #region Info
         private int _totalFiles;
@@ -391,6 +393,7 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
+            _ctcCheckComand = new CancellationTokenSource();
             FilterIndex = 0;
 
             Comprasion comparator = null;
@@ -404,7 +407,11 @@ namespace FileControlAvalonia.ViewModels
                 var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
                 ProgressBarMaximum = TotalFiles;
 
-                var comnparator = ParallelProcessing.ParallelComprasion(newList, TotalFiles);
+                var comnparator = ParallelProcessing.ParallelComprasion(newList, TotalFiles, _ctcCheckComand.Token);
+
+
+                if (_ctcCheckComand.IsCancellationRequested)
+                    return;
                 //====================
                 ProgressBarValue = 0;
 
@@ -418,12 +425,15 @@ namespace FileControlAvalonia.ViewModels
 
                 ProgressBarLoopScrol = true;
                 ProgressBarText = "Обновление БД";
-                var start = DateTime.Now;
+
                 new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
-                var end = DateTime.Now;
                 
             });
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
+
+            if (_ctcCheckComand.IsCancellationRequested)
+                return;
+
             DateLastCheck = DateTime.Now.ToString();
 
 
@@ -665,7 +675,8 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancellCommand()
         {
-            FileExplorerWindowViewModel.CallCancelEvent();
+            //FileExplorerWindowViewModel.CallCancelEvent();
+            _ctcCheckComand.Cancel();
         }
         #endregion
 
