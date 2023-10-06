@@ -1,7 +1,11 @@
-﻿using FileControlAvalonia.Models;
+﻿using Avalonia.Threading;
+using FileControlAvalonia.Core.Enums;
+using FileControlAvalonia.Models;
 using FileControlAvalonia.ViewModels;
 using Splat;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +16,7 @@ namespace FileControlAvalonia.Core
         private static int _count = 0;
         private static object _lock = new object();
         private static MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
+        private static Dictionary<FileTree, (string, string, string, StatusFile)> _oldStats = new Dictionary<FileTree, (string, string, string, StatusFile)>();
 
         public async static Task ParallelCalculateFactParametrs(List<FileTree> files, int countFiles, CancellationToken token)
         {
@@ -105,7 +110,7 @@ namespace FileControlAvalonia.Core
             }
         }
 
-        public static Comprasion ParallelComprasion(List<FileTree> files, int countFiles)
+        public static Comprasion ParallelComprasion(List<FileTree> files, int countFiles, CancellationToken token)
         {
             var comparer = new Comprasion();
             if (files.Count <= 1000)
@@ -133,7 +138,21 @@ namespace FileControlAvalonia.Core
                     {
                         for (int i = localStart; i < localLimit; i++)
                         {
+                            string oldHash = files[i].FHash;
+                            string oldVersion = files[i].FVersion;
+                            string oldLastUpdate = files[i].FLastUpdate;
+                            StatusFile oldStatus = files[i].Status;
+
                             FactParameterizer.SetFactValues(files[i]);
+
+                            lock (_lock)
+                            {
+                                if (oldHash != files[i].FHash || oldVersion != files[i].FVersion || oldLastUpdate != files[i].FLastUpdate)
+                                {
+                                    _oldStats.Add(files[i], (oldHash, oldVersion, oldLastUpdate, oldStatus));
+                                }
+
+                            }
                             lock (_lock)
                             {
                                 comparer.SetStatus(files[i]);
@@ -148,13 +167,30 @@ namespace FileControlAvalonia.Core
                                     //================================================================================================
                                 }
 
+                                if (token.IsCancellationRequested)
+                                    return;
+
                             }
                         }
                     });
                 }
                 for (int i = files.Count - residue; i < files.Count; i++)
                 {
+                    string oldHash = files[i].FHash;
+                    string oldVersion = files[i].FVersion;
+                    string oldLastUpdate = files[i].FLastUpdate;
+                    StatusFile oldStatus = files[i].Status;
+
                     FactParameterizer.SetFactValues(files[i]);
+
+                    lock (_lock)
+                    {
+                        if (oldHash != files[i].FHash || oldVersion != files[i].FVersion || oldLastUpdate != files[i].FLastUpdate)
+                        {
+                            _oldStats.Add(files[i], (oldHash, oldVersion, oldLastUpdate, oldStatus));
+                        }
+
+                    }
                     lock (_lock)
                     {
                         comparer.SetStatus(files[i]);
@@ -174,18 +210,45 @@ namespace FileControlAvalonia.Core
 
             while (true)
             {
-                if (_count == files.Count)
+                if (_count == files.Count || token.IsCancellationRequested)
                 {
+
+                    if (token.IsCancellationRequested)
+                    {
+                        lock(_lock)
+                        {
+                            SetOldFactParametres(files);
+                            foreach (var item in comparer.OldStatuses.ToList())
+                            {
+                                item.Value.Item1.Status = item.Value.Item2;
+                            }
+                        }
+                    }
+
                     //ProgressBar=====================================================================================
                     _mainWindowVM.ProgressBarValue = 0;
                     _mainWindowVM.ProgressBarMaximum = 0;
                     _mainWindowVM.ProgressBarText = string.Empty;
                     //================================================================================================
                     _count = 0;
+                    _oldStats.Clear();
                     break;
                 }
             }
             return comparer;
+        }
+
+        private static void SetOldFactParametres(List<FileTree> files)
+        {
+            foreach(var oldFile in _oldStats)
+            {
+                var file = files.Where(path=> path.Path == oldFile.Key.Path).FirstOrDefault();
+
+                file.FHash = oldFile.Value.Item1;
+                file.FVersion = oldFile.Value.Item2;
+                file.FLastUpdate = oldFile.Value.Item3;
+                Dispatcher.UIThread.Post(()=> file.Status = oldFile.Value.Item4);
+            }
         }
     }
 }
