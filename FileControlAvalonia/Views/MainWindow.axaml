@@ -170,6 +170,11 @@ SystemDecorations="BorderOnly"-->
 								<Setter Property="BorderBrush" Value="Black"></Setter>
 								<Setter Property="BorderThickness" Value="1"></Setter>
 							</Style>
+							<Style Selector="Button:disabled /template/ ContentPresenter">
+								<Setter Property="Background" Value="#cccccc"></Setter>
+								<Setter Property="BorderBrush" Value="Black"></Setter>
+								<Setter Property="BorderThickness" Value="1"></Setter>
+							</Style>
 						</Button.Styles>
 					</Button>
 

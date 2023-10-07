@@ -29,13 +29,13 @@ namespace FileControlAvalonia.ViewModels
         private FileTree? _fileTree;
         private int _counterSelectedFiles = 0;
         private MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
-        public static FileExplorerWindowViewModel _currentWM;
+  
         private string _progressBarText;
         private bool _enabledButtons = true;
         private bool _progressBarLoopScrol;
         private bool _progressBarIsVisible = false;
         private CancellationTokenSource _ctc = new CancellationTokenSource();
-        public static event Action CancellAddOperation = delegate { _currentWM._ctc.Cancel(); };
+        public static event Action CancellAddOperation = delegate { CurrentVM._ctc.Cancel(); };
        
         #endregion
 
@@ -60,21 +60,22 @@ namespace FileControlAvalonia.ViewModels
         {
             if (active)
             {
-                FileExplorerWindowViewModel._currentWM.ProgressBarIsVisible = true;
-                FileExplorerWindowViewModel._currentWM.ProgressBarLoopScrol = true;
-                FileExplorerWindowViewModel._currentWM.EnabledButtons = false;
+                CurrentVM.ProgressBarIsVisible = true;
+                CurrentVM.ProgressBarLoopScrol = true;
+                CurrentVM.EnabledButtons = false;
 
             }
             else
             {
-                FileExplorerWindowViewModel._currentWM.ProgressBarIsVisible = false;
-                FileExplorerWindowViewModel._currentWM.ProgressBarLoopScrol = false;
-                FileExplorerWindowViewModel._currentWM.EnabledButtons = true;
+                CurrentVM.ProgressBarIsVisible = false;
+                CurrentVM.ProgressBarLoopScrol = false;
+                CurrentVM.EnabledButtons = true;
             }
 
         }
 
         #region PROPERTIES
+        public static FileExplorerWindowViewModel CurrentVM { get; set; }
         public int ItemIndex
         {
             get => _itemIndex;
@@ -133,7 +134,7 @@ namespace FileControlAvalonia.ViewModels
 
         public FileExplorerWindowViewModel()
         {
-            _currentWM = this;
+            CurrentVM = this;
             _fileTreeNavigator = new FileTreeNavigator();
             _fileTree = _fileTreeNavigator.FileTree;
             _fileTreeNavigator.PropertyChanged += OnMyPropertyChanged!;
@@ -162,6 +163,7 @@ namespace FileControlAvalonia.ViewModels
                 if (_fileTreeNavigator.watcher != null)
                     _fileTreeNavigator.watcher.StopWatch();
                 window.Close();
+                CurrentVM = null;
                 Dispose();
             }
             else window.Close();
@@ -188,40 +190,9 @@ namespace FileControlAvalonia.ViewModels
 
 
                 await TransitFiles();
-
-                //Dispose();
+                CurrentVM = null;
             }
             else window.Close();
-
-            #region FileTransferBrokerRealization
-            //if(FileTransferBroker.AddedFiles.Count > 0)
-            //{
-            //    window.Close();
-            //    Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
-            //    Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
-            //    Locator.Current.GetService<MainWindowViewModel>().EnabledButtons = false;
-            //    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Добавление файлов";
-
-            //    ObservableCollection<FileTree> test = null;
-            //    await Task.Run(async () =>
-            //    {
-            //        var awdwa = new Converter().ConvertFormatDBToFileTreeCollection(FileTransferBroker.AddedFiles);
-            //        FactParameterizer.SetFactValuesInFilesCollection(awdwa);
-            //        FilesCollectionManager.SetEtalonValues(awdwa);
-            //        test = awdwa;
-            //    });
-            //    MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(test!);
-
-            //    FileTransferBroker.AddedFiles.Clear();
-            //    Dispose();
-            //}
-            //else
-            //{
-            //    FileTransferBroker.AddedFiles.Clear();
-            //    Dispose();
-            //    window.Close();
-            //}
-            #endregion
         }
         public void UpCommand()
         {
@@ -272,7 +243,7 @@ namespace FileControlAvalonia.ViewModels
                 _mainWindowVM.ProgressBarText = string.Empty;
                 return;
             }
-
+            _mainWindowVM. CancellButtonIsEnabled = false;
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
 
         }
