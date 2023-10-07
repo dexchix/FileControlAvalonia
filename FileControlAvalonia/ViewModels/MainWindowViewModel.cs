@@ -38,7 +38,7 @@ namespace FileControlAvalonia.ViewModels
         private static ArrowConverter? s_arrowConverter;
         private int _filterIndex = 0;
         private string _userLevel;
-        private CancellationTokenSource _ctcCheckComand;
+        private CancellationTokenSource _ctcCheckComandToken;
 
         #region Info
         private int _totalFiles;
@@ -54,22 +54,19 @@ namespace FileControlAvalonia.ViewModels
         #endregion
 
 
-        #region ProgressBar
+        #region ControlsState
         private bool _progressBarIsVisible = false;
         private int _progressBarValue = 0;
         private string _progressBarText;
         private bool _progressBarLoopScrol = false;
         private int _progressBarMaximum;
-        #endregion
-
-        #region HeaderTreeDataGrid
         private double _widthNameColumn;
         private double _widthEtalonAndFactColumn;
         private Thickness _marginEtalonColumn;
         private Thickness _marginFactAndDeleteColumn;
         private int _maxHeightMainWindow;
         private int _maxWidthMainWindow;
-        private bool _cancellButtonIsVisible = true;
+        private bool _cancellButtonIsVisible = false;
         private bool _cancellButtonIsEnabled = true;
         private bool _enabledButtons = true;
         #endregion
@@ -337,6 +334,8 @@ namespace FileControlAvalonia.ViewModels
                 ProgressBarText = string.Empty;
                 ProgressBarIsVisible = false;
                 EnabledButtons = true;
+                CancellButtonIsEnabled = true;
+                CancellButtonIsVisible = false;
             });
 
             ShowDialogInfoWindow = new Interaction<InfoWindowViewModel, InfoWindowViewModel?>();
@@ -393,7 +392,11 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
-            _ctcCheckComand = new CancellationTokenSource();
+            CancellButtonIsVisible = true;
+            CancellButtonIsEnabled = true;
+
+
+            _ctcCheckComandToken = new CancellationTokenSource();
             FilterIndex = 0;
 
             Comprasion comparator = null;
@@ -407,10 +410,10 @@ namespace FileControlAvalonia.ViewModels
                 var newList = FilesCollectionManager.UpdateTreeToList(MainFileTreeCollection);
                 ProgressBarMaximum = TotalFiles;
 
-                var comnparator = ParallelProcessing.ParallelComprasion(newList, TotalFiles, _ctcCheckComand.Token);
+                var comnparator = ParallelProcessing.ParallelComprasion(newList, TotalFiles, _ctcCheckComandToken.Token);
 
 
-                if (_ctcCheckComand.IsCancellationRequested)
+                if (_ctcCheckComandToken.IsCancellationRequested)
                     return;
                 //====================
                 ProgressBarValue = 0;
@@ -426,13 +429,21 @@ namespace FileControlAvalonia.ViewModels
                 ProgressBarLoopScrol = true;
                 ProgressBarText = "Обновление БД";
 
+
+                CancellButtonIsEnabled = true;
                 new LastChekInfoManager().UpdateFactParametresInDB(MainFileTreeCollection);
-                
             });
+
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
-            if (_ctcCheckComand.IsCancellationRequested)
+            if (_ctcCheckComandToken.IsCancellationRequested)
+            {
+                CancellButtonIsEnabled = true;
+                CancellButtonIsVisible = false;
+                ProgressBarText = string.Empty;
+                ProgressBarIsVisible = false;
                 return;
+            }
 
             DateLastCheck = DateTime.Now.ToString();
 
@@ -457,6 +468,8 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = false;
             ProgressBarIsVisible = false;
             EnabledButtons = true;
+            ProgressBarIsVisible = false;
+            ProgressBarText = string.Empty;
         }
 
         async public void CreateEtalonCommand()
@@ -469,7 +482,7 @@ namespace FileControlAvalonia.ViewModels
             int countFiles = 0;
 
             await EtalonManager.AddFilesOrCreateEtalon(MainFileTreeCollection, true);
-            
+
             FilesCollectionManager.UpdateViewFilesCollection(ViewCollectionFiles, MainFileTreeCollection);
 
             //============================================================================================
@@ -642,7 +655,7 @@ namespace FileControlAvalonia.ViewModels
 
             FileStats stats = new FileStats();
 
-            await Task.Run(async() =>
+            await Task.Run(async () =>
             {
                 var deliteFileMain = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, MainFileTreeCollection);
                 await EtalonManager.DeliteFileInDB(deliteFileMain);
@@ -664,7 +677,7 @@ namespace FileControlAvalonia.ViewModels
 
             ProgressBarMaximum = 1;
             ProgressBarValue = 1;
-      
+
             ProgressBarText = $"Удаление завершено. Удалено {stats.TotalFiles} файлов";
             await Task.Delay(1500);
             ProgressBarLoopScrol = false;
@@ -675,8 +688,8 @@ namespace FileControlAvalonia.ViewModels
         }
         public void CancellCommand()
         {
-            //FileExplorerWindowViewModel.CallCancelEvent();
-            _ctcCheckComand.Cancel();
+            if (FileExplorerWindowViewModel.CurrentVM != null) FileExplorerWindowViewModel.CallCancelEvent();
+            if (_ctcCheckComandToken != null) _ctcCheckComandToken.Cancel();
         }
         #endregion
 
