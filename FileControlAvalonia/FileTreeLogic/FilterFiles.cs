@@ -24,17 +24,45 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="viewFilesCollection"></param>
         async public static void Filter(StatusFile status, ObservableCollection<FileTree> mainCollection, ObservableCollection<FileTree> viewFilesCollection)
         {
-            ObservableCollection<FileTree> filterCollection = new ObservableCollection<FileTree>();
-            await Task.Run(() =>
+
+            //Dictionary<StatusFile, FileTree> structFiles = new Dictionary<StatusFile, FileTree> ();
+            List<FileTree> files = new List<FileTree>();
+            FillList(mainCollection);
+
+            void FillList(ObservableCollection<FileTree> folder)
             {
-                var copy = FilesCollectionManager.GetDeepCopyFilesCollection(mainCollection);
-                FillFilteredCollection(copy, filterCollection, status);
-            });
+                foreach (FileTree fileTree in folder)
+                {
+                    files.Add(fileTree);
+                    if (fileTree.Children != null)
+                        FillList(fileTree.Children);
+                }
+            }
+            var filteredList = files.Where(x => x.Status == status && !x.IsDirectory).ToList();
+            ObservableCollection<FileTree> filteredCollection = new ObservableCollection<FileTree>();
+            foreach (FileTree fileTree in filteredList)
+            {
+                filteredCollection.Add(fileTree);
+            }
+
             viewFilesCollection.Clear();
-            foreach (var file in filterCollection!.ToList())
+            foreach (var file in filteredList!.ToList())
             {
                 viewFilesCollection.Add(file);
             }
+            //ObservableCollection<FileTree> filterCollection = new ObservableCollection<FileTree>();
+            //await Task.Run(() =>
+            //{
+            //    var copy = FilesCollectionManager.GetDeepCopyFilesCollection(mainCollection);
+            //    FillFilteredCollection(copy, filterCollection, status);
+            //});
+            //viewfilescollection.clear();
+            //foreach (var file in filtercollection!.tolist())
+            //{
+            //    viewfilescollection.add(file);
+            //}
+
+
         }
 
         /// <summary>
@@ -51,9 +79,9 @@ namespace FileControlAvalonia.FileTreeLogic
                 {
                     file.Parent = null;
                     filteredCollection.Add(file);
-                    if(file.IsDirectory) { ClearUnEqualFiles(file, status); }
+                    if (file.IsDirectory) { ClearUnEqualFiles(file, status); }
                 }
-       
+
                 else if (file.Status != status && file.IsDirectory)
                 {
                     FillFilteredCollection(file.Children, filteredCollection, status);
@@ -74,7 +102,7 @@ namespace FileControlAvalonia.FileTreeLogic
                     //file.Children.Remove(filee);    
                     var delitedFile = file.Children.FirstOrDefault(filee => filee.Status != status);
                     file.Children.Remove(delitedFile);
-                    
+
                 }
                 else
                 {

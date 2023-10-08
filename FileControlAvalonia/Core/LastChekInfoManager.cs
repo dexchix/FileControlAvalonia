@@ -3,6 +3,8 @@ using Avalonia.Data;
 using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.DataBase;
 using FileControlAvalonia.Models;
+using FileControlAvalonia.ViewModels;
+using Splat;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -60,6 +62,8 @@ namespace FileControlAvalonia.Core
         }
         public void UpdateFactParametresInDB(ObservableCollection<FileTree> mainCollection)
         {
+            Locator.Current.GetService<MainWindowViewModel>().CancellButtonIsEnabled = false;
+
             SetInfoOfStatusFiles(mainCollection);
             using (var connection = new SQLiteConnection(DataBaseManager.Options))
             {

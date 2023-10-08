@@ -241,6 +241,7 @@ namespace FileControlAvalonia.ViewModels
                 _mainWindowVM.EnabledButtons = true;
                 _mainWindowVM.ProgressBarIsVisible = false;
                 _mainWindowVM.ProgressBarText = string.Empty;
+                _mainWindowVM.CancellButtonIsVisible = false;
                 return;
             }
             _mainWindowVM. CancellButtonIsEnabled = false;
