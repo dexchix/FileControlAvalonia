@@ -442,6 +442,8 @@ namespace FileControlAvalonia.ViewModels
                 CancellButtonIsVisible = false;
                 ProgressBarText = string.Empty;
                 ProgressBarIsVisible = false;
+                ProgressBarLoopScrol = false;
+                EnabledButtons = true;
                 return;
             }
 
@@ -468,6 +470,7 @@ namespace FileControlAvalonia.ViewModels
             ProgressBarLoopScrol = false;
             ProgressBarIsVisible = false;
             EnabledButtons = true;
+            CancellButtonIsVisible = false;
             ProgressBarIsVisible = false;
             ProgressBarText = string.Empty;
         }

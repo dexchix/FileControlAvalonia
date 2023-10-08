@@ -27,7 +27,14 @@ namespace FileControlAvalonia.Core
                     if (!file.IsDirectory) _mainWindowVM.ProgressBarValue++;
                     _mainWindowVM.ProgressBarText = $"Добавлено {_mainWindowVM.ProgressBarValue} из {countFiles}";
                     FactParameterizer.SetFactValues(file);
-                    
+
+                    if(token.IsCancellationRequested)
+                    {
+                        _mainWindowVM.ProgressBarValue = 0;
+                        _mainWindowVM.ProgressBarMaximum = 0;
+                        _mainWindowVM.ProgressBarText = string.Empty;
+                    }
+
                 }
                 _mainWindowVM.ProgressBarValue = 0;
                 _mainWindowVM.ProgressBarMaximum = 0;
@@ -65,7 +72,7 @@ namespace FileControlAvalonia.Core
                                     //================================================================================================
                                 }
 
-                                if(token.IsCancellationRequested)
+                                if (token.IsCancellationRequested)
                                 {
                                     return;
                                 }
@@ -100,7 +107,7 @@ namespace FileControlAvalonia.Core
                     //ProgressBar=====================================================================================
                     //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue = 0;
                     //Locator.Current.GetService<MainWindowViewModel>().ProgressBarMaximum = 0;
-                    _mainWindowVM.ProgressBarValue=0;
+                    _mainWindowVM.ProgressBarValue = 0;
                     _mainWindowVM.ProgressBarMaximum = 0;
                     _mainWindowVM.ProgressBarText = string.Empty;
                     //================================================================================================
@@ -119,6 +126,20 @@ namespace FileControlAvalonia.Core
                 {
                     FactParameterizer.SetFactValues(file);
                     comparer.SetStatus(file);
+
+                    if (token.IsCancellationRequested)
+                    {
+                        lock (_lock)
+                        {
+                            _mainWindowVM.ProgressBarLoopScrol = true;
+                            _mainWindowVM.ProgressBarText = "Отмена операции";
+                            SetOldFactParametres(files);
+                            foreach (var item in comparer.OldStatuses.ToList())
+                            {
+                                Dispatcher.UIThread.Post(() => item.Value.Item1.Status = item.Value.Item2);
+                            }
+                        }
+                    }
                 }
                 return comparer;
             }
@@ -215,12 +236,14 @@ namespace FileControlAvalonia.Core
 
                     if (token.IsCancellationRequested)
                     {
-                        lock(_lock)
+                        lock (_lock)
                         {
+                            _mainWindowVM.ProgressBarLoopScrol = true;
+                            _mainWindowVM.ProgressBarText = "Отмена операции";
                             SetOldFactParametres(files);
                             foreach (var item in comparer.OldStatuses.ToList())
                             {
-                                item.Value.Item1.Status = item.Value.Item2;
+                                Dispatcher.UIThread.Post(() => item.Value.Item1.Status = item.Value.Item2);
                             }
                         }
                     }
@@ -240,14 +263,14 @@ namespace FileControlAvalonia.Core
 
         private static void SetOldFactParametres(List<FileTree> files)
         {
-            foreach(var oldFile in _oldStats)
+            foreach (var oldFile in _oldStats)
             {
-                var file = files.Where(path=> path.Path == oldFile.Key.Path).FirstOrDefault();
+                var file = files.Where(path => path.Path == oldFile.Key.Path).FirstOrDefault();
 
                 file.FHash = oldFile.Value.Item1;
                 file.FVersion = oldFile.Value.Item2;
                 file.FLastUpdate = oldFile.Value.Item3;
-                Dispatcher.UIThread.Post(()=> file.Status = oldFile.Value.Item4);
+                Dispatcher.UIThread.Post(() => file.Status = oldFile.Value.Item4);
             }
         }
     }
