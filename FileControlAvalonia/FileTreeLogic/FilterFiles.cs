@@ -1,11 +1,15 @@
-﻿using FileControlAvalonia.Core.Enums;
+﻿using DynamicData;
+using FileControlAvalonia.Core.Enums;
 using FileControlAvalonia.Models;
 using FileControlAvalonia.SettingsApp;
+using FileControlAvalonia.ViewModels;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -16,6 +20,9 @@ namespace FileControlAvalonia.FileTreeLogic
 {
     public class FilterFiles
     {
+        private static object _lock = new object();
+        private static int _count = 0;
+
         /// <summary>
         /// Фильтрует дерево на основании статуса
         /// </summary>
@@ -24,45 +31,129 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="viewFilesCollection"></param>
         async public static void Filter(StatusFile status, ObservableCollection<FileTree> mainCollection, ObservableCollection<FileTree> viewFilesCollection)
         {
+            viewFilesCollection.Clear();
+            List<FileTree> relevantFiles = new List<FileTree>();
 
-            //Dictionary<StatusFile, FileTree> structFiles = new Dictionary<StatusFile, FileTree> ();
-            List<FileTree> files = new List<FileTree>();
-            FillList(mainCollection);
+            if (status != StatusFile.Checked)
+                await Task.Run(async () =>
+                {
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Фильтрация файлов";
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+
+                    FillList(mainCollection);
+
+
+                    ObservableCollection<FileTree> filteredList = new ObservableCollection<FileTree>(relevantFiles.Where(x => x.Status == status && !x.IsDirectory));
+
+
+                    await Task.Run(() =>
+                    {
+                        foreach (FileTree fileTree in filteredList)
+                        {
+                            viewFilesCollection.Add(fileTree);
+                        }
+                    });
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = false;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = string.Empty;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = false;
+                });
+            else
+            {
+                await Task.Run(async () =>
+                {
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = true;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = "Фильтрация файлов";
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = true;
+
+                    FillCheckedElements(mainCollection);
+
+                    foreach(var file in relevantFiles)
+                    {
+                        viewFilesCollection.Add(file);
+                    }
+
+
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarIsVisible = false;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = string.Empty;
+                    Locator.Current.GetService<MainWindowViewModel>().ProgressBarLoopScrol = false;
+                });
+            }
+
 
             void FillList(ObservableCollection<FileTree> folder)
             {
                 foreach (FileTree fileTree in folder)
                 {
-                    files.Add(fileTree);
+                    relevantFiles.Add(fileTree);
                     if (fileTree.Children != null)
                         FillList(fileTree.Children);
                 }
             }
-            var filteredList = files.Where(x => x.Status == status && !x.IsDirectory).ToList();
-            ObservableCollection<FileTree> filteredCollection = new ObservableCollection<FileTree>();
-            foreach (FileTree fileTree in filteredList)
+            void FillCheckedElements(ObservableCollection<FileTree> folder)
             {
-                filteredCollection.Add(fileTree);
+                foreach (FileTree fileTree in folder)
+                {
+                    if (fileTree.Status == StatusFile.Checked && fileTree.IsDirectory)
+                    {
+                        relevantFiles.Add(fileTree);
+                    }
+                    else if (fileTree.Status == StatusFile.Checked && !fileTree.IsDirectory)
+                        relevantFiles.Add(fileTree);
+                    else if (fileTree.Status != StatusFile.Checked && fileTree.IsDirectory)
+                        FillCheckedElements(fileTree.Children!);
+                }
             }
 
-            viewFilesCollection.Clear();
-            foreach (var file in filteredList!.ToList())
-            {
-                viewFilesCollection.Add(file);
-            }
-            //ObservableCollection<FileTree> filterCollection = new ObservableCollection<FileTree>();
-            //await Task.Run(() =>
+
+
+            //Dictionary<StatusFile, FileTree> structFiles = new Dictionary<StatusFile, FileTree> ();
+
+
+            //if (filteredList.Count > 1000)
             //{
-            //    var copy = FilesCollectionManager.GetDeepCopyFilesCollection(mainCollection);
-            //    FillFilteredCollection(copy, filterCollection, status);
-            //});
-            //viewfilescollection.clear();
-            //foreach (var file in filtercollection!.tolist())
-            //{
-            //    viewfilescollection.add(file);
+            //    int start = 0;
+            //    int limit = 1;
+            //    var section = filteredList.Count / 8;
+            //    int residue = filteredList.Count - section * 8;
+            //    for (int i = 0; i < 8; i++)
+            //    {
+            //        int localStart = start * section;
+            //        int localLimit = limit * section;
+            //        start++;
+            //        limit++;
+            //        Task.Run(() =>
+            //        {
+            //            for (int i = localStart; i < localLimit; i++)
+            //            {
+
+            //                lock (_lock)
+            //                {
+            //                    viewFilesCollection.Add(filteredList[i]);
+            //                    _count++;
+            //                }
+            //            }
+            //        });
+            //    }
+            //    for (int i = filteredList.Count - residue; i < filteredList.Count; i++)
+            //    {
+
+            //        lock (_lock)
+            //        {
+            //            viewFilesCollection.Add(filteredList[i]);
+            //            _count++;
+            //        }
+            //    }
+
+            //    while (true)
+            //    {
+            //        if (_count == filteredList.Count)
+            //        {
+            //            _count = 0;
+            //            return;
+            //        }
+            //    }
             //}
-
-
         }
 
         /// <summary>
