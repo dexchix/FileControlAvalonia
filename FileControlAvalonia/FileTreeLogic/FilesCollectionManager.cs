@@ -62,7 +62,7 @@ namespace FileControlAvalonia.FileTreeLogic
         /// <param name="delitedFile"></param>
         /// <param name="viewCollectionFiles"></param>
         /// <param name="mainFileTree"></param>
-        public static void DeliteFile(FileTree delitedFile, ObservableCollection<FileTree> viewCollectionFiles,
+        public static void DeleteFile(FileTree delitedFile, ObservableCollection<FileTree> viewCollectionFiles,
                                       ObservableCollection<FileTree> mainFileTreeCollection, FileStats fileStats)
         {
             try
@@ -73,19 +73,36 @@ namespace FileControlAvalonia.FileTreeLogic
                 var delitedFileViewCollection = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, viewCollectionFiles);
 
 
-                if (delitedFileMainCollection != null && delitedFileMainCollection.Parent != null) delitedFileMainCollection.Parent.Children!.Remove(delitedFileMainCollection);
+                if (delitedFileMainCollection != null && delitedFileMainCollection.Parent != null)
+                {
+                    delitedFileMainCollection.Parent.Children!.Remove(delitedFileMainCollection);
+                    delitedFileMainCollection.Parent = null;
+                    FilesCollectionManager.FileTreeDeliteDestruction(delitedFileMainCollection);
+                    GC.Collect();
+                   
+                }
                 else
                 {
                     var delFile = mainFileTreeCollection.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
                     mainFileTreeCollection.Remove(delFile!);
+                    FilesCollectionManager.FileTreeDeliteDestruction(delitedFileMainCollection);
+                    GC.Collect();
                 }
 
 
-                if (delitedFileViewCollection != null && delitedFileViewCollection.Parent != null) delitedFileViewCollection.Parent.Children!.Remove(delitedFileViewCollection);
+                if (delitedFileViewCollection != null && delitedFileViewCollection.Parent != null)
+                {
+                    delitedFileViewCollection.Parent.Children!.Remove(delitedFileViewCollection);
+                    delitedFileViewCollection.Parent = null;
+                    FilesCollectionManager.FileTreeDeliteDestruction(delitedFileMainCollection);
+                    GC.Collect();
+                }
                 else
                 {
                     var delFile = viewCollectionFiles.Where(x => x.Path == delitedFile.Path).FirstOrDefault();
                     viewCollectionFiles.Remove(delFile!);
+                    FilesCollectionManager.FileTreeDeliteDestruction(delitedFileViewCollection);
+                    GC.Collect();
                 }
 
             }
@@ -164,7 +181,7 @@ namespace FileControlAvalonia.FileTreeLogic
             {
                 for (var i = 0; i < fileTree.Children.Count; i++)
                 {
-                    if (fileTree.Children[i].IsOpened == true)
+                    if (fileTree.Children[i].IsOpened == true || !fileTree.IsDirectory)
                     {
                         listDestroctionFiles.Add(fileTree.Children[i]);
                         if (fileTree.Children[i].IsDirectory) FillList(fileTree.Children[i]);
@@ -177,7 +194,6 @@ namespace FileControlAvalonia.FileTreeLogic
 
             foreach (var file in listDestroctionFiles)
             {
-
                 if (file.Parent != null) file.Parent = null;
                 if (file.Children != null)
                 {
@@ -185,7 +201,18 @@ namespace FileControlAvalonia.FileTreeLogic
                 }
             }
         }
-        public static string path;
+
+        public static void FileTreeDeliteDestruction(FileTree fileTree)
+        {
+            var delitedList = UpdateTreeToList(new ObservableCollection<FileTree>() { fileTree});
+
+            foreach(var file in delitedList)
+            {
+                file.Parent = null;
+                if(file.Children != null) { file.Children.Clear(); }
+            }
+        }
+
         public static int GetCountElementsByFileTree(FileTree fileTree, bool considerFolders)
         {
             static int CountElementsInFolder(IEnumerable<FileTree> children, bool considerFolders)
@@ -200,7 +227,6 @@ namespace FileControlAvalonia.FileTreeLogic
                     }
                     else if (!child.IsDirectory)
                         count++;
-                    path = child.Path;
 
                     if (child.IsDirectory)
                         count += CountElementsInFolder(child.Children, considerFolders);
