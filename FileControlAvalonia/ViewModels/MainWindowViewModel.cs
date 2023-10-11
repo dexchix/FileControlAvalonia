@@ -663,7 +663,7 @@ namespace FileControlAvalonia.ViewModels
                 var deliteFileMain = FileTreeNavigator.SeachFileInFilesCollection(delitedFile.Path, MainFileTreeCollection);
                 await EtalonManager.DeliteFileInDB(deliteFileMain);
 
-                FilesCollectionManager.DeliteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
+                FilesCollectionManager.DeleteFile(deliteFileMain, ViewCollectionFiles, MainFileTreeCollection, stats);
                 ProgressBarLoopScrol = false;
 
             });
