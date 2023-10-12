@@ -179,7 +179,7 @@ SystemDecorations="BorderOnly"-->
 					</Button>
 
 					<ComboBox Margin=" 0 5 0 0" Grid.Column="1" HorizontalContentAlignment="Right" Height="30" Items="{Binding Filters}"
-			            Width="250" FontSize="11" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" >
+			            Width="250" FontSize="11" SelectedIndex="{Binding FilterIndex}, Mode=TwoWay" IsEnabled="{Binding EnabledButtons}" >
 					</ComboBox>
 				</Grid>
 
