@@ -69,7 +69,7 @@ namespace FileControlAvalonia.DataBase
                     lock (_lock)
                     {
                         filesDictionary.Add(files[i].Path, files[i]);
-                        if (files[i].ParentPath == string.Empty)
+                        if (files[i].ParentPath == null || files[i].ParentPath == string.Empty)
                             rootsDictionary.Add(files[i]);
                         _count++;
                     }
@@ -94,41 +94,58 @@ namespace FileControlAvalonia.DataBase
                     limit++;
                     Task.Run(() =>
                     {
-                        for (int i = localStart; i < localLimit; i++)
+                        try
                         {
-                            lock (_lock)
+                            for (int i = localStart; i < localLimit; i++)
                             {
-                                var file = filesDictionary[files[i].Path];
-                                if (files[i].ParentPath != null && files[i].ParentPath != string.Empty)
+                                lock (_lock)
                                 {
-                                    var fileParent = filesDictionary[files[i].ParentPath];
-                                    if (fileParent != null)
+                                    var file = filesDictionary[files[i].Path];
+                                    if (files[i].ParentPath != null && files[i].ParentPath != string.Empty)
                                     {
-                                        file.Parent = fileParent;
-                                        fileParent.Children.Add(file);
+                                        var fileParent = filesDictionary[files[i].ParentPath];
+                                        if (fileParent != null)
+                                        {
+                                            file.Parent = fileParent;
+                                            fileParent.Children.Add(file);
+                                        }
                                     }
+                                    _count++;
                                 }
-                                _count++;
                             }
+
                         }
+                        catch
+                        {
+
+                        }
+                       
                     });
                 }
                 for (int i = files.Count - residue; i < files.Count; i++)
                 {
-                    lock (_lock)
+                    try
                     {
-                        var file = filesDictionary[files[i].Path];
-                        if (files[i].ParentPath != string.Empty)
+                        lock (_lock)
                         {
-                            var fileParent = filesDictionary[files[i].ParentPath];
-                            if (fileParent != null)
+                            var file = filesDictionary[files[i].Path];
+                            if (files[i].ParentPath != null && files[i].ParentPath != string.Empty)
                             {
-                                file.Parent = fileParent;
-                                fileParent.Children!.Add(file);
+                                var fileParent = filesDictionary[files[i].ParentPath];
+                                if (fileParent != null)
+                                {
+                                    file.Parent = fileParent;
+                                    fileParent.Children!.Add(file);
+                                }
                             }
+                            _count++;
                         }
-                        _count++;
                     }
+                    catch
+                    {
+
+                    }
+                    
                 }
                 while (true)
                 {
