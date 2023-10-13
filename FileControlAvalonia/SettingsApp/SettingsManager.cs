@@ -96,6 +96,7 @@ namespace FileControlAvalonia.SettingsApp
                 settings.WindowWidth = 1200;
                 settings.XLocation = 0;
                 settings.YLocation = 0;
+                settings.NameDataBase = "FileIntegrityDB";
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (StreamWriter streamWriter = new StreamWriter("Settings.xml"))
                 {

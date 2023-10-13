@@ -17,11 +17,11 @@ namespace FileControlAvalonia.DataBase
 {
     public static class DataBaseManager
     {
-        private static string databaseFileName = "FileIntegrityDB.db";
+        private static string databaseFileName = "FileIntegrityDB";
         private static string currentDirectory = Directory.GetCurrentDirectory();
-        private static string databasePath = Path.Combine(currentDirectory, databaseFileName);
+        private static string databasePath = Path.Combine(currentDirectory, databaseFileName + ".db");
 
-        public static string NameDB { get; private set; } = "FileIntegrityDB.db";
+        public static string NameDB { get; private set; }
         public static string Password { get; private set; } = "Bzpa/123456789";
         public static SQLiteConnectionString Options { get; set; }
 
@@ -92,19 +92,33 @@ namespace FileControlAvalonia.DataBase
                     };
                     command.ExecuteNonQuery();
                 }
-                catch
+                catch(Exception ex) 
                 {
-
+                    Logger.logger.Error($"Не удалось сменить пароль БД - {ex.Message}");
                 }
                 SetOptions();
             }
+        }
+
+        public static void ChangeDataBaseName(string newName)
+        {
+            File.Move(Path.Combine(Directory.GetCurrentDirectory(), NameDB + ".db"), Path.Combine(Directory.GetCurrentDirectory(), newName + ".db"));
+            Options = new SQLiteConnectionString(newName + ".db", true, Password);
+            NameDB = newName;
         }
 
 
         public static void SetOptions()
         {
             Password = SettingsManager.AppSettings.Password;
-            Options = new SQLiteConnectionString(NameDB, true, Password);
+            Options = new SQLiteConnectionString(NameDB + ".db", true, Password);
+        }
+
+        public static void SetStartOptions()
+        {
+            NameDB = SettingsManager.AppSettings.NameDataBase;
+            Password = SettingsManager.AppSettings.Password;
+            Options = new SQLiteConnectionString(SettingsManager.AppSettings.NameDataBase + ".db", true, Password);
         }
 
         #region CRYPT_Password

@@ -29,14 +29,14 @@ namespace FileControlAvalonia.ViewModels
         private FileTree? _fileTree;
         private int _counterSelectedFiles = 0;
         private MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
-  
+
         private string _progressBarText;
         private bool _enabledButtons = true;
         private bool _progressBarLoopScrol;
         private bool _progressBarIsVisible = false;
         private CancellationTokenSource _ctc = new CancellationTokenSource();
         public static event Action CancellAddOperation = delegate { CurrentVM._ctc.Cancel(); };
-       
+
         #endregion
 
         public static void CallCancelEvent()
@@ -53,7 +53,7 @@ namespace FileControlAvalonia.ViewModels
                 FileTree.TaskSelectedChildrenIsStarted = false;
                 FileTree._startedTask.Clear();
             });
-    
+
         }
 
         private static void ChangeState(bool active)
@@ -81,7 +81,14 @@ namespace FileControlAvalonia.ViewModels
             get => _itemIndex;
             set => this.RaiseAndSetIfChanged(ref _itemIndex, value);
         }
-        public string Extensions { get => SettingsManager.SettingsString!; }
+        public string Extensions
+        {
+            get
+            {
+                if (SettingsManager.SettingsString! == null ||  SettingsManager.SettingsString! == string.Empty) return "*.*";
+                else return SettingsManager.SettingsString!;
+            }
+        }
 
         #region ProgressBar
         public string ProgressBarText
@@ -244,7 +251,7 @@ namespace FileControlAvalonia.ViewModels
                 _mainWindowVM.CancellButtonIsVisible = false;
                 return;
             }
-            _mainWindowVM. CancellButtonIsEnabled = false;
+            _mainWindowVM.CancellButtonIsEnabled = false;
             MessageBus.Current.SendMessage<ObservableCollection<FileTree>>(childrenTFL!);
 
         }
@@ -275,9 +282,10 @@ namespace FileControlAvalonia.ViewModels
         }
         #endregion
 
-        ~FileExplorerWindowViewModel(){
+        ~FileExplorerWindowViewModel()
+        {
 
         }
     }
-  
+
 }

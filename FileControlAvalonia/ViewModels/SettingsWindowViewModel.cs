@@ -19,7 +19,7 @@ namespace FileControlAvalonia.ViewModels
         private Settings _settings = SettingsManager.GetSettings()!;
         private string? _userVM;
         private string? _passwordVM;
-        private string? _nameTableVM;
+        private string? _nameDataBaseVM;
         private string? _opcConnectionStringVM;
         private string? _opcCommonTagVM;
         private string? _OpcCountTagVM;
@@ -31,9 +31,8 @@ namespace FileControlAvalonia.ViewModels
         private string? _avalibleFileExtensionsVM;
         private string? _accessParametrForCheckButtonVM;
         private string? _rootPath;
-        private string _pastPassword;
-
-
+        private string _oldPassword;
+        private string? _oldNameDB;
         private string _windowHeightVM;
         private string _windowWidthVM;
         private string _xLocationVM;
@@ -69,13 +68,13 @@ namespace FileControlAvalonia.ViewModels
                 _settings.Password = value;
             }
         }
-        public string NameTableVM
+        public string NameDataBaseVM
         {
-            get => _nameTableVM!;
+            get => _nameDataBaseVM!;
             set
             {
-                this.RaiseAndSetIfChanged(ref _nameTableVM, value);
-                _settings.NameTable = value;
+                this.RaiseAndSetIfChanged(ref _nameDataBaseVM, value);
+                _settings.NameDataBase = value;
             }
         }
         public string OpcConnectionStringVM
@@ -237,8 +236,11 @@ namespace FileControlAvalonia.ViewModels
             _settings = _settings ?? new Settings();
             _userVM = _settings.User;
             _passwordVM = _settings.Password;
-            _pastPassword = _settings.Password;
-            _nameTableVM = _settings.NameTable;
+
+            _oldPassword = _settings.Password;
+            _oldNameDB = _settings.NameDataBase;
+
+            _nameDataBaseVM = _settings.NameDataBase == null ? DataBaseManager.NameDB : _settings.NameDataBase;
             _opcConnectionStringVM = _settings.OpcConnectionString;
             _opcCommonTagVM = _settings.OpcCommonTag;
             _OpcCountTagVM = _settings.OpcCountTag;
@@ -247,7 +249,7 @@ namespace FileControlAvalonia.ViewModels
             _opcSemiPassedTagVM = _settings.OpcSemiPassedTag;
             _opcNoAccessTagVM = _settings.OpcNoAccessTag;
             _opcNotFoundTagVM = _settings.OpcNotFoundTag;
-            _avalibleFileExtensionsVM = _settings.AvalibleFileExtensions;
+            _avalibleFileExtensionsVM = _settings.AvalibleFileExtensions == null || _settings.AvalibleFileExtensions == string.Empty ? "*,*" : _settings.AvalibleFileExtensions;
             _accessParametrForCheckButtonVM = _settings.AccessParametrForCheckButton;
             _rootPath = _settings.RootPath;
 
@@ -259,10 +261,10 @@ namespace FileControlAvalonia.ViewModels
             _xLocationVM = Locator.Current.GetService<MainWindow>().Position.X.ToString();
             _yLocationVM = Locator.Current.GetService<MainWindow>().Position.Y.ToString();
 
-            _dragAndDropWindowVM = _settings.DragAndDropWindow == null? false: _settings.DragAndDropWindow;
+            _dragAndDropWindowVM = _settings.DragAndDropWindow == null ? false : _settings.DragAndDropWindow;
 
 
-            _windowHeight =_settings.WindowHeight;
+            _windowHeight = _settings.WindowHeight;
             _windowWidth = _settings.WindowWidth;
             _xLocation = _settings.XLocation;
             _yLocation = _settings.YLocation;
@@ -277,64 +279,54 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         public void CloseWindow(Window window)
         {
-            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == string.Empty)
-            {
-                var mBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", "Введите новый пароль", ButtonEnum.OkCancel);
-                mBox.Show();
-            }
-            else
-            {
-                window.Close();
-            }
+            window.Close();
         }
         public void Confirm(Window window)
         {
-            if (IsEnabledPasswordTextBox == true && PasswordVM == null || PasswordVM == string.Empty)
-            {
-                var mBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", "Введите новый пароль", ButtonEnum.OkCancel);
-                mBox.Show();
-            }
+            if (PasswordVM != _oldPassword && !string.IsNullOrWhiteSpace(PasswordVM))
+                DataBaseManager.ChangePasswordDataBase(PasswordVM);
+            else if (PasswordVM != _oldPassword && string.IsNullOrWhiteSpace(PasswordVM))
+                _settings.Password = _oldPassword;
+
+            if (NameDataBaseVM != _oldNameDB && !string.IsNullOrWhiteSpace(NameDataBaseVM))
+                DataBaseManager.ChangeDataBaseName(NameDataBaseVM);
+            else if (NameDataBaseVM != _oldNameDB && string.IsNullOrWhiteSpace(NameDataBaseVM))
+                _settings.NameDataBase = _oldNameDB;
+
+            _settings.WindowHeight = Convert.ToInt32(WindowHeightVM);
+            _settings.WindowWidth = Convert.ToInt32(WindowWidthVM);
+
+
+            var mainWindow = Locator.Current.GetService<MainWindow>();
+            if (DragAndDropWindowVM)
+                mainWindow.title.PointerPressed += mainWindow.DragMoveWindow;
             else
+                mainWindow.title.PointerPressed -= mainWindow.DragMoveWindow;
+
+
+            IsEnabledPasswordTextBox = false;
+
+
+            if (SettingsManager.AppSettings.WindowHeight != _windowHeight || SettingsManager.AppSettings.WindowWidth != _windowWidth)
             {
-                if (PasswordVM != _pastPassword)
-                    DataBaseManager.ChangePasswordDataBase(PasswordVM);
-
-
-                _settings.WindowHeight = Convert.ToInt32(WindowHeightVM);
-                _settings.WindowWidth = Convert.ToInt32(WindowWidthVM);
-
-
-                var mainWindow = Locator.Current.GetService<MainWindow>();
-                if (DragAndDropWindowVM)
-                    mainWindow.title.PointerPressed += mainWindow.DragMoveWindow;
-                else
-                    mainWindow.title.PointerPressed -= mainWindow.DragMoveWindow;
-
-                
-                IsEnabledPasswordTextBox = false;
-
-
-                if(SettingsManager.AppSettings.WindowHeight != _windowHeight || SettingsManager.AppSettings.WindowWidth != _windowWidth)
-                {
-                    ResizeWindow.Invoke((double)_settings.WindowWidth, (double)_settings.WindowHeight);
-                }
-                var XLocation = Convert.ToInt32(XLocationVM);
-                var YLocation = Convert.ToInt32(YLocationVM);
-                if (SettingsManager.AppSettings.XLocation != XLocation || SettingsManager.AppSettings.YLocation != YLocation)
-                {
-                    ChangeLocationWindow.Invoke((double)(XLocation), (double)(YLocation));
-                    if (SettingsManager.AppSettings.DragAndDropWindow)
-                    {
-                        mainWindow.title.PointerPressed -= mainWindow.DragMoveWindow;
-                        mainWindow.title.PointerPressed += mainWindow.DragMoveWindow;
-                    }
-                }
-                _settings.XLocation = Convert.ToDouble(XLocationVM);
-                _settings.YLocation = Convert.ToDouble(YLocationVM);
-
-                SettingsManager.SetSettings(_settings);
-                window.Close();
+                ResizeWindow.Invoke((double)_settings.WindowWidth, (double)_settings.WindowHeight);
             }
+            var XLocation = Convert.ToInt32(XLocationVM);
+            var YLocation = Convert.ToInt32(YLocationVM);
+            if (SettingsManager.AppSettings.XLocation != XLocation || SettingsManager.AppSettings.YLocation != YLocation)
+            {
+                ChangeLocationWindow.Invoke((double)(XLocation), (double)(YLocation));
+                if (SettingsManager.AppSettings.DragAndDropWindow)
+                {
+                    mainWindow.title.PointerPressed -= mainWindow.DragMoveWindow;
+                    mainWindow.title.PointerPressed += mainWindow.DragMoveWindow;
+                }
+            }
+            _settings.XLocation = Convert.ToDouble(XLocationVM);
+            _settings.YLocation = Convert.ToDouble(YLocationVM);
+
+            SettingsManager.SetSettings(_settings);
+            window.Close();
         }
         public void ChangePassword(TextBox textBox)
         {
@@ -346,16 +338,5 @@ namespace FileControlAvalonia.ViewModels
         }
         #endregion
 
-        private bool IsNumeric(string str)
-        {
-            foreach (char c in str)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
     }
 }
