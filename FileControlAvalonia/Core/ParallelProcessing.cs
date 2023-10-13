@@ -258,6 +258,7 @@ namespace FileControlAvalonia.Core
                     break;
                 }
             }
+            comparer.ChangeStatusParents();
             return comparer;
         }
 

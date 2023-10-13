@@ -40,7 +40,7 @@
 					   VerticalAlignment="Center"/>
 			</Canvas>
 			<StackPanel Grid.Row="1" Grid.Column="1" Spacing="17" 
-						VerticalAlignment="Center" Margin="50 20 0 0">
+						VerticalAlignment="Center" Margin="25 20 0 0">
 				<Label Content="{Binding NameProgram}"></Label>
 				<Label Content="{Binding NameCompany}"></Label>
 				<Label Content="{Binding VersionApp}"></Label>
