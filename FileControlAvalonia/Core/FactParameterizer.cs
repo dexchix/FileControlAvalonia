@@ -16,7 +16,7 @@ namespace FileControlAvalonia.Core
 {
     public static class FactParameterizer
     {
-        private static string GetMD5Hash(string filePath)
+        public static string GetMD5Hash(string filePath)
         {
             bool folderExist = Directory.Exists(filePath);
             bool fileExist = File.Exists(filePath);
@@ -91,29 +91,6 @@ namespace FileControlAvalonia.Core
             }
             return "Файл отсутствует";
         }
-        //public static void SetFactValues(this FileTree file)
-        //{
-        //    var version = GetVersion(file.Path);
-        //    var fhash = GetMD5Hash(file.Path);
-        //    var lastUpdate = GetLastUpdate(file.Path);
-
-        //    file.FVersion = version;
-        //    file.FHash = fhash;
-        //    file.FLastUpdate = lastUpdate;
-
-        //    if (version == "Отказано в доступе")
-        //        file.FVersion = "-";
-
-        //    if (lastUpdate == "Отказано в доступе")
-        //        file.FLastUpdate = "-";
-
-        //    if (fhash == "Отказано в доступе")
-        //    {
-        //        file.FVersion = "Отказано в доступе";
-        //        file.FHash = "Отказано в доступе";
-        //        file.FLastUpdate = "Отказано в доступе";
-        //    }
-        //}
 
         public static void SetFactValues(this FileTree file)
         {

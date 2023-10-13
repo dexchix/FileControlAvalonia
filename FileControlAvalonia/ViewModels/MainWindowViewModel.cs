@@ -392,6 +392,9 @@ namespace FileControlAvalonia.ViewModels
         #region COMMANDS
         async public void CheckCommand()
         {
+            //ExpandAllNodesCommand();
+            //CollapseAllNodesCommand();
+
             CancellButtonIsVisible = true;
             CancellButtonIsEnabled = true;
 

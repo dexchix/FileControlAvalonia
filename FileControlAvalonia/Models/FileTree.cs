@@ -108,7 +108,14 @@ namespace FileControlAvalonia.Models
         public StatusFile Status
         {
             get => _status;
-            set => this.RaiseAndSetIfChanged(ref _status, value);
+            set
+            {
+                if(Path == @"C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS")
+                {
+
+                }
+                this.RaiseAndSetIfChanged(ref _status, value);
+            }
         }
         public string Path
         {
@@ -170,7 +177,7 @@ namespace FileControlAvalonia.Models
                 if (Parent.Path == SettingsManager.RootPath)
                     ParentPath = null;
                 else
-                    ParentPath =  Parent.Path;
+                    ParentPath = Parent.Path;
             }
             else
                 ParentPath = null;
