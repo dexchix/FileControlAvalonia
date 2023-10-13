@@ -51,18 +51,6 @@ namespace FileControlAvalonia.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            //double parentX = Locator.Current.GetService<MainWindow>().Position.X;
-            //double parentY = Locator.Current.GetService<MainWindow>().Position.Y;
-            //double parentWidth = Bounds.Width;
-            //double parentHeight = Bounds.Height;
-
-            //double childWidth = Bounds.Width;
-            //double childHeight = Bounds.Height;
-
-            //double childX = parentX + (parentWidth - childWidth) / 2;
-            //double childY = parentY + (parentHeight - childHeight) / 2;
-
-            //Position = new PixelPoint((int)childX, (int)childY);
 
             double parentX = Locator.Current.GetService<MainWindow>().Position.X;
             double parentY = Locator.Current.GetService<MainWindow>().Position.Y;

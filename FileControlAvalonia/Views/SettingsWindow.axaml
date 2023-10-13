@@ -56,8 +56,8 @@
 						<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="11.5" Margin="5 0 0 0">
 							<Label Content = "Пользователь"></Label>
 							<Label Content = "Пароль"></Label>
-							<Label Content = "Имя таблицы"></Label>
-							<Label Content = "Доступные расширения файлов"></Label>
+							<Label Content = "Имя базы данных"></Label>
+							<Label Content = "Доступные расширения файлов (exe/png)"></Label>
 							<Label Content = "Параметр доступа для кнопки «Проверить»"></Label>
 							<Label Content = "Корневой путь"></Label>
 						</StackPanel>
@@ -82,7 +82,6 @@
 										</Style>
 										<Style Selector="TextBox:disabled /template/ Border">
 											<Setter Property="BorderBrush" Value="Black"></Setter>
-
 											<Setter Property="Background" Value="Transparent"></Setter>
 										</Style>
 									</TextBox.Styles>
@@ -94,7 +93,7 @@
 									</Canvas>
 								</Button>
 							</StackPanel>
-							<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameTableVM}, Mode=TwoWay"></TextBox>
+							<TextBox HorizontalAlignment="Stretch" Text ="{Binding NameDataBaseVM}, Mode=TwoWay"></TextBox>
 							<TextBox HorizontalAlignment="Stretch" Text ="{Binding AvalibleFileExtensionsVM}, Mode=TwoWay" Watermark="exe/stu/xlsx/png/zef/xef"></TextBox>
 							<TextBox HorizontalAlignment="Stretch" Text ="{Binding AccessParametrForCheckButtonVM}, Mode=TwoWay"></TextBox>
 							<TextBox HorizontalAlignment="Stretch" Text ="{Binding RootPath}, Mode=TwoWay"></TextBox>

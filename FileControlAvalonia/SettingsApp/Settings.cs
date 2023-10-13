@@ -7,7 +7,7 @@ namespace FileControlAvalonia.SettingsApp
     {
         public string? User { get; set; }
         public string? Password { get; set; }
-        public string? NameTable { get; set; }
+        public string? NameDataBase { get; set; }
         public string? OpcConnectionString { get; set; }
         public string? OpcCommonTag { get; set; }
         public string? OpcCountTag { get; set; }
