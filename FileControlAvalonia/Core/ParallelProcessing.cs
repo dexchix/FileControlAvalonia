@@ -18,7 +18,7 @@ namespace FileControlAvalonia.Core
         private static MainWindowViewModel _mainWindowVM = Locator.Current.GetService<MainWindowViewModel>();
         private static Dictionary<FileTree, (string, string, string, StatusFile)> _oldStats = new Dictionary<FileTree, (string, string, string, StatusFile)>();
 
-        public async static Task ParallelCalculateFactParametrs(List<FileTree> files, int countFiles, CancellationToken token)
+        public static void ParallelCalculateFactParametrs(List<FileTree> files, int countFiles, CancellationToken token)
         {
             if (files.Count <= 1000)
             {
@@ -28,7 +28,7 @@ namespace FileControlAvalonia.Core
                     _mainWindowVM.ProgressBarText = $"Добавлено {_mainWindowVM.ProgressBarValue} из {countFiles}";
                     FactParameterizer.SetFactValues(file);
 
-                    if(token.IsCancellationRequested)
+                    if (token.IsCancellationRequested)
                     {
                         _mainWindowVM.ProgressBarValue = 0;
                         _mainWindowVM.ProgressBarMaximum = 0;
@@ -58,6 +58,9 @@ namespace FileControlAvalonia.Core
                         for (int i = localStart; i < localLimit; i++)
                         {
                             FactParameterizer.SetFactValues(files[i]);
+                            files[i].EHash = files[i].FHash;
+                            files[i].ELastUpdate = files[i].FLastUpdate;
+                            files[i].EVersion = files[i].FVersion;
                             lock (_lock)
                             {
                                 _count++;
@@ -67,8 +70,6 @@ namespace FileControlAvalonia.Core
                                     //ProgressBar=====================================================================================
                                     _mainWindowVM.ProgressBarValue++;
                                     _mainWindowVM.ProgressBarText = $"Добавлено {_mainWindowVM.ProgressBarValue} из {countFiles}";
-                                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarValue++;
-                                    //Locator.Current.GetService<MainWindowViewModel>().ProgressBarText = $"Добавлено {_count} из {countFiles}";
                                     //================================================================================================
                                 }
 
@@ -84,6 +85,9 @@ namespace FileControlAvalonia.Core
                 for (int i = files.Count - residue; i < files.Count; i++)
                 {
                     FactParameterizer.SetFactValues(files[i]);
+                    files[i].EHash = files[i].FHash;
+                    files[i].ELastUpdate = files[i].FLastUpdate;
+                    files[i].EVersion = files[i].FVersion;
                     lock (_lock)
                     {
                         _count++;

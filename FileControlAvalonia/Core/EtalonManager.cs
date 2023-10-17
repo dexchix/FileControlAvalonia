@@ -26,8 +26,6 @@ namespace FileControlAvalonia.Core
         /// <param name="createEalon">Если true - создает эталон, если false - добавляет файлы</param>
         public async static Task AddFilesOrCreateEtalon(ObservableCollection<FileTree> mainFileTreeCollection, bool createEalon)
         {
-            FilesCollectionManager.SetEtalonValues(mainFileTreeCollection);
-
             var listFiles = FilesCollectionManager.UpdateTreeToList(mainFileTreeCollection);
 
             var asyncConnection = new SQLiteAsyncConnection(DataBaseManager.Options);
