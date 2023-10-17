@@ -239,7 +239,7 @@ namespace FileControlAvalonia.ViewModels
                 _mainWindowVM.ProgressBarMaximum = count;
                 //===================================
 
-                await ParallelProcessing.ParallelCalculateFactParametrs(newList, count, _ctc.Token);
+                ParallelProcessing.ParallelCalculateFactParametrs(newList, count, _ctc.Token);
             });
 
             if (_ctc.IsCancellationRequested)
